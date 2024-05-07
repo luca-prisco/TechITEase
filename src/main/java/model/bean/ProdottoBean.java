@@ -1,7 +1,6 @@
-package model;
+package model.bean;
 
 import java.math.BigDecimal;
-import java.sql.Blob;
 
 public class ProdottoBean {
 	private int IDProdotto;
