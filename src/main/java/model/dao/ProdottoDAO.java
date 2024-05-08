@@ -117,7 +117,8 @@ public class ProdottoDAO {
 			prodotto.setRam(rs.getInt(10));
 			prodotto.setQuantita(rs.getInt(11));
 			prodotto.setPrezzo(rs.getBigDecimal(12));
-			prodotto.setImage(rs.getBytes(13));
+			prodotto.setNumVendite(rs.getInt(13));
+			prodotto.setImage(rs.getBytes(14));
 			prodotti.add(prodotto);
 		}
 		
@@ -148,7 +149,8 @@ public class ProdottoDAO {
 			prodotto.setRam(rs.getInt(10));
 			prodotto.setQuantita(rs.getInt(11));
 			prodotto.setPrezzo(rs.getBigDecimal(12));
-			
+			prodotto.setNumVendite(rs.getInt(13));
+			prodotto.setImage(rs.getBytes(14));
 		}
 		
 		return prodotto;

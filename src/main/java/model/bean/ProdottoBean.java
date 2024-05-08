@@ -1,6 +1,7 @@
 package model.bean;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 public class ProdottoBean {
 	private int IDProdotto;
@@ -15,6 +16,7 @@ public class ProdottoBean {
 	private int ram;
 	private int quantita;
 	private BigDecimal prezzo;
+	private int numVendite;
 	private byte[] image;
 	
 	public ProdottoBean() {
@@ -125,12 +127,19 @@ public class ProdottoBean {
 		this.image = image;
 	}
 
+	public int getNumVendite() {
+		return numVendite;
+	}
+
+	public void setNumVendite(int numVendite) {
+		this.numVendite = numVendite;
+	}
+
 	@Override
 	public String toString() {
 		return "ProdottoBean [IDProdotto=" + IDProdotto + ", nomeProdotto=" + nomeProdotto + ", brand=" + brand
 				+ ", categoria=" + categoria + ", descrizione=" + descrizione + ", dettagli=" + dettagli
 				+ ", IDSpecifiche=" + IDSpecifiche + ", colore=" + colore + ", hdd=" + hdd + ", ram=" + ram
-				+ ", quantita=" + quantita + ", prezzo=" + prezzo + "]";
+				+ ", quantita=" + quantita + ", prezzo=" + prezzo + ", numVendite=" + numVendite + "]";
 	}
-	
 }
