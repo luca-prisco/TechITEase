@@ -1,9 +1,13 @@
 package model.bean;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-public class ProdottoBean {
+public class ProdottoBean implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private int IDProdotto;
 	private String nomeProdotto;
 	private String brand;

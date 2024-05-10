@@ -1,8 +1,12 @@
 package model.bean;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class AcquistoBean {
+public class AcquistoBean implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private int IDAcquisto;
 	private String nome;
 	private String colore;

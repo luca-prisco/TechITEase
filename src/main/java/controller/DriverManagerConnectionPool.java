@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 
-public class ConnectionPool {
+public class DriverManagerConnectionPool {
 
 	private static List<Connection> freeDbConnections;
 
@@ -25,7 +25,7 @@ public class ConnectionPool {
 	private static synchronized Connection createDBConnection() throws SQLException {
 		Connection newConnection = null;
 
-		String dbName = "DeviceDepot";
+		String dbName = "TechITEase";
 		String dbUsername = "root";
 		String dbPassword = "lucaprisco";
 		String url = "jdbc:mysql://localhost:3306/"+ dbName + "?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true"

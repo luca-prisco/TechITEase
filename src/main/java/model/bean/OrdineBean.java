@@ -1,9 +1,13 @@
 package model.bean;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class OrdineBean {
+public class OrdineBean implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private int IDOrdine;
 	private Date dataOrdine;
 	private Date dataConsegna;
