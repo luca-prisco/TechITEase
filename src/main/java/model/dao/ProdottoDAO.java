@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import controller.DriverManagerConnectionPool;
+import model.dao.ProdottoDAO;
 import model.bean.ProdottoBean;
 
 public class ProdottoDAO {
@@ -225,5 +226,43 @@ public class ProdottoDAO {
 		}
 		
 		return prodotto;
+	}
+	
+	public synchronized void deleteProduct(int id1, int id2) throws SQLException {
+	    Connection connection = null;
+	    PreparedStatement ps = null;
+	    PreparedStatement psProdSpec = null;
+	    
+	    String sql = "DELETE FROM " + ProdottoDAO.TABLE_NAME + " WHERE IDProdotto = ?";
+	    String sql2 = "DELETE FROM " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " WHERE IDProdotto = ? AND IDSpecifiche = ?";
+	    
+	    try {
+	        connection = dmcp.getConnection();
+	        
+	        // Preparo ed eseguo la query per eliminare dalla tabella specifiche
+	        psProdSpec = connection.prepareStatement(sql2);
+	        psProdSpec.setInt(1, id1);
+	        psProdSpec.setInt(2, id2);
+	        psProdSpec.executeUpdate();
+	        
+	        // Prepara ed esegui la query per eliminare dalla tabella prodotto
+	        ps = connection.prepareStatement(sql);
+	        ps.setInt(1, id1);
+	        ps.executeUpdate();
+	    
+	    } finally {
+	        try {
+	            if (psProdSpec != null) {
+	                psProdSpec.close();
+	            }
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } finally {
+	            if (connection != null) {
+	                dmcp.releaseConnection(connection);
+	            }
+	        }
+	    }
 	}
 }
