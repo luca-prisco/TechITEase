@@ -32,12 +32,12 @@
 			UtenteBean utente = (UtenteBean) session.getAttribute("utente");
 			if(utente != null) {%>
 				<a href=""><button>${utente.nome}</button></a> 
-				<a href=""><button>LogOut</button></a> 
+				<a href="${pageContext.request.contextPath}/common/AutenticationControl?action=logout"><button>LogOut</button></a> 
 			<%
 			} else {
 			%>
 		
-				<a href="${pageContext.request.contextPath}/common/login.jsp">
+				<a style="text-decoration: none;" href="${pageContext.request.contextPath}/common/login.jsp">
 					<button id="login-button">LogIn</button>
 				</a>
 				<a href="${pageContext.request.contextPath}/common/signup.jsp">
