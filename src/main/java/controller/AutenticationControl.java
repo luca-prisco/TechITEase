@@ -17,7 +17,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import model.bean.*;
-import model.dao.UtenteDAO;
+import model.dao.*;
 
 @WebServlet("/common/AutenticationControl")
 public class AutenticationControl extends HttpServlet {
@@ -27,98 +27,98 @@ public class AutenticationControl extends HttpServlet {
 	public AutenticationControl() {
 		super();
 	}
-	
+	List<String> errors = new ArrayList<>();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		DriverManagerConnectionPool dm = (DriverManagerConnectionPool) getServletContext()
-				.getAttribute("DriverManager");
+		DriverManagerConnectionPool dm = (DriverManagerConnectionPool) getServletContext().getAttribute("DriverManager");
 		UtenteDAO utenteDAO = new UtenteDAO(dm);
 		String action = request.getParameter("action");
-
-		if (action.equals("login")) {
-
-			String emailUtente = request.getParameter("emailUtente");
-			String password = request.getParameter("password");
-			List<String> errors = new ArrayList<>();
-			RequestDispatcher dispatcherToLoginPage = request.getRequestDispatcher("login.jsp");
-
-			if (emailUtente == null || emailUtente.trim().isEmpty()) {
-				errors.add("Il campo email non può essere vuoto!");
-			}
-			if (password == null || password.trim().isEmpty()) {
-				errors.add("Il campo password non può essere vuoto!");
-			}
-			if (!errors.isEmpty()) {
-				request.setAttribute("errors", errors);
-				dispatcherToLoginPage.forward(request, response);
-				return;
-			}
-
-			emailUtente = emailUtente.trim();
-			String hashPassword = toHash(password.trim());
-
+		errors.clear();
+		 
+		if(action.equalsIgnoreCase("login")) {
 			try {
-				UtenteBean u = utenteDAO.loginUser(emailUtente, hashPassword);
-				HttpSession session = request.getSession();
-				session.setAttribute("utente", u);
-				System.out.println(u.isAdmin());
-				if (u.isAdmin() && u.getPassword() != null) { // admin
-					if (u.getPassword().equals(hashPassword)) {
-						request.getSession().setAttribute("isAdmin", Boolean.TRUE);
-						response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
-					}
-				} else if (!u.isAdmin() && u.getPassword() != null) { // user
-					if (u.getPassword().equals(hashPassword)) {
-						request.getSession().setAttribute("isAdmin", Boolean.FALSE);
-						response.sendRedirect(request.getContextPath() + "/common/index.jsp");
-					}
-				}
-
-				else {
-					errors.add("Username o password non validi!");
-					request.setAttribute("errors", errors);
-					dispatcherToLoginPage.forward(request, response);
-				}
-			} catch (SQLException e) {
+				handleLogin(request, response, utenteDAO);
+			} catch (SQLException | IOException | ServletException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
-		if(action.equals("signup")) {
-			String emailUtente = request.getParameter("emailUtente");
-			String nome = request.getParameter("firstname");
-			String cognome = request.getParameter("lastname");
-			String telefono = request.getParameter("phone");
-			String password = toHash(request.getParameter("password"));
-			Boolean isAdmin = Boolean.FALSE;
-			
-			UtenteBean utente = new UtenteBean();
-			utente.setEmailUtente(emailUtente);
-			utente.setNome(nome);
-			utente.setCognome(cognome);
-			utente.setTelefono(telefono);
-			utente.setPassword(password);
-			utente.setAdmin(isAdmin);
-			
-			try {
-				utenteDAO.registerUser(utente);
-				response.sendRedirect(request.getContextPath() + "/common/login.jsp");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if(action.equalsIgnoreCase("signup")) {
+			//handleSignup(request, response, utenteDAO);
 		}
-		
-		if(action.equals("logout")) {
+		if(action.equalsIgnoreCase("logout")) {
 			request.getSession().invalidate();
 			response.sendRedirect(request.getContextPath() + "/common/login.jsp");
 		}
-		
-	}
+
+	}	
 	
+	private void handleLogin(HttpServletRequest request, HttpServletResponse response, UtenteDAO utenteDAO) throws SQLException, IOException, ServletException {
+		String emailUtente = request.getParameter("emailUtente");
+		String password = request.getParameter("password");
+
+		
+		if(isValidLoginForm(emailUtente, password)) {	//se il campi del form sono validi chiamo il metodo loginUser
+			String hashPassword = toHash(password.trim());
+			UtenteBean u = utenteDAO.loginUser(emailUtente, hashPassword);
+			
+			if(u != null) {	//se l'utente è riuscito a loggare imposto l'attributo utente nella sessione
+				System.out.println("riuscito a loggare");
+				request.getSession().setAttribute("utente", u);
+				errors.clear();
+				if (u.isAdmin()) {	//Se l'utente è un admin setto l'informazione e indirizzo l'utente alla dashboard
+					request.getSession().setAttribute("isAdmin", Boolean.TRUE);
+					response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
+					return;
+				} else if (!u.isAdmin() && u.getPassword() != null) { //USER
+					request.getSession().setAttribute("isAdmin", Boolean.FALSE);
+		 			response.sendRedirect(request.getContextPath() + "/common/index.jsp");
+		 			return;
+				}	
+			} else {	//credenziali non valide
+				System.out.println("no valid credenziali");
+				errors.add("Email o password non corretti");
+				request.setAttribute("errors", errors);
+				request.getRequestDispatcher("/common/login.jsp").forward(request, response);
+			}
+		} else {	//campi del form non validi 
+			System.out.println("no valid field");
+			request.setAttribute("errors", errors);
+			request.getRequestDispatcher("/common/login.jsp").forward(request, response);
+		}
+	}
+		
+	
+
+
+	private boolean isValidLoginForm(String emailUtente, String password) {
+		//CONTROLLO PASSWORD 
+		String passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\\W_]).{8,}$";
+		String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+		if(password == null || password.trim().isEmpty()) {
+			
+		}            
+		else {
+		if(!password.matches(passwordPattern)) {
+	        errors.add("La password deve essere lunga almeno 8 caratteri, " +
+	                   "contenere almeno una lettera maiuscola, una lettera minuscola, " +
+	                   "un numero e un carattere speciale");
+	    	}
+		}
+		
+		if (emailUtente == null || emailUtente.trim().isEmpty()) {
+	
+		} else {
+			if (!emailUtente.matches(emailPattern)) {
+				errors.add("Il formato della mail non è corretto");
+			}
+		}
+		return errors.isEmpty();
+	}
+
+
 	
 	
 	private String toHash(String password) {

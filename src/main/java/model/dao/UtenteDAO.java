@@ -23,7 +23,7 @@ public class UtenteDAO {
 		Connection connection = null;
 		PreparedStatement ps = null;
 		
-		UtenteBean utente = new UtenteBean();
+		UtenteBean utente = null;
 
 		String sql = "SELECT * FROM " + UtenteDAO.TABLE_NAME + " WHERE emailUtente = ? AND password = ?";
 
@@ -36,6 +36,7 @@ public class UtenteDAO {
 			ResultSet rs = ps.executeQuery();
 	
 			if (rs.next()) {
+				utente = new UtenteBean();
 				utente.setEmailUtente(rs.getString("emailUtente"));
 				utente.setNome(rs.getString("nome"));
 				utente.setCognome(rs.getString("cognome"));
