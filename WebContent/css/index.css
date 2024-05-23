@@ -10,73 +10,77 @@ body {
 	 background: #fafafc;
 	 margin: 0;
 }
-
+ 
 .page {
-	max-width: 1200px;
-	margin: auto;
-}
+	width: 100%;
+	margin: 150px auto auto auto;
 
-section {
-	margin-top: 70px;
 }
 
 /* Slider container */
 .slideshow-container {
-	display: block;
-	width: 90%;
-	height: 500px;
-	margin: auto;
-	box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.1);
-	border: 0.1px solid lightgrey;
-	border-radius: 20px;
-	padding: 40px 40px 40px 40px;
-	background-color: #ffffff;
-	position: relative;
-
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    margin: 150px 0 170px 0;
 }
 
+/* Slideshow images */
 .mySlides {
-	display: none;
-	flex-direction: row;
-	width: 100%;
-	padding: 50px;
-	height: 100%;
-
+    display: none;
+    width: 100%;
 }
 
-.mySlides img  {
-	float: left;
-	width: auto; 
-	max-width: 70%;
-	height: auto;
-	object-fit: contain;
+/* animazione */
+.fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+
+/* Buttons */
+.slider-button {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: 4%;
+    height: 50px;
+    color: 1B2149;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.4s ease;
+    border-radius: 3px 3px 3px 3px;
+    user-select: none;
+}
+
+.slider-display-left {
+    left: 10px;
+}
+
+.slider-display-right {
+    right: 10px;
+}
+
+.slider-button:hover {
+    background-color: rgba(0,0,0,0.08);
 }
 
 .info__prodotto {
-	float: right;
-	width: 40%;
-	font-size: 20px;
-	letter-spacing: 1px;
-	text-align: justify;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	width: 38%;
 }
-
-.info__prodotto button {
-	border: solid 1px #9497ff;
-	background-color: #ffffff;
-	color: #9497ff;
+.info__prodotto h1 {
+	margin: 0;
+	font-size: 40px;
 }
-.info__prodotto button:hover {
-	background-color: #9497ff;
-	color: #ffffff;
-}
-
-.descrizione__prod p {
-	width: 100%;
-	display: block;
-	text-align: justify;
-	letter-spacing: 1px;
-	font-size: 16px;
-	line-height: 1.5;
+.info__prodotto h3 {
+	font-size: 28px;
 }
 
 /* Content bottom */
@@ -84,8 +88,7 @@ section {
 	clear: both;
 	display: flex;
 	flex-direction: column;
-	margin-top: 110px;
-	
+	height: 90vh;
 }
 
 .bottom-container h1 {
@@ -97,7 +100,6 @@ section {
 	width: 100%;
 	display: flex;
 	flex-direction: row;
-	margin: auto;
 }
 
 .product-card {
@@ -165,128 +167,4 @@ section {
 	background-color: #1B2149;
 	color: #ffffff;
 }
-
-.slider-button {
-	cursor: pointer;
-	margin: 0;
-	color: #1B2149;
-	background-color: #fafafc;
-	font-weight: bold;
-	font-size: 18px;
-	border: none;
-	user-select: none;
-	position: absolute;
-	bottom: 45%;
-}
-
-.slider-display-left {
-	left: 10px;
-}
-
-.slider-display-right {
-	right: 10px;
-}
-
-@media screen and (max-width: 1071px) {
-	
-	.slideshow-container {
-		height: 400px;
-		padding-right: 30px;
-	}
-	
-	.mySlides {
-		padding: 0;
-	}
-	
-	.mySlides img {
-		width: 100%;
-	}
-	
-	.info__prodotto {
-		margin-top: 50px;
-	}
-	
-	.info__prodotto h1 {
-		font-size: 24px;
-	}
-	
-	.descrizione__prod p {
-		font-size: 13px;
-		line-height: 1.3;
-	}
-
-	.product-cards-container {
-		flex-wrap: wrap;	
-		justify-content: center;
-	}
-	
-	.product-card {
-		width: 40%;
-	}
-}
-
-@media screen and (max-width: 626px) {
-	
-	.slideshow-container {
-		width: 100%;
-		height: 500px;
-		margin-top: 0;
-		border-radius: 0;
-	}
-	
-	.mySlides {
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
-		padding: 0 25px 0 25px;
-	}
-	
-	.mySlides img  {
-		width: 100%;
-		height: 38%;
-		object-fit: cover;
-	}
-	
-	.info__prodotto {
-		width: auto;
-	}
-	
-	.info__prodotto {
-		margin-top: 30px;
-	}
-	
-	.product-cards-container {
-		flex-wrap: wrap;	
-		justify-content: center;
-	}
-	
-	.product-card {
-		width: 50%;
-		border: 0.5px solid grey;
-		border-radius: 0px;
-		margin: 0;
-	}
-	
-	.product-details h2 {
-		font-size: 18px;
-	}
-	
-	.product-details p {
-		font-size: 12px;
-	}
-	
-	.product-price-buy h3 {
-		font-size: 14px;
-	}
-	
-	.product-price-buy button {
-		font-size: 14px;
-	}
-}
-
-@media screen and (max-width: 490px) {
-	.product-price-buy button {
-		padding: 7px 5% 7px 5%;
-		font-size: 13px;
-	}
-}
+ 

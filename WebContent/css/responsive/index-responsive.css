@@ -1,0 +1,157 @@
+@charset "UTF-8";
+
+@media screen and (max-width: 1071px) {
+
+	.slideshow-container {
+		height: 60vh;
+		padding-right: 30px;
+	}
+	
+	.mySlides {
+		padding-top: 70px;
+	}
+	.prod__image img {
+		width: 100%;
+		object-fit: contain;
+	}
+
+	
+	.info__prodotto h1 {
+		font-size: 24px;
+	}
+	.info__prodotto h3 {
+		font-size: 20px;
+	}
+	.info__prodotto p {
+		width: 100%;
+	}
+	
+	.descrizione__prod p {
+		font-size: 13px;
+		line-height: 1.3;
+	}
+
+	.product-cards-container {
+		flex-wrap: wrap;	
+		justify-content: center;
+	}
+	
+	.product-card {
+		width: 40%;
+	}
+}
+
+@media screen and (max-width: 626px) {
+	.page {
+		max-width: 1200px;
+		margin: 150px auto auto auto;
+
+	}	
+	
+    .slideshow-container {
+        width: 100%;
+        height: 60vh;
+        padding: 0;
+    }
+	
+	.mySlides {
+    	flex-direction: column;
+    	justify-content: space-between;
+    	align-items: center;
+    	height: 100%;
+    	padding: 0;
+    }
+    
+    .prod__image {
+    	width: 100%;
+    }
+    
+    .info__prodotto {
+    	width: 75%;
+    	margin-top: 40px;
+    }
+    .info__prodotto h1 {
+        font-size: 1.2em;
+    }
+    .info__prodotto h3 {
+        font-size: 1em;
+    }
+    .info__prodotto p {
+		width: 100%;
+	}
+
+    .slider-button {
+        padding: 10px;
+        font-size: 14px;
+    }
+	
+	.product-cards-container {
+		flex-wrap: wrap;	
+		justify-content: center;
+	}
+	
+	.product-card {
+		width: 50%;
+		border: 0.5px solid grey;
+		border-radius: 0px;
+		margin: 0;
+	}
+	
+	.product-details h2 {
+		font-size: 18px;
+	}
+	
+	.product-details p {
+		font-size: 12px;
+	}
+	
+	.product-price-buy h3 {
+		font-size: 14px;
+	}
+	
+	.product-price-buy button {
+		font-size: 14px;
+	}
+}
+
+@media screen and (max-width: 490px) {
+	
+	.product-price-buy button {
+		padding: 7px 5% 7px 5%;
+		font-size: 13px;
+	}
+	
+    .slideshow-container {
+        width: 100%;
+        height: 60vh;
+        padding: 0;
+    }
+	
+	.mySlides {
+    	flex-direction: column;
+    	justify-content: space-between;
+    	align-items: center;
+    	height: 100%;
+    }
+    
+    .mySlides img {
+        width: 100%;
+    }
+    
+    .info__prodotto {
+    	width: 75%;
+    	margin-top: 40px;
+    }
+    .info__prodotto h1 {
+        font-size: 1.2em;
+    }
+    .info__prodotto h3 {
+        font-size: 1em;
+    }
+
+
+    .slider-button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
