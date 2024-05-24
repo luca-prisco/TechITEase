@@ -8,11 +8,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import controller.DriverManagerConnectionPool;
-import model.dao.ProdottoDAO;
-import model.bean.ProdottoBean;
-
+import model.bean.*;
 public class ProdottoDAO {
 	
 	private static final String TABLE_NAME = "Prodotto";
@@ -32,7 +33,7 @@ public class ProdottoDAO {
 		
 		int IDProdotto;
 		
-		String sql = "INSERT INTO" + ProdottoDAO.TABLE_NAME + "(nomeProdotto, brand, categoria, descrizione, dettagli) VALUES  (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO " + ProdottoDAO.TABLE_NAME + " (nomeProdotto, brand, categoria, descrizione, dettagli) VALUES  (?, ?, ?, ?, ?)";
 		
 		
 		try {
@@ -61,19 +62,22 @@ public class ProdottoDAO {
 				dmcp.releaseConnection(connection);
 			}
 		}
-		String sql2 = "INSERT INTO" + ProdottoDAO.TABLE_NAME_SPECIFICHE +"(colore, hdd, ram, quantita, prezzo, IDProdotto) VALUES (?, ?, ?, ?, ?, ?)";
+		String sql2 = "INSERT INTO " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " (colore, hdd, ram, quantita, prezzo, numVendite, IDProdotto) VALUES (?, ?, ?, ?, ?, ?)";
 		
 		try {
 			psProdSpec = connection.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);
 		
-			psProdSpec.setString(1, prodotto.getColore());
-			psProdSpec.setInt(2, prodotto.getHdd());
-			psProdSpec.setInt(3, prodotto.getRam());
-			psProdSpec.setInt(4, prodotto.getQuantita());
-			psProdSpec.setBigDecimal(5, prodotto.getPrezzo());
-			psProdSpec.setInt(6, IDProdotto);
-			
-			psProdSpec.executeUpdate();
+			List<Specifiche> specifiche = prodotto.getSpecifiche();
+			for(Specifiche specifica : specifiche) {
+				psProdSpec.setString(1, specifica.getColore());
+				psProdSpec.setInt(2, specifica.getHdd());
+				psProdSpec.setInt(3, specifica.getRam());
+				psProdSpec.setInt(4, specifica.getQuantita());
+				psProdSpec.setBigDecimal(5, specifica.getPrezzo());
+				psProdSpec.setInt(6, specifica.getNumVendite());
+				psProdSpec.setInt(7, IDProdotto);
+			}
+			psProdSpec.executeBatch();
 			
 		} finally {
 			try {
@@ -84,150 +88,78 @@ public class ProdottoDAO {
 			}
 		}
 	
-	}
-	
-	public synchronized void updateProduct(ProdottoBean prodotto) throws SQLException {
-		Connection connection = null;
-		PreparedStatement ps = null;
-		PreparedStatement psProdSpec = null;
-		
-		String sql = "UPDATE " + ProdottoDAO.TABLE_NAME + " SET nomeProdotto = ?, brand = ?, categoria = ?, descrizione = ?, dettagli = ? WHERE IDProdotto = ?";
-	
-		try {
-			connection = dmcp.getConnection();
-			ps = connection.prepareStatement(sql);
-			
-			ps.setInt(6, prodotto.getIDProdotto());
-			
-			ps.setString(1, prodotto.getNomeProdotto());
-			ps.setString(2, prodotto.getBrand());
-			ps.setString(3, prodotto.getCategoria());
-			ps.setString(4, prodotto.getDescrizione());
-			ps.setString(5, prodotto.getDettagli());
-			
-			ps.executeUpdate();
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-			} finally {
-				dmcp.releaseConnection(connection);
-			}
-		}
-		
-		String sql2 = "UPDATE " + ProdottoDAO.TABLE_NAME_SPECIFICHE +" SET colore = ?, hdd = ?, ram = ?, quantita = ?, prezzo = ? WHERE IDProdotto = ? AND IDSpecifiche = ?";
-		
-		try {
-			psProdSpec = connection.prepareStatement(sql2);
-			
-			ps.setInt(6, prodotto.getIDProdotto());
-			ps.setInt(7, prodotto.getIDSpecifiche());
-			
-			ps.setString(1, prodotto.getColore());
-			ps.setInt(2, prodotto.getHdd());
-			ps.setInt(3, prodotto.getRam());
-			ps.setInt(4, prodotto.getQuantita());
-			ps.setBigDecimal(5, prodotto.getPrezzo());
-			
-			psProdSpec.executeUpdate();
-			
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-			} finally {
-				dmcp.releaseConnection(connection);
-			}
-		}
 	}
 	
 	
 	public synchronized Collection<ProdottoBean> doRetrieveAll() throws SQLException {
-		Collection<ProdottoBean> prodotti = new ArrayList<ProdottoBean>();
-		
-		Connection connection = null;
-		PreparedStatement ps = null;
-		
-		String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto";
-			
-		try {
-			connection = dmcp.getConnection();
-			ps = connection.prepareStatement(sql);
-			
-			ResultSet rs = ps.executeQuery();
-			
-			while(rs.next()) {
-				ProdottoBean prodotto = new ProdottoBean();
-				prodotto.setIDProdotto(rs.getInt(1));
-				prodotto.setNomeProdotto(rs.getString(2));
-				prodotto.setBrand(rs.getString(3));
-				prodotto.setCategoria(rs.getString(4));
-				prodotto.setDescrizione(rs.getString(5));
-				prodotto.setDettagli(rs.getString(6));
-				prodotto.setIDSpecifiche(rs.getInt(7));
-				prodotto.setColore(rs.getString(8));
-				prodotto.setHdd(rs.getInt(9));
-				prodotto.setRam(rs.getInt(10));
-				prodotto.setQuantita(rs.getInt(11));
-				prodotto.setPrezzo(rs.getBigDecimal(12));
-				prodotto.setNumVendite(rs.getInt(13));
-				prodotto.setImage(rs.getBytes(14));
-				prodotti.add(prodotto);
-			}
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-			} finally {
-				dmcp.releaseConnection(connection);
-			}
-		}
-		
-		return prodotti;
+	    Collection<ProdottoBean> prodotti = new ArrayList<>();
+
+	    Connection connection = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto";
+
+	    try {
+	        connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+	        rs = ps.executeQuery();
+
+	        // Mappa per tenere traccia dei prodotti mentre si scansionano le righe del ResultSet
+	        Map<Integer, ProdottoBean> mapProdotti = new HashMap<>();
+
+	        while (rs.next()) {
+	            int IDProdotto = rs.getInt("IDProdotto");
+
+	            // Se il prodotto non è stato ancora creato, lo crea e lo aggiunge alla mappa
+	            if (!mapProdotti.containsKey(IDProdotto)) {
+	                ProdottoBean prodotto = new ProdottoBean();
+	                prodotto.setIDProdotto(IDProdotto);
+	                prodotto.setNomeProdotto(rs.getString("nomeProdotto"));
+	                prodotto.setBrand(rs.getString("brand"));
+	                prodotto.setCategoria(rs.getString("categoria"));
+	                prodotto.setDescrizione(rs.getString("descrizione"));
+	                prodotto.setDettagli(rs.getString("dettagli"));
+
+	                mapProdotti.put(IDProdotto, prodotto);
+	            }
+
+	            // Aggiunge le specifiche al prodotto
+	            Specifiche specifiche = new Specifiche();
+	            specifiche.setIDSpecifiche(rs.getInt("IDSpecifiche"));
+	            specifiche.setColore(rs.getString("colore"));
+	            specifiche.setHdd(rs.getInt("hdd"));
+	            specifiche.setRam(rs.getInt("ram"));
+	            specifiche.setQuantita(rs.getInt("quantita"));
+	            specifiche.setPrezzo(rs.getBigDecimal("prezzo"));
+	            specifiche.setNumVendite(rs.getInt("numVendite"));
+	            specifiche.setImage(rs.getBytes("photo"));
+
+	            mapProdotti.get(IDProdotto).getSpecifiche().add(specifiche);
+	        }
+
+	        // Aggiunge i prodotti dalla mappa alla collezione finale
+	        prodotti.addAll(mapProdotti.values());
+	    } finally {
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } finally {
+	            if (connection != null) {
+	                dmcp.releaseConnection(connection);
+	            }
+	        }
+	    }
+
+	    return prodotti;
 	}
-	
-	public ProdottoBean doRetrieveById(int IDProdotto, int IDSpecifiche) throws SQLException {
-		
-		ProdottoBean prodotto = new ProdottoBean();
-		Connection connection = null;
-		PreparedStatement ps = null;
-		
-		String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto";
-		
-		try {
-			connection = dmcp.getConnection();
-			ps = connection.prepareStatement(sql);
-			
-			ResultSet rs = ps.executeQuery();
-			
-			if(rs.next()) {
-				prodotto.setIDProdotto(rs.getInt(1));
-				prodotto.setNomeProdotto(rs.getString(2));
-				prodotto.setBrand(rs.getString(3));
-				prodotto.setCategoria(rs.getString(4));
-				prodotto.setDescrizione(rs.getString(5));
-				prodotto.setDettagli(rs.getString(6));
-				prodotto.setIDSpecifiche(rs.getInt(7));
-				prodotto.setColore(rs.getString(8));
-				prodotto.setHdd(rs.getInt(9));
-				prodotto.setRam(rs.getInt(10));
-				prodotto.setQuantita(rs.getInt(11));
-				prodotto.setPrezzo(rs.getBigDecimal(12));
-				prodotto.setNumVendite(rs.getInt(13));
-				prodotto.setImage(rs.getBytes(14));
-			} 
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-			} finally {
-				dmcp.releaseConnection(connection);
-			}
-		}
-		
-		return prodotto;
-	}
-	
+
+
+
 	public synchronized void deleteProduct(int id1, int id2) throws SQLException {
 	    Connection connection = null;
 	    PreparedStatement ps = null;
