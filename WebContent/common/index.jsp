@@ -81,6 +81,7 @@
 			</div>
 		</div>
 	</div>
+	
 	<script src="scripts/slider.js"></script>
 </body>
 </html>
