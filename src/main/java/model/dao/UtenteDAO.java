@@ -57,9 +57,10 @@ public class UtenteDAO {
 
 	}
 	
-	public synchronized void registerUser(UtenteBean utente) throws SQLException {
+	public synchronized boolean registerUser(String emailUtente, String nome, String cognome, String telefono, String password, boolean isAdmin) throws SQLException {
 		Connection connection = null;
-		PreparedStatement ps = null;	
+		PreparedStatement ps = null;
+		boolean success = false;
 		
 		String sql = "INSERT INTO " + UtenteDAO.TABLE_NAME + " (emailUtente, nome, cognome, telefono, password, isAdmin) VALUES(?, ?, ?, ?, ?, ?)";
 		
@@ -67,20 +68,54 @@ public class UtenteDAO {
 			connection = dmcp.getConnection(); //Ottengo la connection dalla connection pool
 			ps = connection.prepareStatement(sql);
 			
-			ps.setString(1, utente.getEmailUtente());
-			ps.setString(2, utente.getNome());
-			ps.setString(3, utente.getCognome());
-			ps.setString(4, utente.getTelefono());
-			ps.setString(5, utente.getPassword());
-			ps.setBoolean(6, utente.isAdmin());
+			ps.setString(1, emailUtente);
+			ps.setString(2, nome);
+			ps.setString(3, cognome);
+			ps.setString(4, telefono);
+			ps.setString(5, password);
+			ps.setBoolean(6, isAdmin);
 			
-			ps.executeUpdate();
+			int result = ps.executeUpdate();
+			
+			if(result > 0)
+				success = true;
+			
 		} finally {
 			try {
 				if (ps != null)
 					ps.close();
 			} finally {
 				dmcp.releaseConnection(connection);
+			}
+		}
+		
+		return success;
+	}
+	
+	public boolean checkByEmail(String emailUtente) throws SQLException {
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT * FROM " + UtenteDAO.TABLE_NAME + " WHERE emailUtente = ?";
+
+		try {
+			connection = dmcp.getConnection(); //Ottengo la connection dalla connection pool
+			ps = connection.prepareStatement(sql);
+			ps.setString(1, emailUtente);
+			rs = ps.executeQuery();
+			
+			return rs.next();
+			
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+				if (rs != null)
+					rs.close();
+			} finally {
+				if(connection != null)
+					dmcp.releaseConnection(connection);
 			}
 		}
 	}

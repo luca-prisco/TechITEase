@@ -41,12 +41,15 @@ public class AutenticationControl extends HttpServlet {
 			try {
 				handleLogin(request, response, utenteDAO);
 			} catch (SQLException | IOException | ServletException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		if(action.equalsIgnoreCase("signup")) {
-			//handleSignup(request, response, utenteDAO);
+			try {
+				handleSignup(request, response, utenteDAO);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		if(action.equalsIgnoreCase("logout")) {
 			request.getSession().invalidate();
@@ -54,7 +57,8 @@ public class AutenticationControl extends HttpServlet {
 		}
 
 	}	
-	
+
+	//GESTIONE DELLA AUTENTICAZIONE
 	private void handleLogin(HttpServletRequest request, HttpServletResponse response, UtenteDAO utenteDAO) throws SQLException, IOException, ServletException {
 		String emailUtente = request.getParameter("emailUtente");
 		String password = request.getParameter("password");
@@ -78,46 +82,107 @@ public class AutenticationControl extends HttpServlet {
 		 			return;
 				}	
 			} else {	//credenziali non valide
-				System.out.println("no valid credenziali");
 				errors.add("Email o password non corretti");
 				request.setAttribute("errors", errors);
 				request.getRequestDispatcher("/common/login.jsp").forward(request, response);
 			}
 		} else {	//campi del form non validi 
-			System.out.println("no valid field");
 			request.setAttribute("errors", errors);
 			request.getRequestDispatcher("/common/login.jsp").forward(request, response);
 		}
 	}
 		
-	
-
-
 	private boolean isValidLoginForm(String emailUtente, String password) {
 		//CONTROLLO PASSWORD 
 		String passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\\W_]).{8,}$";
 		String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-		if(password == null || password.trim().isEmpty()) {
+		if(password == null || password.trim().isEmpty()) 
+			errors.add("La password è obbligatoria");
+		else 
+			if(!password.matches(passwordPattern)) 
+		        errors.add("La password deve essere lunga almeno 8 caratteri, " +
+		                   "contenere almeno una lettera maiuscola, una lettera minuscola, " +
+		                   "un numero e un carattere speciale");
+
+		if (emailUtente == null || emailUtente.trim().isEmpty()) 
+			errors.add("La email è obbligatoria");
+		else 
+			if (!emailUtente.matches(emailPattern)) 
+				errors.add("Il formato della mail non è valido");
 			
-		}            
-		else {
-		if(!password.matches(passwordPattern)) {
-	        errors.add("La password deve essere lunga almeno 8 caratteri, " +
-	                   "contenere almeno una lettera maiuscola, una lettera minuscola, " +
-	                   "un numero e un carattere speciale");
-	    	}
-		}
-		
-		if (emailUtente == null || emailUtente.trim().isEmpty()) {
-	
-		} else {
-			if (!emailUtente.matches(emailPattern)) {
-				errors.add("Il formato della mail non è corretto");
-			}
-		}
 		return errors.isEmpty();
 	}
+	
+	//GESTIONE DELLA REGISTRAZIONE
+	private void handleSignup(HttpServletRequest request, HttpServletResponse response, UtenteDAO utenteDAO) throws SQLException, IOException, ServletException {
+		String emailUtente = request.getParameter("emailUtente");
+		String nome = request.getParameter("nome");
+		String cognome = request.getParameter("cognome");
+		String telefono = request.getParameter("telefono");
+		String password = request.getParameter("password");
+		
+		if(isValidSignupForm(emailUtente, nome, cognome, telefono, password)) {
+			String hashPassword = toHash(password);
+			if(!utenteDAO.checkByEmail(emailUtente)) {
+				if(utenteDAO.registerUser(emailUtente, nome, cognome, telefono, hashPassword, Boolean.FALSE)) {
+					request.getSession().setAttribute("newUser", nome);
+		 			response.sendRedirect(request.getContextPath() + "/common/index.jsp");
+		 			errors.clear();
+		 			return;
+				} else {	//REGISTRAZIONE NON ANDATA A BUON FINE
+					errors.add("La registrazione non è andata a buon fine");
+					request.setAttribute("errors", errors);
+					request.getRequestDispatcher("/common/signup.jsp").forward(request, response);
+				}			
+			} else {	//EMAIL GIA' REGISTRATA
+				errors.add("Utente già registrato");
+				request.setAttribute("errors", errors);
+				request.getRequestDispatcher("/common/signup.jsp").forward(request, response);
+			}
+		} else {	//campi del form non validi 
+			request.setAttribute("errors", errors);
+			request.getRequestDispatcher("/common/signup.jsp").forward(request, response);
+			
+		}
+		
+		
+	}
+	
+	private boolean isValidSignupForm(String emailUtente, String nome, String cognome, String telefono, String password) {
+		String passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\\W_]).{8,}$";
+		String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+		String nomeCognomePattern = "^[a-zA-ZÀ-ÖØ-öø-ÿ\\\\s']*";
+		String telefonoPattern = "^\\d{7,15}$";
+		
+		if(password == null || password.trim().isEmpty()) 
+			errors.add("La password è obbligatoria");
+		else if(!password.matches(passwordPattern)) 
+		        errors.add("La password deve essere lunga almeno 8 caratteri, " +
+		                   "contenere almeno una lettera maiuscola, una lettera minuscola, " +
+		                   "un numero e un carattere speciale");
 
+		if (emailUtente == null || emailUtente.trim().isEmpty()) 
+			errors.add("La email è obbligatoria");
+		else if (!emailUtente.matches(emailPattern)) 
+				errors.add("Il formato della mail non è valido");
+		
+		if (nome == null || nome.trim().isEmpty()) 
+			errors.add("Il nome è obbligatorio");
+		else if (!nome.matches(nomeCognomePattern)) 
+				errors.add("Il formato del nome non è valido");
+		
+		if (cognome == null || cognome.trim().isEmpty()) 
+			errors.add("Il cognome è obbligatorio");
+		else if (!cognome.matches(nomeCognomePattern)) 
+				errors.add("Il formato del cognome non è valido");
+		
+		if (telefono == null || telefono.trim().isEmpty()) 
+			errors.add("Il telefono è obbligatorio");
+		else if (!telefono.matches(telefonoPattern)) 
+				errors.add("Il formato del telefono non è valido");
+		
+		return errors.isEmpty();
+	}
 
 	
 	
