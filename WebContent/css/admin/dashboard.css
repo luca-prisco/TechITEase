@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont;
+	color: #1B2149;
+}
+
+body {
+	 background: #fafafc;
+	 margin: 0;
+	 display: flex;
+	 flex-direction: row;
+}
+

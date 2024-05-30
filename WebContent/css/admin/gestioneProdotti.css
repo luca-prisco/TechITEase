@@ -1,0 +1,103 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont;
+	color: #1B2149;
+}
+
+body {
+	 background: #fafafc;
+	 margin: 0;
+	 display: flex;
+	 flex-direction: row;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	margin-left: 20px;
+	width: 100%;
+}
+
+.row-container{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 20px;
+}
+
+.row-container button {
+	background-color: #7d57de;
+	color: #ffffff;
+}
+
+button{
+	border: none;
+	border-radius: 10px;
+	padding: 12px 18px 12px 18px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+
+/*PRODOTTI__STORAGE*/
+.prodotti__storage {
+	display: flex;
+	flex-direction: column;
+	margin: 20px;
+	height: 100vh;
+}
+
+.prodotto {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 20px;
+	box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.1);
+	border: 0.1px solid lightgrey;
+	padding: 10px;
+	background-color: #ffffff;
+	margin-bottom: 0px;
+}
+
+.info_prodotto{
+	display:flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.tools {
+	display:flex;
+	flex-direction: row;
+}
+
+.filters button {
+	background-color: #efedfa;
+	color: #7d57de;
+}
+
+/* TABLE */
+table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse; /*per non avere spazio tra i bordi*/
+	width: 100%;
+	background-color: white;
+	box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.1);
+	border: 0.1px solid lightgrey;
+	caption-side: bottom;
+}
+
+th {
+	background-color: #efedfa;
+}
+
+td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+	height: 30px;
+}
+
+
+
