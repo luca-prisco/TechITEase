@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import controller.DriverManagerConnectionPool;
-import model.bean.UtenteBean;
+import model.bean.*;
 
 public class UtenteDAO {
 	

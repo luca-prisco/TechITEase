@@ -24,7 +24,7 @@
 			</ul>
 		</div>
 
-		<a href=""><img id="cart" src="img/icons/cart.png" alt="cart"
+		<a href=""><img id="cart" src="${pageContext.request.contextPath}/img/icons/cart.png" alt="cart"
 			style="width: 25px;"></a>
 
 		<div class="account">
@@ -69,7 +69,7 @@
 		</a> <a href="${pageContext.request.contextPath}/Catalogo"> <img
 			src="img/icons/prodottiChiaro.png" alt="catalogo" style="width: 25px;">
 		</a> 
-		<a href="#"> <img id="cart" src="img/icons/cartChiaro.png" alt="cart"
+		<a href="#"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cartChiaro.png" alt="cart"
 			style="width: 25px;">
 		</a>
 

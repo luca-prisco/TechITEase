@@ -11,7 +11,7 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/login.css" />
 </head>
 <body>
-	<%@ include file="/include/header.jsp"%>
+	<jsp:include page="/include/header.jsp"/>
 	<script src="scripts/validateSignup.js"></script>
 
 	<div class="content">
