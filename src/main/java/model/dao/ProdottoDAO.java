@@ -62,7 +62,7 @@ public class ProdottoDAO {
 				dmcp.releaseConnection(connection);
 			}
 		}
-		String sql2 = "INSERT INTO " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " (colore, hdd, ram, quantita, prezzo, numVendite, IDProdotto) VALUES (?, ?, ?, ?, ?, ?)";
+		String sql2 = "INSERT INTO " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " (colore, hdd, ram, quantita, prezzo, IDProdotto) VALUES (?, ?, ?, ?, ?, ?)";
 		
 		try {
 			psProdSpec = connection.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);
@@ -74,10 +74,11 @@ public class ProdottoDAO {
 				psProdSpec.setInt(3, specifica.getRam());
 				psProdSpec.setInt(4, specifica.getQuantita());
 				psProdSpec.setBigDecimal(5, specifica.getPrezzo());
-				psProdSpec.setInt(6, specifica.getNumVendite());
-				psProdSpec.setInt(7, IDProdotto);
+				psProdSpec.setInt(6, IDProdotto);
+				psProdSpec.addBatch(); // Aggiunge al batch
 			}
-			psProdSpec.executeBatch();
+			
+			psProdSpec.executeBatch(); //Esegue il batch
 			
 		} finally {
 			try {
