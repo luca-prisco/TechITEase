@@ -165,26 +165,43 @@ public class ProdottoDAO {
 	    Connection connection = null;
 	    PreparedStatement ps = null;
 	    PreparedStatement psProdSpec = null;
+	    PreparedStatement psCheck = null;
 	    
-	    String sql = "DELETE FROM " + ProdottoDAO.TABLE_NAME + " WHERE IDProdotto = ?";
-	    String sql2 = "DELETE FROM " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " WHERE IDProdotto = ? AND IDSpecifiche = ?";
+	    String sqlCheck = "SELECT COUNT(*) FROM " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " WHERE IDProdotto = ?";
+	    String sqlDeleteSpecifica = "DELETE FROM " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " WHERE IDProdotto = ? AND IDSpecifiche = ?";
+	    String sqlDeleteProdotto = "DELETE FROM " + ProdottoDAO.TABLE_NAME + " WHERE IDProdotto = ?";
 	    
 	    try {
 	        connection = dmcp.getConnection();
 	        
-	        // Preparo ed eseguo la query per eliminare dalla tabella specifiche
-	        psProdSpec = connection.prepareStatement(sql2);
+	        //Controlla il numero di specifiche associate al prodotto
+	        psCheck = connection.prepareStatement(sqlCheck);
+	        psCheck.setInt(1, id1);
+	        ResultSet rsCheck = psCheck.executeQuery();
+	        
+	        int numSpecifiche = 0;
+	        if (rsCheck.next()) { //muove il curosore alla prima riga del ResultSet
+	            numSpecifiche = rsCheck.getInt(1); //Ottiene il valore della prima colonna della riga corrente (che è il conteggio delle specifiche).
+	        }
+	        
+	        //Elimina la specifica selezionata
+	        psProdSpec = connection.prepareStatement(sqlDeleteSpecifica);
 	        psProdSpec.setInt(1, id1);
 	        psProdSpec.setInt(2, id2);
 	        psProdSpec.executeUpdate();
 	        
-	        // Prepara ed esegui la query per eliminare dalla tabella prodotto
-	        ps = connection.prepareStatement(sql);
-	        ps.setInt(1, id1);
-	        ps.executeUpdate();
+	        //Se il numero di specifiche è uno elimino anche il prodotto
+	        if(numSpecifiche == 1) {
+		        ps = connection.prepareStatement(sqlDeleteProdotto);
+		        ps.setInt(1, id1);
+		        ps.executeUpdate();
+	        }
 	    
 	    } finally {
 	        try {
+	        	if (psCheck != null) {
+	                psCheck.close();
+	            }
 	            if (psProdSpec != null) {
 	                psProdSpec.close();
 	            }

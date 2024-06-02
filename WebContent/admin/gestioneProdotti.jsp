@@ -69,8 +69,8 @@ if(prodotti == null)
 													<form id="uploadPhoto" action="./UploadPhoto" enctype="multipart/form-data" method="post">
 														<input type="hidden" name="id1" value="${prodotto.IDProdotto}">
 														<input type="hidden" name="id2" value="${specifiche.IDSpecifiche}">
-														<input id="fileInput${specifiche.IDSpecifiche}" class="file" type="file" name="talkPhoto" maxlength="255" style="display: none;">
-														<label for="fileInput${specifiche.IDSpecifiche}" style="cursor: pointer;"> 
+														<input id="fileInput" class="file" type="file" name="talkPhoto" maxlength="255" style="display: none;">
+														<label for="fileInput" style="cursor: pointer;"> 
 															<img src="${pageContext.request.contextPath}/img/icons/addImage.png" style="width:25px; margin: 10px 0 10px 25px;">
 														</label>
 													</form>
@@ -81,22 +81,19 @@ if(prodotti == null)
 												</c:otherwise>
 											</c:choose>
 										</td>
-										<td>
+										<td id="azioni">
 											<form method="get" action="GestioneCatalogo?action=updateProduct">
 												<input type="hidden" name="id" value="${prodotto.IDProdotto}">
 												<button type="submit">Edit</button>
 											</form>
-										</td>
-										<td>
-											<form id="deleteForm" method="get" action="ProdottoControl">
+																						<form id="deleteForm" method="get" action="ProdottoControl">
 												<input type="hidden" name="action" value="delete">
 												<input type="hidden" name="del1" value="${prodotto.IDProdotto}">
 												<input type="hidden" name="del2" value="${specifiche.IDSpecifiche}">
-												<label for="deleteSubmit${specifiche.IDSpecifiche}" style="cursor: pointer;"> 
-													<img src="${pageContext.request.contextPath}/img/icons/deleteIcon.png" style="width:25px; margin: 10px 0 10px 25px;">
-												</label>
+												<button type="submit">Delete</button>
 											</form>
 										</td>
+									
 									</tr>
 									<script>
 										document.getElementById('fileInput').addEventListener('change', function() {
