@@ -93,6 +93,11 @@ public class ProdottoControl extends HttpServlet {
 					response.sendRedirect(request.getContextPath() + "/admin/gestioneProdotti.jsp");
 			        return;
 				}
+				if(action.equalsIgnoreCase("toPage")) {
+					String id1 = request.getParameter("id1");
+					String id2 = request.getParameter("id2");
+					
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

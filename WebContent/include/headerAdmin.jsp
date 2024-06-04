@@ -11,7 +11,7 @@
 <body>
 	<div class="header">
 		<div class="logo">
-			<img src="${pageContext.request.contextPath}/img/TechITEase.svg" alt="LOGO">
+			<img src="${pageContext.request.contextPath}/img/logo/TechITEase.svg" alt="LOGO">
 		</div>
 		<div class="menu">
 			<ul>

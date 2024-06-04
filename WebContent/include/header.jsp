@@ -19,7 +19,7 @@
 			<ul>
 				<li><a
 					href="${pageContext.request.contextPath}/common/index.jsp">Home</a></li>
-				<li><a href="${pageContext.request.contextPath}/Catalogo">Catalogo</a></li>
+				<li><a href="${pageContext.request.contextPath}/Catalogo">Prodotti</a></li>
 				<li><a href="HomeSelection?action=aboutus">Chi siamo</a></li>
 			</ul>
 		</div>
