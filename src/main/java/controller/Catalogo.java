@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 import model.Cart;
 import model.dao.ProdottoDAO;
 
@@ -38,6 +40,7 @@ public class Catalogo extends HttpServlet {
 		try {
 			request.removeAttribute("prodotti");
 			request.setAttribute("prodotti", prodottoDao.doRetrieveAll());
+			
 		} catch (SQLException e) {
 			System.out.println("Error:" + e.getMessage());
 		}

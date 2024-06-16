@@ -87,43 +87,26 @@
 			
 			<div class="content__prodotti">
 				<c:forEach var="p" items="${prodotti}" begin="0">
-					<c:forEach var="s" items="${p.specifiche}" begin="0">
-						<div class="product-card" data-idProdotto="${p.IDProdotto}" data-idSpecifiche="${s.IDSpecifiche}">
-							<img
-								src="./getPicture?id1=${p.IDProdotto}&id2=${s.IDSpecifiche}"
-								alt="prova" style="width: 210px;">
-							<div class="product-details">
-								<h2>${p.nomeProdotto}</h2>
-								<p>${p.descrizione}</p>
-								<div class="product-price-buy">
-									<span style="float: left; font-size: 14px; margin-bottom: 5px;">A partire da:</span>
-									<h3>&euro;${p.specifiche[0].prezzo}</h3>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</c:forEach>
+			        <c:forEach var="s" items="${p.specifiche}" begin="0">
+			            <a href="./ProdottoControl?action=toPage&id1=${p.IDProdotto}&id2=${s.IDSpecifiche}" style="text-decoration:none;">
+			                <div class="product-card">
+			                    <img src="./getPicture?id1=${p.IDProdotto}&id2=${s.IDSpecifiche}" alt="prova" style="width: 210px;">
+			                    <div class="product-details">
+			                        <h2>${p.nomeProdotto}</h2>
+			                        <p>${p.descrizione}</p>
+			                        <div class="product-price-buy">
+			                            <span style="float: left; font-size: 14px; margin-bottom: 5px;">A partire da:</span>
+			                            <h3>&euro;${s.prezzo}</h3>
+			                        </div>
+			                    </div>
+			                </div>
+			            </a>
+			        </c:forEach>
+			    </c:forEach>
 	
 			</div>
 		</div>
 	</div>
-	<script>
-    // Seleziona tutti gli elementi con la classe 'product-card'
-    document.querySelectorAll('.product-card').forEach(function(card) {
-        // Aggiungi un event listener per il click su ciascun 'card'
-        card.addEventListener('click', function() {
-            // Ottieni gli ID dai data-attribute del div cliccato
-            var idProdotto = this.getAttribute('data-idProdotto');
-            var idSpecifiche = this.getAttribute('data-idSpecifiche');
-            
-            // Costruisci l'URL con i parametri
-            var url = 'https://localhost/TechITEase/ProdottoControl?action=toPage&id1=' + encodeURIComponent(idProdotto) + '&id2=' + encodeURIComponent(idSpecifiche);
-            
-            // Reindirizza alla nuova URL
-            window.location.href = url;
-        });
-    });
-	</script>
-	
+
 </body>
 </html>

@@ -121,6 +121,7 @@ public class ProdottoDAO {
 	                prodotto.setCategoria(rs.getString("categoria"));
 	                prodotto.setDescrizione(rs.getString("descrizione"));
 	                prodotto.setDettagli(rs.getString("dettagli"));
+	                prodotto.setSpecifiche(new ArrayList<>()); // Inizializza la lista delle specifiche
 
 	                mapProdotti.put(IDProdotto, prodotto);
 	            }
@@ -141,23 +142,21 @@ public class ProdottoDAO {
 
 	        // Aggiunge i prodotti dalla mappa alla collezione finale
 	        prodotti.addAll(mapProdotti.values());
+	    } catch (SQLException e) {
+	        e.printStackTrace(); // Gestisci l'eccezione in modo appropriato
+	        throw e; // Rilancia l'eccezione per permettere la gestione a livello superiore
 	    } finally {
 	        try {
-	            if (rs != null) {
-	                rs.close();
-	            }
-	            if (ps != null) {
-	                ps.close();
-	            }
+	            if (rs != null) rs.close();
+	            if (ps != null) ps.close();
 	        } finally {
-	            if (connection != null) {
-	                dmcp.releaseConnection(connection);
-	            }
+	            if (connection != null) dmcp.releaseConnection(connection);
 	        }
 	    }
 
 	    return prodotti;
 	}
+
 
 
 
@@ -215,4 +214,57 @@ public class ProdottoDAO {
 	        }
 	    }
 	}
+	
+	public synchronized ProdottoBean doRetrieveById(int idProdotto) throws SQLException {
+	    ProdottoBean prodotto = null;
+	    Connection connection = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p " +
+	                 "JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s " +
+	                 "ON p.IDProdotto = s.IDProdotto " +
+	                 "WHERE p.IDProdotto = ?";
+
+	    try {
+	        connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+	        ps.setInt(1, idProdotto);
+	        rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            if (prodotto == null) {
+	                prodotto = new ProdottoBean();
+	                prodotto.setIDProdotto(rs.getInt("IDProdotto"));
+	                prodotto.setNomeProdotto(rs.getString("nomeProdotto"));
+	                prodotto.setBrand(rs.getString("brand"));
+	                prodotto.setCategoria(rs.getString("categoria"));
+	                prodotto.setDescrizione(rs.getString("descrizione"));
+	                prodotto.setDettagli(rs.getString("dettagli"));
+	            }
+
+	            Specifiche specifiche = new Specifiche();
+	            specifiche.setIDSpecifiche(rs.getInt("IDSpecifiche"));
+	            specifiche.setColore(rs.getString("colore"));
+	            specifiche.setHdd(rs.getInt("hdd"));
+	            specifiche.setRam(rs.getInt("ram"));
+	            specifiche.setQuantita(rs.getInt("quantita"));
+	            specifiche.setPrezzo(rs.getBigDecimal("prezzo"));
+	            specifiche.setNumVendite(rs.getInt("numVendite"));
+	            specifiche.setImage(rs.getBytes("photo"));
+
+	            prodotto.getSpecifiche().add(specifiche);
+	        }
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            if (ps != null) ps.close();
+	        } finally {
+	            if (connection != null) dmcp.releaseConnection(connection);
+	        }
+	    }
+
+	    return prodotto;
+	}
+
 }

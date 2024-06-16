@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+
 import model.Cart;
 import model.bean.*;
 import model.dao.*;
@@ -96,7 +98,20 @@ public class ProdottoControl extends HttpServlet {
 				if(action.equalsIgnoreCase("toPage")) {
 					String id1 = request.getParameter("id1");
 					String id2 = request.getParameter("id2");
-					
+					request.setAttribute("id1", id1);
+					request.setAttribute("id2", id2);
+				    try {
+				        ProdottoBean prodotto = prodottoDAO.doRetrieveById(Integer.parseInt(id1));
+				        Gson gson = new Gson();
+				        String specificheJson = gson.toJson(prodotto.getSpecifiche());
+				        request.setAttribute("specificheJson", specificheJson);
+				        request.setAttribute("prodotto", prodotto);
+				        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/productPage.jsp");
+				        dispatcher.forward(request, response);
+				    } catch (SQLException e) {
+				        e.printStackTrace();
+				    }
+				    return;
 				}
 			}
 		} catch (SQLException e) {
@@ -111,8 +126,15 @@ public class ProdottoControl extends HttpServlet {
 			System.out.println("Error:" + e.getMessage());
 		}
 
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/gestioneProdotti.jsp");
-		dispatcher.forward(request, response);
+		Boolean isAdmin = (Boolean) request.getSession().getAttribute("isAdmin");
+		
+		if(isAdmin) {
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/gestioneProdotti.jsp");
+			dispatcher.forward(request, response);
+		} else {
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/index.jsp");
+			dispatcher.forward(request, response);			
+		}
 		
 	}
 
