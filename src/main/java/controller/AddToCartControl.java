@@ -19,7 +19,7 @@ import model.bean.Specifiche;
 /**
  * Servlet implementation class AddToCartControl
  */
-@WebServlet("/AddToCart")
+@WebServlet("/C")
 public class AddToCartControl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
