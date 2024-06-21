@@ -56,6 +56,18 @@ body {
 	font-weight: 500;
 }
 
+#addToCartForm > .addToCart-button {
+	border: solid 1px #1B2149;
+	background-color: #1B2149;
+	color: #ffffff;
+	letter-spacing: 1px;
+}
+#addToCartForm > .addToCart-button:hover {
+	border: solid 1px #363975;
+	background-color: #363975;
+	color: #ffffff;
+}
+
 #spec-buttons > .spec-button {
 	width: 100%;
 	margin: 20px 0 0 0;
@@ -70,4 +82,6 @@ body {
 #spec-buttons > .spec-button.selected {
 	border: 1.8px solid #7B57DF;
 }
+
+
 

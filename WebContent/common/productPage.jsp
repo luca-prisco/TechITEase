@@ -34,6 +34,11 @@
 						</c:if>
 					</c:forEach>
 				</div>
+				<form id="addToCartForm" action="AddToCart" method="post">
+					<input type="hidden" name="idProdCart" value="${prodotto.IDProdotto}">
+					<input type="hidden" name="idSpecCart" value="${id2}">
+					<button type="button" class="addToCart-button">Aggiungi al carrello</button>
+				</form>
 				<div id="spec-buttons">
 					<c:forEach var="spec" items="${prodotto.specifiche}">
 						<button type="button" class="spec-button"
@@ -64,6 +69,7 @@
             document.getElementById('hdd').textContent = "HDD: " + selectedSpec.hdd + " GB";
             document.getElementById('ram').textContent = "RAM: " + selectedSpec.ram + " GB";
             document.getElementById('prezzo').textContent = "€" + selectedSpec.prezzo;
+            document.getElementById('idSpecCart').value = selectedSpec.IDSpecifiche; //Aggiorna l'input nascosto per l'aggiunta al carrello
         }
     }
 
