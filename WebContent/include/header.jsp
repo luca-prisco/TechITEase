@@ -24,7 +24,7 @@
 			</ul>
 		</div>
 
-		<a href=""><img id="cart" src="${pageContext.request.contextPath}/img/icons/cart.png" alt="cart"
+		<a href="${pageContext.request.contextPath}/common/cart.jsp"><img id="cart" src="${pageContext.request.contextPath}/img/icons/cart.png" alt="cart"
 			style="width: 25px;"></a>
 
 		<div class="account">

@@ -34,10 +34,10 @@
 						</c:if>
 					</c:forEach>
 				</div>
-				<form id="addToCartForm" action="AddToCart" method="post">
+				<form id="addToCartForm" action="${pageContext.request.contextPath}/common/AddToCart?action=add" method="post">
 					<input type="hidden" name="idProdCart" value="${prodotto.IDProdotto}">
 					<input type="hidden" name="idSpecCart" value="${id2}">
-					<button type="button" class="addToCart-button">Aggiungi al carrello</button>
+					<button type="submit" class="addToCart-button">Aggiungi al carrello</button>
 				</form>
 				<div id="spec-buttons">
 					<c:forEach var="spec" items="${prodotto.specifiche}">
@@ -69,21 +69,30 @@
             document.getElementById('hdd').textContent = "HDD: " + selectedSpec.hdd + " GB";
             document.getElementById('ram').textContent = "RAM: " + selectedSpec.ram + " GB";
             document.getElementById('prezzo').textContent = "€" + selectedSpec.prezzo;
-            document.getElementById('idSpecCart').value = selectedSpec.IDSpecifiche; //Aggiorna l'input nascosto per l'aggiunta al carrello
+			document.querySelector('input[name="idSpecCart"]').value = selectedSpec.IDSpecifiche; // Aggiorna l'input nascosto per l'aggiunta al carrello
         }
     }
 
-    //Selezioniamo tutti i pulsanti con la classe spec-button
-    document.querySelectorAll('.spec-button').forEach(button => {
-        button.addEventListener('click', function() {	//Aggiungiamo un eventListener ad ogni pulsante
-            document.querySelectorAll('.spec-button').forEach(btn => btn.classList.remove('selected')); //Togliamo il selected a tutti i pulsanti
-            this.classList.add('selected'); //Aggiungiamo selected al pulsante premuto
-            updateSpecifiche(); //Aggiorniamo le specifiche in base al pulsante selezionato
-        });
-    });
 
-    //Inizializza lo stato dei bottoni in base alla selezione predefinita
-    updateSpecifiche();
+	function initializeSpecButtons() {
+		// Selezioniamo tutti i pulsanti con la classe spec-button
+		document.querySelectorAll('.spec-button').forEach(button => {
+			button.addEventListener('click', function() { // Aggiungiamo un eventListener ad ogni pulsante
+				document.querySelectorAll('.spec-button').forEach(btn => btn.classList.remove('selected')); // Togliamo il selected a tutti i pulsanti
+				this.classList.add('selected'); // Aggiungiamo selected al pulsante premuto
+				updateSpecifiche(); // Aggiorniamo le specifiche in base al pulsante selezionato
+			});
+
+			// Se il pulsante ha l'ID uguale a selectedSpecId, aggiungiamo la classe selected
+			if (button.getAttribute('data-id') === selectedSpecId) {
+				button.classList.add('selected');
+			}
+		});
+	}
+
+	// Inizializza lo stato dei bottoni in base alla selezione predefinita
+	initializeSpecButtons();
+	updateSpecifiche();
 </script>
 
 </body>

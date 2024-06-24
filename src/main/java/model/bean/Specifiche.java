@@ -85,8 +85,7 @@ public class Specifiche implements Serializable {
 	@Override
 	public String toString() {
 		return "Specifiche [IDSpecifiche=" + IDSpecifiche + ", colore=" + colore + ", hdd=" + hdd + ", ram=" + ram
-				+ ", quantita=" + quantita + ", prezzo=" + prezzo + ", numVendite=" + numVendite + ", image="
-				+ Arrays.toString(image) + "]";
+				+ ", quantita=" + quantita + ", prezzo=" + prezzo + ", numVendite=" + numVendite + "]";
 	}
 	
 	

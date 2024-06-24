@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont;
+	color: #1B2149;
+}
+
+body {
+	 background: #fafafc;
+	 margin: 0;
+}
+ 
+.page {
+	width: 100%;
+	margin: 150px auto auto auto;
+
+}
+
+.left {
+	display: flex;
+	flex-direction: column;
+}
+
+.prodotto__cart {
+	display: flex;
+	flex-direction: row;
+	
+}

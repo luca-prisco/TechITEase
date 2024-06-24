@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +20,7 @@ import model.bean.Specifiche;
 /**
  * Servlet implementation class AddToCartControl
  */
-@WebServlet("/C")
+@WebServlet("/common/AddToCart")
 public class AddToCartControl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -46,6 +47,10 @@ public class AddToCartControl extends HttpServlet {
 		String action = request.getParameter("action");
 		String id1 = request.getParameter("idProdCart");
 		String id2 = request.getParameter("idSpecCart");
+		System.out.println("Azione: " + action);
+		System.out.println("ID Prodotto: " + id1);
+		System.out.println("ID Specifica: " + id2);
+
 		DriverManagerConnectionPool dm = (DriverManagerConnectionPool) getServletContext().getAttribute("DriverManager");
 		ProdottoDAO prodottoDAO = new ProdottoDAO(dm);
 		try {
@@ -77,10 +82,14 @@ public class AddToCartControl extends HttpServlet {
 
 		            if (cart == null) {
 		                cart = new Cart();
+		                System.out.println("Carrello creato");
 		                session.setAttribute("cart", cart);
 		            }
 
 		            cart.addProduct(prodSelezionato);
+
+			        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/cart.jsp");
+			        dispatcher.forward(request, response);
 		        }
 			} catch (NumberFormatException | SQLException e) {
 				e.printStackTrace();
