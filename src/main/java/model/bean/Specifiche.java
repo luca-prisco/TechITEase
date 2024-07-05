@@ -13,6 +13,7 @@ public class Specifiche implements Serializable {
 	private BigDecimal prezzo;
 	private int numVendite;
 	private byte[] image;
+	private int IDProdotto;
 	
 	public Specifiche() {
 		
@@ -81,12 +82,19 @@ public class Specifiche implements Serializable {
 	public void setImage(byte[] image) {
 		this.image = image;
 	}
+	public int getIDProdotto() {
+		return IDProdotto;
+	}
+
+	public void setIDProdotto(int iDProdotto) {
+		IDProdotto = iDProdotto;
+	}
 
 	@Override
 	public String toString() {
 		return "Specifiche [IDSpecifiche=" + IDSpecifiche + ", colore=" + colore + ", hdd=" + hdd + ", ram=" + ram
-				+ ", quantita=" + quantita + ", prezzo=" + prezzo + ", numVendite=" + numVendite + "]";
+				+ ", quantita=" + quantita + ", prezzo=" + prezzo + ", numVendite=" + numVendite + ", IDProdotto=" + IDProdotto + "]";
 	}
 	
-	
+
 }

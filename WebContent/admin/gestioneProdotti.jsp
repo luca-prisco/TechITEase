@@ -86,7 +86,7 @@ if(prodotti == null)
 												<input type="hidden" name="id" value="${prodotto.IDProdotto}">
 												<button type="submit">Edit</button>
 											</form>
-																						<form id="deleteForm" method="get" action="ProdottoControl">
+											<form id="deleteForm" method="get" action="ProdottoControl">
 												<input type="hidden" name="action" value="delete">
 												<input type="hidden" name="del1" value="${prodotto.IDProdotto}">
 												<input type="hidden" name="del2" value="${specifiche.IDSpecifiche}">
@@ -97,7 +97,7 @@ if(prodotti == null)
 									</tr>
 									<script>
 										document.getElementById('fileInput').addEventListener('change', function() {
-											document.getElementById('uploadForm${specifiche.IDSpecifiche}').submit();
+											document.getElementById('uploadPhoto').submit();
 										});
 										document.getElementById('deleteSubmit').addEventListener('click', function() {
 											document.getElementById('deleteForm').submit();
