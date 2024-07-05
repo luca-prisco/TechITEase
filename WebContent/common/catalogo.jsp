@@ -92,7 +92,7 @@
 			                <div class="product-card">
 			                    <img src="./getPicture?id1=${p.IDProdotto}&id2=${s.IDSpecifiche}" alt="prova" style="width: 210px;">
 			                    <div class="product-details">
-			                        <h2>${p.nomeProdotto}</h2>
+			                        <h2>${p.nomeProdotto} - ${s.hdd}gb</h2>
 			                        <p>${p.descrizione}</p>
 			                        <div class="product-price-buy">
 			                            <span style="float: left; font-size: 14px; margin-bottom: 5px;">A partire da:</span>

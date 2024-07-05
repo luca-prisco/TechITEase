@@ -23,7 +23,7 @@ h2 {
 select {
 	padding: 10px;
 	border: 0.4px solid lightgrey;
-	border-radius: 10px;
+	border-radius: .75rem;
 }
 
 .catalogo {
@@ -55,7 +55,10 @@ h3 {
 
 .content__prodotti {
 	display: flex;
+	justify-content: flex-end;
 	flex-direction: row;
+	flex-wrap: wrap;
+	row-gap: 10px;
 	width: 900px;
 	height: 100vh;
 }
@@ -83,8 +86,8 @@ h3 {
 	cursor: pointer;
 	margin: 20px 20px 20px 20px;
 	padding: 20px;
-	box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.1);
-	border-radius: 15px;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .05);
+	border-radius: .75rem;
 	width: 250px;
 	height: 320px;
 	background-color: #ffffff;
