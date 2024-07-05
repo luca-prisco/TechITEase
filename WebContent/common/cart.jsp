@@ -30,17 +30,90 @@
 	
     <div class="page">
         <div class="left">
-  			<c:forEach var="item" items="${cart.items}">
-                <div class="prodotto__cart">
-                    <p>${item.prodotto.nomeProdotto}</p>
-                    <p>Colore: ${item.specifiche.colore}</p>
-                    <p>HDD: ${item.specifiche.hdd} GB</p>
-                    <p>RAM: ${item.specifiche.ram} GB</p>
-                    <p>Prezzo unitario: €${item.specifiche.prezzo}</p>
-                    <p>Quantità: ${item.quantity}</p>
-                    <p>Prezzo totale: €<c:out value="${item.specifiche.prezzo * item.quantity}" /></p>
-                </div>
-            </c:forEach>
+        	<h1>Il tuo carrello</h1>
+        	<div class="prodotti__container">
+	  			<c:forEach var="item" items="${cart.items}">
+	  				<div class="prodotto__cart">
+	  					<div style="display:flex;">
+		  					<div class="prodotto__image">
+					  			<img id="productImage"
+									src="${pageContext.request.contextPath}/getPicture?id1=${item.prodotto.IDProdotto}&id2=${item.specifiche.IDSpecifiche}"
+									alt="prova">
+							</div>
+			                <div class="prodotto__details">
+			                    <h3>${item.prodotto.nomeProdotto} - ${item.specifiche.colore}</h3>
+			                    <p>HDD: ${item.specifiche.hdd} GB<br>
+			                    RAM: ${item.specifiche.ram} GB<br>
+			                    Quantità: ${item.quantity}<br></p>
+			                    <p style="font-size: 16px;font-weight: 400; margin:0;"><c:out value="${item.specifiche.prezzo * item.quantity}" /> €</p>
+			                </div>
+		                </div>
+		                <div class="quantity">
+		                	<select>
+		                		<option selected="selected">1</option>	
+		                		<option>2</option>	
+		                		<option>3</option>	
+		                		<option>4</option>	
+		                		<option>5</option>	
+		                		<option>6</option>	
+		                		<option>7</option>	
+		                		<option>8</option>	
+		                		<option>9</option>	
+		                	</select>
+		                			      
+						<form id="deleteForm" method="post" action="${pageContext.request.contextPath}/common/CartControl">
+							<input type="hidden" name="action" value="delete"> 
+							<input type="hidden" name="del1" value="${item.prodotto.IDProdotto}">
+							<input type="hidden" name=del2 value="${item.specifiche.IDSpecifiche}">
+							<button type="submit">Rimuovi</button>
+						</form>
+		                </div>
+					</div>
+	            </c:forEach>
+            </div>
+        </div>
+        <div class="right">
+        	<h1>Riepilogo</h1>
+        	<div class="riepilogo__cart">
+        		<c:forEach var="item" items="${cart.items}">
+		        	<div class="prodotto__riepilogo">
+		        		<div style="display:flex;width: 100%;">
+		  					<div class="prodotto__image">
+					  			<img id="productImageRiep"
+									src="${pageContext.request.contextPath}/getPicture?id1=${item.prodotto.IDProdotto}&id2=${item.specifiche.IDSpecifiche}"
+									alt="prova">
+							</div>
+			                <div class="prodotto__details-rep">
+			                    <p style="font-weight: 500;">${item.prodotto.nomeProdotto} - ${item.specifiche.hdd}gb - ${item.specifiche.ram}gb</p>
+			                    
+			                    <p style="font-weight: 300;"><c:out value="${item.specifiche.prezzo * item.quantity}"/>€</p>
+			                </div>
+		                </div>
+		        	</div>
+		        	
+	        	</c:forEach>
+	        	<hr style="width: 90%;border: 0.2px solid #D5D6D8;">
+				<div class="riepilogo-totale">
+					<p>Totale</p>
+
+					<p id="totale-cart">
+						<c:set var="total" value="0" />
+						<c:forEach var="item" items="${cart.items}">
+							<c:set var="total"
+								value="${total + (item.specifiche.prezzo * item.quantity)}" />
+						</c:forEach>
+						<c:out value="${total}" />
+						€
+					</p>
+				</div>
+				<form id="confermaOrdine" method="get" action="ProdottoControl">
+					<input type="hidden" name="action" value="delete"> 
+					<input type="hidden" name="del1" value="${prodotto.IDProdotto}">
+					<input type="hidden" name="del2" value="${specifiche.IDSpecifiche}">
+					<button type="submit">Conferma il tuo ordine</button>
+				</form>
+				
+			</div>
         </div>
     </div>
 </body>
