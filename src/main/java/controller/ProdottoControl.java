@@ -1,11 +1,16 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -103,9 +108,25 @@ public class ProdottoControl extends HttpServlet {
 				    try {
 				        ProdottoBean prodotto = prodottoDAO.doRetrieveById(Integer.parseInt(id1));
 				        Gson gson = new Gson();
-				        String specificheJson = gson.toJson(prodotto.getSpecifiche());
+				        	
+				        Set<String> colorsSet = new HashSet<>();
+				        Set<Integer> ramsSet = new HashSet<>();
+				        Set<Integer> hddsSet = new HashSet<>();
+				        for(Specifiche s : prodotto.getSpecifiche()) {
+				        	colorsSet.add(s.getColore());
+				        	ramsSet.add(s.getRam());
+				        	hddsSet.add(s.getHdd());
+				        }
+				  
+				        List<SpecificheRidotte> specificheRid = prodottoDAO.convertToSpecificheRidotte(prodotto.getSpecifiche());
+				        String specificheJson = gson.toJson(specificheRid);
+ 				        request.setAttribute("colorsSet", colorsSet);
+ 				        request.setAttribute("ramsSet", ramsSet);
+ 				        request.setAttribute("hddsSet", hddsSet);
+
 				        request.setAttribute("specificheJson", specificheJson);
 				        request.setAttribute("prodotto", prodotto);
+				        
 				        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/productPage.jsp");
 				        dispatcher.forward(request, response);
 				    } catch (SQLException e) {
@@ -113,6 +134,7 @@ public class ProdottoControl extends HttpServlet {
 				    }
 				    return;
 				}
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -121,7 +143,8 @@ public class ProdottoControl extends HttpServlet {
 		
 		try {
 			request.removeAttribute("prodotti");
-			request.setAttribute("prodotti", prodottoDAO.doRetrieveAll());
+			List<ProdottoBean> prodotti = (List<ProdottoBean>) prodottoDAO.doRetrieveAll();
+			request.setAttribute("prodotti", prodotti);
 		} catch (SQLException e) {
 			System.out.println("Error:" + e.getMessage());
 		}

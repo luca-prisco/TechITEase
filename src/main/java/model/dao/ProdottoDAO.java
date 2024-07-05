@@ -99,7 +99,7 @@ public class ProdottoDAO {
 	    PreparedStatement ps = null;
 	    ResultSet rs = null;
 
-	    String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto";
+	    String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto ORDER BY RAND()";
 
 	    try {
 	        connection = dmcp.getConnection();
@@ -244,6 +244,7 @@ public class ProdottoDAO {
 	            }
 
 	            Specifiche specifiche = new Specifiche();
+	            specifiche.setIDProdotto(rs.getInt("IDProdotto"));
 	            specifiche.setIDSpecifiche(rs.getInt("IDSpecifiche"));
 	            specifiche.setColore(rs.getString("colore"));
 	            specifiche.setHdd(rs.getInt("hdd"));
@@ -267,4 +268,65 @@ public class ProdottoDAO {
 	    return prodotto;
 	}
 
+	public synchronized Specifiche recuperaSpecifica(int idProdotto, String colore, int hdd, int ram) throws SQLException {
+		Connection connection = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    Specifiche specifica = null;
+	    
+	    String sql = "SELECT * FROM " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " WHERE IDProdotto = ? AND colore LIKE ? AND hdd = ? AND ram = ?";
+	    
+
+	    try {
+	        connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+	        ps.setInt(1, idProdotto);
+	        ps.setString(2, colore);
+	        ps.setInt(3, hdd);
+	        ps.setInt(4, ram);
+	        
+	        System.out.println("Executing query: " + ps.toString());
+	        
+	        rs = ps.executeQuery();
+	        
+	        while(rs.next()) {
+	            specifica = new Specifiche();
+	            specifica.setIDSpecifiche(rs.getInt("IDSpecifiche"));
+	            specifica.setColore(rs.getString("colore"));
+	            specifica.setHdd(rs.getInt("hdd"));
+	            specifica.setRam(rs.getInt("ram"));
+	            specifica.setQuantita(rs.getInt("quantita"));
+	            specifica.setPrezzo(rs.getBigDecimal("prezzo"));
+	            specifica.setNumVendite(rs.getInt("numVendite"));
+	            specifica.setImage(rs.getBytes("photo")); 
+	            specifica.setIDProdotto(rs.getInt("IDProdotto"));
+	        }
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+			} finally {
+				if (connection != null)
+					dmcp.releaseConnection(connection);
+			}
+		}
+	    System.out.println("Recuperata specifica: " + specifica); // Aggiungi questo log
+
+	    return specifica;
+	}
+	
+	
+	public List<SpecificheRidotte> convertToSpecificheRidotte(List<Specifiche> specificheList) {
+	    List<SpecificheRidotte> ridotteList = new ArrayList<>();
+	    for (Specifiche specifiche : specificheList) {
+	        SpecificheRidotte ridotte = new SpecificheRidotte();
+	        ridotte.setIDProdotto(specifiche.getIDProdotto());
+	        ridotte.setIDSpecifiche(specifiche.getIDSpecifiche());
+	        ridotte.setColore(specifiche.getColore());
+	        ridotte.setHdd(specifiche.getHdd());
+	        ridotte.setRam(specifiche.getRam());
+	        ridotteList.add(ridotte);
+	    }
+	    return ridotteList;
+	}
 }

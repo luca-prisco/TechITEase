@@ -44,11 +44,16 @@ body {
 	width: 30%;
 }
 
+.details {
+	width: 400px;;
+}
+
 .details p {
 	font-size: 14px;
 	font-weight: 300;
 	text-align: justify;
 	line-height: 1.5;
+	width: 95%;
 }
 
 #prezzo {
@@ -61,6 +66,7 @@ body {
 	background-color: #1B2149;
 	color: #ffffff;
 	letter-spacing: 1px;
+	margin-top: 30px;
 }
 #addToCartForm > .addToCart-button:hover {
 	border: solid 1px #363975;
@@ -68,20 +74,40 @@ body {
 	color: #ffffff;
 }
 
-#spec-buttons > .spec-button {
-	width: 100%;
-	margin: 20px 0 0 0;
-	padding: 30px;
-	box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.1);
-	border-radius: 15px;
-	border: 1px solid lightgrey;
+
+.spec-options {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	width: 400px;
+	flex-wrap: wrap;
+	row-gap: 10px;
+}
+/* Nasconde i radio button di default */
+input[type="radio"] {
+	display: none;
+}
+
+/* Stili per i label che sembrano pulsanti */
+.radio-button-label {
+	display: inline-block;
+	width: 120px;
+	height: 50px;
+	padding-top: 15px;
+	font-size: 16px;
 	background-color: #ffffff;
+	border: 1px solid grey;
 	cursor: pointer;
+	margin-right: 10px;
+	border-radius: 5px;
+	font-size: 15px;
+	text-align: center;
+	opacity: 0.7;
 }
 
-#spec-buttons > .spec-button.selected {
-	border: 1.8px solid #7B57DF;
+/* Stili per il radio button "checked" */
+input[type="radio"]:checked+.radio-button-label {
+	background-color: #f6f2fc;
+	border: 1.5px solid #1B2149;
+	opacity: 1;
 }
-
-
-
