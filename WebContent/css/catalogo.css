@@ -44,12 +44,20 @@ h3 {
 	font-weight: 500;
 	font-size: 17px;
 }
-.categoria ul {
+
+.radio-filter label{
 	list-style-type: none;
-	line-height: 1.5;
+	line-height: 1.8;
 	cursor: pointer;
+	font-weight: 300;
 }
-.categoria ul li {
+.radio-filter ul {
+	list-style-type: none;
+	line-height: 1.8;
+	cursor: pointer;
+	padding: 0;
+}
+.radio-filter ul li {
 	font-weight: 300;
 }
 
@@ -70,15 +78,6 @@ h3 {
 	border: 0.4px solid lightgrey;
 	border-radius: 10px;
 }
-
-.checkbox-list input[type="checkbox"] {	
-	margin: 0 10px 15px 45px;
-	cursor: pointer;
-}
-.checkbox-list label {
-	font-weight: 300;
-}
-
 
 .product-card {
 	display: flex;

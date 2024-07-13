@@ -16,7 +16,16 @@ public class ProdottoBean implements Serializable {
 	private String descrizione;
 	private String dettagli;
 	private List<Specifiche> specifiche = new ArrayList<>();
+	private List<SpecificheRidotte> specificheRidotte = new ArrayList<>();
 	
+	public List<SpecificheRidotte> getSpecificheRidotte() {
+		return specificheRidotte;
+	}
+
+	public void setSpecificheRidotte(List<SpecificheRidotte> specificheRidotte) {
+		this.specificheRidotte = specificheRidotte;
+	}
+
 	public ProdottoBean() {
 		
 	}
@@ -81,6 +90,6 @@ public class ProdottoBean implements Serializable {
 	public String toString() {
 		return "ProdottoBean [IDProdotto=" + IDProdotto + ", nomeProdotto=" + nomeProdotto + ", brand=" + brand
 				+ ", categoria=" + categoria + ", descrizione=" + descrizione + ", dettagli=" + dettagli
-				+ ", specifiche=" + specifiche + "]";
+				+ ", specificheRidotte=" + specificheRidotte + "]";
 	}
 }

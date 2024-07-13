@@ -2,18 +2,11 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.*" %>
+<%@ page import="com.google.gson.Gson" %>
 <%@ page import="model.dao.*" %>
+<%@ page import="model.bean.*" %>
 <%@ page import="model.*" %>
-	
-<%
-	Collection<?> prodotti = (Collection<?>) request.getAttribute("prodotti");
-	if(prodotti == null) {
-		response.sendRedirect(request.getContextPath() + "/Catalogo");	
-		return;
-	}
-	
-	Cart cart = (Cart) request.getAttribute("cart");
-%>
+
 
 <!DOCTYPE html>
 <html>
@@ -32,9 +25,9 @@
 				<h3>Ordina per</h3> 
 				<div class="prezzo" style="display: flex;justify-content: left;">
 					<select name="sort" id="sort">
+						<option selected value="bestseller">Bestseller</option>
 						<option value="crescente">Prezzo crescente</option>
 						<option value="decrescente">Prezzo decrescente</option>
-						<option value="bestseller">Bestseller</option>
 					</select> 
 				</div>
 				<h3>Prezzo</h3> 
@@ -42,71 +35,199 @@
 			        <input type="text" id="minPrice" name="minPrice" min="0" placeholder="Min(€)">
 			        <input type="text" id="maxPrice" name="maxPrice" min="0" placeholder="Max(€)">
 				</div>
-				<div class="categoria">
-					<h3>Categorie</h3>
-					<ul>
-						<li>Smartphone</li>
-						<li>Pc</li>
-						<li>Tablet</li>
-						<li>Smartwatch</li>
-					</ul>
-				</div>
-				<div class="checkbox-list">
-					<h3>Brand</h3>
-					<input type="checkbox" id="apple" name="apple" value="apple">
-					<label for="apple"> Apple</label><br>
-					<input type="checkbox" id="samsung" name="samsung" value="samsung">
-					<label for="samsung"> Samsung</label><br>
-					<input type="checkbox" id="google" name="google" value="google">
-					<label for="google"> Google</label><br>
-					<input type="checkbox" id="oppo" name="oppo" value="oppo">
-					<label for="oppo"> Oppo</label><br>
-					<input type="checkbox" id="asus" name="asus" value="asus">
-					<label for="asus"> Asus</label><br>
-					<input type="checkbox" id="hp" name="hp" value="hp">
-					<label for="hp"> HP</label><br>
-					<input type="checkbox" id="msi" name="msi" value="msi">
-					<label for="msi"> MSI</label><br>
-				</div>
-				<div class="checkbox-list">
-					<h3>Memoria HDD</h3>
-					<input type="checkbox" id="apple" name="apple" value="apple">
-					<label for="apple"> 64GB</label><br>
-					<input type="checkbox" id="samsung" name="samsung" value="samsung">
-					<label for="samsung"> 128GB</label><br>
-					<input type="checkbox" id="google" name="google" value="google">
-					<label for="google"> 256GB</label><br>
-					<input type="checkbox" id="oppo" name="oppo" value="oppo">
-					<label for="oppo"> 512GB</label><br>
-					<input type="checkbox" id="asus" name="asus" value="asus">
-					<label for="asus"> 1TB</label><br>
-					<input type="checkbox" id="hp" name="hp" value="hp">
-					<label for="hp"> 2TB</label><br>
-				</div>
+ 				<div class="radio-filter">
+                    <h3>Categorie</h3>
+                    <ul>
+                        <li><input type="radio" name="categoria-radio" class="categoria-radio" value="smartphone" onchange="categoriaChange(this)"> Smartphone</li>
+                        <li><input type="radio" name="categoria-radio" class="categoria-radio" value="notebook" onchange="categoriaChange(this)"> Notebook</li>
+                        <li><input type="radio" name="categoria-radio" class="categoria-radio" value="tablet" onchange="categoriaChange(this)"> Tablet</li>
+                        <li><input type="radio" name="categoria-radio" class="categoria-radio" value="smartwatch" onchange="categoriaChange(this)"> Smartwatch</li>
+                    </ul>
+                </div>
+                <div class="radio-filter">
+                    <h3>Brand</h3>
+                    <input type="radio" name="brand-radio" class="brand-radio" value="apple" onchange="brandChange(this)">
+                    <label for="apple"> Apple</label><br>
+                    <input type="radio" name="brand-radio" class="brand-radio" value="samsung" onchange="brandChange(this)">
+                    <label for="samsung"> Samsung</label><br>
+                    <input type="radio" name="brand-radio" class="brand-radio" value="google" onchange="brandChange(this)">
+                    <label for="google"> Google</label><br>
+                    <input type="radio" name="brand-radio" class="brand-radio" value="asus" onchange="brandChange(this)">
+                    <label for="asus"> Asus</label><br>
+                    <input type="radio" name="brand-radio" class="brand-radio" value="hp" onchange="brandChange(this)">
+                    <label for="hp"> HP</label><br>
+                    <input type="radio" name="brand-radio" class="brand-radio" value="msi" onchange="brandChange(this)">
+                    <label for="msi"> MSI</label><br>
+                </div>
 			</aside>
-			
-			<div class="content__prodotti">
-				<c:forEach var="p" items="${prodotti}" begin="0">
-			        <c:forEach var="s" items="${p.specifiche}" begin="0">
-			            <a href="./ProdottoControl?action=toPage&id1=${p.IDProdotto}&id2=${s.IDSpecifiche}" style="text-decoration:none;">
-			                <div class="product-card">
-			                    <img src="./getPicture?id1=${p.IDProdotto}&id2=${s.IDSpecifiche}" alt="prova" style="width: 210px;">
-			                    <div class="product-details">
-			                        <h2>${p.nomeProdotto} - ${s.hdd}gb</h2>
-			                        <p>${p.descrizione}</p>
-			                        <div class="product-price-buy">
-			                            <span style="float: left; font-size: 14px; margin-bottom: 5px;">A partire da:</span>
-			                            <h3>&euro;${s.prezzo}</h3>
-			                        </div>
-			                    </div>
-			                </div>
-			            </a>
-			        </c:forEach>
-			    </c:forEach>
-	
+
+			<div class="content__prodotti" id="productContainer">
+				<c:forEach var="p" items="${prodotti}">
+					<div class="product-card">
+						<a
+							href="./ProdottoControl?action=toPage&id1=${p.prodotto.IDProdotto}&id2=${p.specRidotte.IDSpecifiche}"
+							style="text-decoration: none;"> <img
+							src="./getPicture?id1=${p.prodotto.IDProdotto}&id2=${p.specRidotte.IDSpecifiche}"
+							alt="prova" style="width: 210px;">
+							<div class="product-details">
+								<h2>${p.prodotto.nomeProdotto}- ${p.specRidotte.hdd}GB</h2>
+								<p>${p.prodotto.descrizione}</p>
+								<div class="product-price-buy">
+									<span style="float: left; font-size: 14px; margin-bottom: 5px;">A
+										partire da:</span>
+									<h3>&euro;${p.specRidotte.prezzo}</h3>
+								</div>
+							</div>
+							
+						</a>
+					</div>
+				</c:forEach>
 			</div>
 		</div>
 	</div>
+	
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("sort").addEventListener("change", function() {
+        var sortOption = this.value;
+        fetchProdotti(sortOption);
+    });
+
+    function fetchProdotti(sortOption) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "./FiltriCatalogo?sort=" + sortOption, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var prodotti = JSON.parse(xhr.responseText);
+                updateProdotti(prodotti);
+            }
+        };
+        xhr.send();
+    }
+    
+    function updateProdotti(prodotti) {
+        var prodottiDiv = document.getElementById("productContainer");
+        prodottiDiv.innerHTML = "";
+        prodotti.forEach(function(p) {
+
+            var prodottoDiv = document.createElement("div");
+            prodottoDiv.className = "product-card";
+
+            var idProdotto = p.prodotto.IDProdotto;
+            var idSpecifiche = p.specRidotte.IDSpecifiche;
+
+            prodottoDiv.innerHTML = '<a href="./ProdottoControl?action=toPage&id1=' + idProdotto + '&id2=' + idSpecifiche + '" style="text-decoration: none;">' +
+            '<img src="./getPicture?id1=' + idProdotto + '&id2=' + idSpecifiche + '" alt="prova" style="width: 210px;">' +
+            '<div class="product-details">' +
+            '<h2>' + p.prodotto.nomeProdotto + ' - ' + p.specRidotte.hdd + 'GB</h2>' +
+            '<p>' + p.prodotto.descrizione + '</p>' +
+            '<div class="product-price-buy">' +
+            '<span style="float: left; font-size: 14px; margin-bottom: 5px;">A partire da:</span>' +
+            '<h3>&euro;' + p.specRidotte.prezzo + '</h3>' +
+            '</div>' +
+            '</div>' +
+            '</a>';
+       		prodottiDiv.appendChild(prodottoDiv)
+        });
+    }
+});
+</script>
+
+<script>
+	function categoriaChange(radio) {
+	    var categoriaSelezionata = radio.value;
+	    console.log("Categoria selezionata:", categoriaSelezionata);
+	    filtraPerCategoria(categoriaSelezionata);
+	}
+	
+	function filtraPerCategoria(sortOption) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "./FiltriCatalogo?categoria=" + sortOption, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var prodotti = JSON.parse(xhr.responseText);
+                updateProdotti(prodotti);
+            }
+        };
+        xhr.send();
+    }
+	function updateProdotti(prodotti) {
+    	console.log(prodotti);
+        var prodottiDiv = document.getElementById("productContainer");
+        prodottiDiv.innerHTML = "";
+        prodotti.forEach(function(p) {
+            // Logging per debug
+            console.log("Prodotto: ", p);
+
+            var prodottoDiv = document.createElement("div");
+            prodottoDiv.className = "product-card";
+
+            var idProdotto = p.prodotto.IDProdotto;
+            var idSpecifiche = p.specRidotte.IDSpecifiche;
+
+            console.log("IDProdotto: ", idProdotto);
+            console.log("IDSpecifiche: ", idSpecifiche);
+
+            prodottoDiv.innerHTML = '<a href="./ProdottoControl?action=toPage&id1=' + idProdotto + '&id2=' + idSpecifiche + '" style="text-decoration: none;">' +
+            '<img src="./getPicture?id1=' + idProdotto + '&id2=' + idSpecifiche + '" alt="prova" style="width: 210px;">' +
+            '<div class="product-details">' +
+            '<h2>' + p.prodotto.nomeProdotto + ' - ' + p.specRidotte.hdd + 'GB</h2>' +
+            '<p>' + p.prodotto.descrizione + '</p>' +
+            '<div class="product-price-buy">' +
+            '<span style="float: left; font-size: 14px; margin-bottom: 5px;">A partire da:</span>' +
+            '<h3>&euro;' + p.specRidotte.prezzo + '</h3>' +
+            '</div>' +
+            '</div>' +
+            '</a>';
+       		prodottiDiv.appendChild(prodottoDiv)
+        });
+    }
+</script>
+
+<script>
+	function brandChange(radio) {
+	    var brandSelezionato = radio.value;
+	    filtraPerBrand(brandSelezionato);
+	}
+	
+	function filtraPerBrand(sortOption) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "./FiltriCatalogo?brand=" + sortOption, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var prodotti = JSON.parse(xhr.responseText);
+                updateProdotti(prodotti);
+            }
+        };
+        xhr.send();
+    }
+	function updateProdotti(prodotti) {
+        var prodottiDiv = document.getElementById("productContainer");
+        prodottiDiv.innerHTML = "";
+        prodotti.forEach(function(p) {
+
+            var prodottoDiv = document.createElement("div");
+            prodottoDiv.className = "product-card";
+
+            var idProdotto = p.prodotto.IDProdotto;
+            var idSpecifiche = p.specRidotte.IDSpecifiche;
+
+            prodottoDiv.innerHTML = '<a href="./ProdottoControl?action=toPage&id1=' + idProdotto + '&id2=' + idSpecifiche + '" style="text-decoration: none;">' +
+            '<img src="./getPicture?id1=' + idProdotto + '&id2=' + idSpecifiche + '" alt="prova" style="width: 210px;">' +
+            '<div class="product-details">' +
+            '<h2>' + p.prodotto.nomeProdotto + ' - ' + p.specRidotte.hdd + 'GB</h2>' +
+            '<p>' + p.prodotto.descrizione + '</p>' +
+            '<div class="product-price-buy">' +
+            '<span style="float: left; font-size: 14px; margin-bottom: 5px;">A partire da:</span>' +
+            '<h3>&euro;' + p.specRidotte.prezzo + '</h3>' +
+            '</div>' +
+            '</div>' +
+            '</a>';
+       		prodottiDiv.appendChild(prodottoDiv)
+        });
+    }
+</script>
+
 
 </body>
 </html>

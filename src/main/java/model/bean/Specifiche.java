@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class Specifiche implements Serializable {
 	private int IDSpecifiche;
 	private String colore;
-	private int hdd;
+	private String hdd;
 	private int ram;
 	private int quantita;
 	private BigDecimal prezzo;
@@ -35,11 +35,11 @@ public class Specifiche implements Serializable {
 		this.colore = colore;
 	}
 
-	public int getHdd() {
+	public String getHdd() {
 		return hdd;
 	}
 
-	public void setHdd(int hdd) {
+	public void setHdd(String hdd) {
 		this.hdd = hdd;
 	}
 

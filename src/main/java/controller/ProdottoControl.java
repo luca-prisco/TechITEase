@@ -80,7 +80,7 @@ public class ProdottoControl extends HttpServlet {
 			        for(int i=0; i < colori.length; i++) {
 						Specifiche specifica = new Specifiche();
 						specifica.setColore(colori[i]);
-						specifica.setHdd(Integer.parseInt(hdds[i]));
+						specifica.setHdd(hdds[i]);
 						specifica.setRam(Integer.parseInt(rams[i]));
 						specifica.setQuantita(Integer.parseInt(quantita[i]));
 						specifica.setPrezzo(new BigDecimal(prezzi[i]));
@@ -111,7 +111,7 @@ public class ProdottoControl extends HttpServlet {
 				        	
 				        Set<String> colorsSet = new HashSet<>();
 				        Set<Integer> ramsSet = new HashSet<>();
-				        Set<Integer> hddsSet = new HashSet<>();
+				        Set<String> hddsSet = new HashSet<>();
 				        for(Specifiche s : prodotto.getSpecifiche()) {
 				        	colorsSet.add(s.getColore());
 				        	ramsSet.add(s.getRam());
@@ -138,15 +138,6 @@ public class ProdottoControl extends HttpServlet {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
-		
-		try {
-			request.removeAttribute("prodotti");
-			List<ProdottoBean> prodotti = (List<ProdottoBean>) prodottoDAO.doRetrieveAll();
-			request.setAttribute("prodotti", prodotti);
-		} catch (SQLException e) {
-			System.out.println("Error:" + e.getMessage());
 		}
 
 		Boolean isAdmin = (Boolean) request.getSession().getAttribute("isAdmin");

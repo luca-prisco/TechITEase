@@ -31,8 +31,12 @@ public class GetPictureServlet extends HttpServlet {
 		DriverManagerConnectionPool dm = (DriverManagerConnectionPool) getServletContext().getAttribute("DriverManager");
 		PhotoControl photoControl = new PhotoControl(dm);
 
-		String id1 = request.getParameter("id1");
-		String id2 = request.getParameter("id2");
+        String id1 = request.getParameter("id1");
+        String id2 = request.getParameter("id2");
+
+        // Log dei parametri ricevuti per debug
+        System.out.println("Received id1: " + id1);
+        System.out.println("Received id2: " + id2);
 	
 		if (id1 != null && id2 != null) {
 			byte[] bt = photoControl.load(Integer.parseInt(id1), Integer.parseInt(id2));

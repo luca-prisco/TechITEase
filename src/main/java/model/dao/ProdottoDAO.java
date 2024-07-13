@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,7 @@ public class ProdottoDAO {
 			List<Specifiche> specifiche = prodotto.getSpecifiche();
 			for(Specifiche specifica : specifiche) {
 				psProdSpec.setString(1, specifica.getColore());
-				psProdSpec.setInt(2, specifica.getHdd());
+				psProdSpec.setString(2, specifica.getHdd());
 				psProdSpec.setInt(3, specifica.getRam());
 				psProdSpec.setInt(4, specifica.getQuantita());
 				psProdSpec.setBigDecimal(5, specifica.getPrezzo());
@@ -107,6 +108,8 @@ public class ProdottoDAO {
 	        rs = ps.executeQuery();
 
 	        // Mappa per tenere traccia dei prodotti mentre si scansionano le righe del ResultSet
+	        // Altrimenti un prodotto verrebbe creato nuovo per ogni specifica 
+	        // In questo modo se l'id è già presente nella mappa la specifica viene aggiunta a quel prodotto e non viene creato un altro
 	        Map<Integer, ProdottoBean> mapProdotti = new HashMap<>();
 
 	        while (rs.next()) {
@@ -127,17 +130,16 @@ public class ProdottoDAO {
 	            }
 
 	            // Aggiunge le specifiche al prodotto
-	            Specifiche specifiche = new Specifiche();
-	            specifiche.setIDSpecifiche(rs.getInt("IDSpecifiche"));
-	            specifiche.setColore(rs.getString("colore"));
-	            specifiche.setHdd(rs.getInt("hdd"));
-	            specifiche.setRam(rs.getInt("ram"));
-	            specifiche.setQuantita(rs.getInt("quantita"));
-	            specifiche.setPrezzo(rs.getBigDecimal("prezzo"));
-	            specifiche.setNumVendite(rs.getInt("numVendite"));
-	            specifiche.setImage(rs.getBytes("photo"));
-
-	            mapProdotti.get(IDProdotto).getSpecifiche().add(specifiche);
+	            SpecificheRidotte specRidotte = new SpecificheRidotte();
+	            specRidotte.setIDSpecifiche(rs.getInt("IDSpecifiche"));
+	            specRidotte.setColore(rs.getString("colore"));
+	            specRidotte.setHdd(rs.getString("hdd"));
+	            specRidotte.setRam(rs.getInt("ram"));
+	            specRidotte.setQuantita(rs.getInt("quantita"));
+	            specRidotte.setPrezzo(rs.getBigDecimal("prezzo"));
+	            specRidotte.setNumVendite(rs.getInt("numVendite"));
+	            
+	            mapProdotti.get(IDProdotto).getSpecificheRidotte().add(specRidotte);
 	        }
 
 	        // Aggiunge i prodotti dalla mappa alla collezione finale
@@ -247,7 +249,7 @@ public class ProdottoDAO {
 	            specifiche.setIDProdotto(rs.getInt("IDProdotto"));
 	            specifiche.setIDSpecifiche(rs.getInt("IDSpecifiche"));
 	            specifiche.setColore(rs.getString("colore"));
-	            specifiche.setHdd(rs.getInt("hdd"));
+	            specifiche.setHdd(rs.getString("hdd"));
 	            specifiche.setRam(rs.getInt("ram"));
 	            specifiche.setQuantita(rs.getInt("quantita"));
 	            specifiche.setPrezzo(rs.getBigDecimal("prezzo"));
@@ -293,7 +295,7 @@ public class ProdottoDAO {
 	            specifica = new Specifiche();
 	            specifica.setIDSpecifiche(rs.getInt("IDSpecifiche"));
 	            specifica.setColore(rs.getString("colore"));
-	            specifica.setHdd(rs.getInt("hdd"));
+	            specifica.setHdd(rs.getString("hdd"));
 	            specifica.setRam(rs.getInt("ram"));
 	            specifica.setQuantita(rs.getInt("quantita"));
 	            specifica.setPrezzo(rs.getBigDecimal("prezzo"));
@@ -303,8 +305,8 @@ public class ProdottoDAO {
 	        }
 		} finally {
 			try {
-				if (rs != null)
-					rs.close();
+				if (rs != null) rs.close();
+				if (ps != null) ps.close();
 			} finally {
 				if (connection != null)
 					dmcp.releaseConnection(connection);
@@ -314,6 +316,222 @@ public class ProdottoDAO {
 
 	    return specifica;
 	}
+	
+	//Restituisce i prodotti per numero di vendite
+	
+	public synchronized Collection<ProdottoSpecificheBean> doRetrieveByVendite() throws SQLException {
+	    Collection<ProdottoSpecificheBean> prodotti = new ArrayList<>();
+
+	    Connection connection = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto ORDER BY s.numVendite DESC";
+
+	    try {
+	        connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+	        rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            ProdottoSpecificheBean prodottoSpec = new ProdottoSpecificheBean();
+	            
+	            ProdottoBean prodotto = new ProdottoBean();
+	            prodotto.setIDProdotto(rs.getInt("IDProdotto"));
+	            prodotto.setNomeProdotto(rs.getString("nomeProdotto"));
+	            prodotto.setBrand(rs.getString("brand"));
+	            prodotto.setCategoria(rs.getString("categoria"));
+	            prodotto.setDescrizione(rs.getString("descrizione"));
+	            prodotto.setDettagli(rs.getString("dettagli"));
+	            
+	            SpecificheRidotte specRidotte = new SpecificheRidotte();
+	            specRidotte.setIDSpecifiche(rs.getInt("IDSpecifiche"));
+	            specRidotte.setColore(rs.getString("colore"));
+	            specRidotte.setHdd(rs.getString("hdd"));
+	            specRidotte.setRam(rs.getInt("ram"));
+	            specRidotte.setQuantita(rs.getInt("quantita"));
+	            specRidotte.setPrezzo(rs.getBigDecimal("prezzo"));
+	            specRidotte.setNumVendite(rs.getInt("numVendite"));
+
+	            prodottoSpec.setProdotto(prodotto);
+	            prodottoSpec.setSpecRidotte(specRidotte);
+
+	            prodotti.add(prodottoSpec);
+	        }
+	    } finally {
+			try {
+				if (rs != null) rs.close();
+				if (ps != null) ps.close();
+			} finally {
+				if (connection != null)
+					dmcp.releaseConnection(connection);
+			}
+		}
+
+	    return prodotti;
+	}
+	
+	public synchronized Collection<ProdottoSpecificheBean> doRetrieveByBrand(String brand) throws SQLException {
+	    Collection<ProdottoSpecificheBean> prodotti = new ArrayList<>();
+
+	    Connection connection = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto WHERE p.brand = ?";
+
+	    try {
+	        connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+	        ps.setString(1, brand);
+	        rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            ProdottoSpecificheBean prodottoSpec = new ProdottoSpecificheBean();
+	            
+	            ProdottoBean prodotto = new ProdottoBean();
+	            prodotto.setIDProdotto(rs.getInt("IDProdotto"));
+	            prodotto.setNomeProdotto(rs.getString("nomeProdotto"));
+	            prodotto.setBrand(rs.getString("brand"));
+	            prodotto.setCategoria(rs.getString("categoria"));
+	            prodotto.setDescrizione(rs.getString("descrizione"));
+	            prodotto.setDettagli(rs.getString("dettagli"));
+	            
+	            SpecificheRidotte specRidotte = new SpecificheRidotte();
+	            specRidotte.setIDSpecifiche(rs.getInt("IDSpecifiche"));
+	            specRidotte.setColore(rs.getString("colore"));
+	            specRidotte.setHdd(rs.getString("hdd"));
+	            specRidotte.setRam(rs.getInt("ram"));
+	            specRidotte.setQuantita(rs.getInt("quantita"));
+	            specRidotte.setPrezzo(rs.getBigDecimal("prezzo"));
+	            specRidotte.setNumVendite(rs.getInt("numVendite"));
+
+	            prodottoSpec.setProdotto(prodotto);
+	            prodottoSpec.setSpecRidotte(specRidotte);
+
+	            prodotti.add(prodottoSpec);
+	        }
+	    } finally {
+			try {
+				if (rs != null) rs.close();
+				if (ps != null) ps.close();
+			} finally {
+				if (connection != null)
+					dmcp.releaseConnection(connection);
+			}
+		}
+
+	    return prodotti;
+	}
+	
+    
+    public synchronized Collection<ProdottoSpecificheBean> ordinaPerPrezzo(boolean mod) throws SQLException {
+	    Collection<ProdottoSpecificheBean> prodotti = new ArrayList<>();
+
+    	Connection connection = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    String ordine = mod ? "ASC" : "DESC";
+	    String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p "
+	               + "JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto "
+	               + "ORDER BY s.prezzo " + ordine;
+	    try {
+	        connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+	        rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            ProdottoSpecificheBean prodottoSpec = new ProdottoSpecificheBean();
+	            
+	            ProdottoBean prodotto = new ProdottoBean();
+	            prodotto.setIDProdotto(rs.getInt("IDProdotto"));
+	            prodotto.setNomeProdotto(rs.getString("nomeProdotto"));
+	            prodotto.setBrand(rs.getString("brand"));
+	            prodotto.setCategoria(rs.getString("categoria"));
+	            prodotto.setDescrizione(rs.getString("descrizione"));
+	            prodotto.setDettagli(rs.getString("dettagli"));
+	            
+	            SpecificheRidotte specRidotte = new SpecificheRidotte();
+	            specRidotte.setIDSpecifiche(rs.getInt("IDSpecifiche"));
+	            specRidotte.setColore(rs.getString("colore"));
+	            specRidotte.setHdd(rs.getString("hdd"));
+	            specRidotte.setRam(rs.getInt("ram"));
+	            specRidotte.setQuantita(rs.getInt("quantita"));
+	            specRidotte.setPrezzo(rs.getBigDecimal("prezzo"));
+	            specRidotte.setNumVendite(rs.getInt("numVendite"));
+
+	            prodottoSpec.setProdotto(prodotto);
+	            prodottoSpec.setSpecRidotte(specRidotte);
+
+	            prodotti.add(prodottoSpec);
+	        }
+	    } finally {
+			try {
+				if (rs != null) rs.close();
+				if (ps != null) ps.close();
+			} finally {
+				if (connection != null)
+					dmcp.releaseConnection(connection);
+			}
+		}
+
+	    return prodotti;
+    }
+    
+    public synchronized Collection<ProdottoSpecificheBean> doRetrieveByCategoria(String categoria) throws SQLException {
+	    Collection<ProdottoSpecificheBean> prodotti = new ArrayList<>();
+
+	    Connection connection = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto WHERE p.categoria = ?";
+
+	    try {
+	        connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+	        ps.setString(1, categoria);
+	        rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            ProdottoSpecificheBean prodottoSpec = new ProdottoSpecificheBean();
+	            
+	            ProdottoBean prodotto = new ProdottoBean();
+	            prodotto.setIDProdotto(rs.getInt("IDProdotto"));
+	            prodotto.setNomeProdotto(rs.getString("nomeProdotto"));
+	            prodotto.setBrand(rs.getString("brand"));
+	            prodotto.setCategoria(rs.getString("categoria"));
+	            prodotto.setDescrizione(rs.getString("descrizione"));
+	            prodotto.setDettagli(rs.getString("dettagli"));
+	            
+	            SpecificheRidotte specRidotte = new SpecificheRidotte();
+	            specRidotte.setIDSpecifiche(rs.getInt("IDSpecifiche"));
+	            specRidotte.setColore(rs.getString("colore"));
+	            specRidotte.setHdd(rs.getString("hdd"));
+	            specRidotte.setRam(rs.getInt("ram"));
+	            specRidotte.setQuantita(rs.getInt("quantita"));
+	            specRidotte.setPrezzo(rs.getBigDecimal("prezzo"));
+	            specRidotte.setNumVendite(rs.getInt("numVendite"));
+
+	            prodottoSpec.setProdotto(prodotto);
+	            prodottoSpec.setSpecRidotte(specRidotte);
+
+	            prodotti.add(prodottoSpec);
+	        }
+	    } finally {
+			try {
+				if (rs != null) rs.close();
+				if (ps != null) ps.close();
+			} finally {
+				if (connection != null)
+					dmcp.releaseConnection(connection);
+			}
+		}
+
+	    return prodotti;
+    }
+
 	
 	
 	public List<SpecificheRidotte> convertToSpecificheRidotte(List<Specifiche> specificheList) {
