@@ -1,5 +1,6 @@
 package model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +45,35 @@ public class Cart {
             }
         }
     }
+    
+    public void updateQuantity(int productId, int specId, int quantity) {
+        for (CartItem item : items) {
+            if (item.getProdotto().getIDProdotto() == productId && item.getSpecifiche().getIDSpecifiche() == specId) {
+                item.setQuantity(quantity);
+                return;
+            }
+        }
+    }
+    
+    public BigDecimal getTotale() {
+    	BigDecimal totale = new BigDecimal(0);
+        for (CartItem item : items) {
+            BigDecimal price = item.getSpecifiche().getPrezzo(); // Prezzo come BigDecimal
+            BigDecimal quantity = new BigDecimal(item.getQuantity()); // Quantità come BigDecimal
+            
+            totale = totale.add(price.multiply(quantity));        }
+        
+        return totale;
+    }
 
     public List<CartItem> getItems() {
         return items;
+    }
+    
+    public void printItems(List<CartItem> items) {
+        for (CartItem item : items) {
+        	System.out.println(item);
+        }
     }
 }
 

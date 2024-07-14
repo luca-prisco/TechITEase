@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -120,5 +121,23 @@ public class CartControl extends HttpServlet {
 				e.printStackTrace();
 			}
 		}	
+		
+		if(action.equals("updateQuantity")) {
+			int productId = Integer.parseInt(request.getParameter("productId"));
+	        int specId = Integer.parseInt(request.getParameter("specId"));
+	        int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+	        if (cart != null) {
+	            cart.updateQuantity(productId, specId, quantity);
+	        }
+		}
+        if (action.equals("getTotal")) { 
+            if (cart != null) {
+                BigDecimal total = cart.getTotale();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(total.toString());
+            } 
+        }
 	}
 }

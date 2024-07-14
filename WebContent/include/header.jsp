@@ -34,7 +34,7 @@
 			if (utente != null) {
 			%>
 			<button class="dropbtn" data-dropdown-button>${utente.nome}<img
-					src="img/icons/user.svg" style="padding-left: 10px;"
+					src="${pageContext.request.contextPath}/img/icons/user.svg" style="padding-left: 10px;"
 					alt="Non disponibile">
 			</button>
 			<a
@@ -65,9 +65,9 @@
 	</div>
 	<div class="header-mobile">
 		<a href="${pageContext.request.contextPath}/common/index.jsp"> <img
-			src="img/icons/homeChiaro.png" alt="home" style="width: 25px;">
+			src="${pageContext.request.contextPath}/img/icons/homeChiaro.png" alt="home" style="width: 25px;">
 		</a> <a href="${pageContext.request.contextPath}/Catalogo"> <img
-			src="img/icons/prodottiChiaro.png" alt="catalogo" style="width: 25px;">
+			src="${pageContext.request.contextPath}/img/icons/prodottiChiaro.png" alt="catalogo" style="width: 25px;">
 		</a> 
 		<a href="#"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cartChiaro.png" alt="cart"
 			style="width: 25px;">
@@ -78,15 +78,15 @@
 		%>
 		<a
 			href="${pageContext.request.contextPath}/common/AutenticationControl?action=logout">
-			<img src="img/icons/logout.png" alt="logout" style="width: 25px;">
+			<img src="${pageContext.request.contextPath}/img/icons/logout.png" alt="logout" style="width: 25px;">
 		</a>
 		<%
 		} else {
 		%>
 		<a href="${pageContext.request.contextPath}/common/login.jsp"> <img
-			src="img/icons/login.png" alt="login" style="width: 25px;">
+			src="${pageContext.request.contextPath}/img/icons/login.png" alt="login" style="width: 25px;">
 		</a> <a href="${pageContext.request.contextPath}/common/signup.jsp">
-			<img src="img/icons/signup.png" alt="signup" style="width: 25px;">
+			<img src="${pageContext.request.contextPath}/img/icons/signup.png" alt="signup" style="width: 25px;">
 		</a>
 		<%
 		}

@@ -87,10 +87,12 @@ h3 {
 	line-height: 1.5;
 }
 
-.quantity {
+.actions {
 	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
-.quantity select {
+.quantity-select  {
 	width: 60px;
 	height: 35px;
 	padding: 0 0 0 7px;
@@ -116,7 +118,7 @@ h3 {
 .riepilogo__cart {
 	display: flex; 
 	flex-direction: column;
-	width: 90%;
+	width: 100%;
 	height: auto;
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .05);
 	border-radius: .75rem;
@@ -137,7 +139,7 @@ h3 {
 }
 
 .prodotto__details-rep {
-	display: flex;
+	display: block;
 	flex-direction: row;
 	justify-content: space-between;
 	width: 100%;
