@@ -49,8 +49,15 @@ public class CartControl extends HttpServlet {
 		String action = request.getParameter("action");
 		String id1 = request.getParameter("idProdCart");
 		String id2 = request.getParameter("idSpecCart");
+        HttpSession session = request.getSession();
+        Cart cart = (Cart) session.getAttribute("cart");
 		
-
+        if (cart == null) {
+            cart = new Cart();
+            System.out.println("Carrello creato");
+            session.setAttribute("cart", cart);
+        }
+	
 		DriverManagerConnectionPool dm = (DriverManagerConnectionPool) getServletContext().getAttribute("DriverManager");
 		ProdottoDAO prodottoDAO = new ProdottoDAO(dm);
 		try {
@@ -76,15 +83,6 @@ public class CartControl extends HttpServlet {
 		            prodSelezionato.setDescrizione(prodotto.getDescrizione());
 		            prodSelezionato.setDettagli(prodotto.getDettagli());
 		            prodSelezionato.getSpecifiche().add(specifica);
-		        	
-		            HttpSession session = request.getSession();
-		            Cart cart = (Cart) session.getAttribute("cart");
-
-		            if (cart == null) {
-		                cart = new Cart();
-		                System.out.println("Carrello creato");
-		                session.setAttribute("cart", cart);
-		            }
 
 		            cart.addProduct(prodSelezionato);
 
@@ -98,20 +96,25 @@ public class CartControl extends HttpServlet {
 		
 		if(action.equals("delete")) {
 			try {
-	            HttpSession session = request.getSession();
-	            Cart cart = (Cart) session.getAttribute("cart");
-				String del1 = request.getParameter("del1");
-				String del2 = request.getParameter("del2");
+				String idProdotto = request.getParameter("del1");
+				String idSpecifiche = request.getParameter("del2");
 				
+		        List<CartItem> listaCart = cart.getItems();
+		        // Trova l'elemento usando stream
+		        CartItem itemToRemove = listaCart.stream()
+		                .filter(prod -> prod.getProdotto().getIDProdotto() == Integer.parseInt(idProdotto) && prod.getSpecifiche().getIDSpecifiche() == Integer.parseInt(idSpecifiche))
+		                .findFirst()
+		                .orElse(null);
+
+		        if (itemToRemove != null) {
+		            listaCart.remove(itemToRemove);
+		            System.out.println("Item removed: " + itemToRemove);
+		        } else {
+		            System.out.println("Item not found");
+		        }
 				
-				List<CartItem> listaCart = cart.getItems();
-				CartItem item = (CartItem) listaCart.stream()
-						.filter(prod -> prod.getProdotto().getIDProdotto() == Integer.parseInt(del1) && prod.getSpecifiche().getIDSpecifiche() == Integer.parseInt(del2));
-				System.out.println(item);
-				
-				
-			        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/cart.jsp");
-			        dispatcher.forward(request, response);
+			    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/cart.jsp");
+			    dispatcher.forward(request, response);
 		       }
 			catch (NumberFormatException e) {
 				e.printStackTrace();
