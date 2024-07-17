@@ -75,5 +75,9 @@ public class Cart {
         	System.out.println(item);
         }
     }
+    
+    public void clearCart() {
+    	items.clear();
+    }
 }
 

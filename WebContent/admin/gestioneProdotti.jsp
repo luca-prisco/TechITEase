@@ -7,8 +7,10 @@
 
 <%
 Collection<ProdottoBean> prodotti = (Collection<ProdottoBean>) request.getAttribute("prodotti");
-if(prodotti == null) 
-	response.sendRedirect(request.getContextPath() + "/ProdottoControl");
+if (prodotti == null || prodotti.isEmpty()) {
+    response.sendRedirect(request.getContextPath() + "/ProdottoControl");
+    return;
+}
 %>
 
 <!DOCTYPE html>

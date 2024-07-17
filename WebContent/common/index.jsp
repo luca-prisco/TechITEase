@@ -38,7 +38,7 @@
 				<c:forEach var="p" items="${prodotti}" begin="0" end="2">
 					<div class="mySlides fade">
 						<div class="prod__image" style="width: 58%">
-							<img src="./getPicture?id1=${p.IDProdotto}&id2=${p.specificheRidotte[0].IDSpecifiche}"
+							<img src="./getPicture?id1=${p.IDProdotto}&id2=${p.specifiche[0].IDSpecifiche}"
 								alt="${p.nomeProdotto}" style="width: 100%">
 						</div>
 						<div class="info__prodotto">
@@ -47,7 +47,7 @@
 								<p style="text-align: justify; line-height: 1.5;">${p.dettagli}</p>
 							</div>
 							<div class="descrizione__prod" style="width: 90%;">
-								<h3>&euro;${p.specificheRidotte[0].prezzo}</h3>
+								<h3>&euro;${p.specifiche[0].prezzo}</h3>
 								<a href=""><button>Scopri di più</button></a>
 							</div>
 						</div>
@@ -66,13 +66,13 @@
 			<div class="product-cards-container">
 				<c:forEach var="p" items="${prodotti}" begin="0" end="2">
 					<div class="product-card">
-						<img src="./getPicture?id1=${p.IDProdotto}&id2=${p.specificheRidotte[0].IDSpecifiche}"
+						<img src="./getPicture?id1=${p.IDProdotto}&id2=${p.specifiche[0].IDSpecifiche}"
 							alt="prova" style="width: 100%">
 						<div class="product-details">
 							<h2>${p.nomeProdotto}</h2>
 							<p>${p.descrizione}</p>
 							<div class="product-price-buy">
-								<h3>&euro;${p.specificheRidotte[0].prezzo}</h3>
+								<h3>&euro;${p.specifiche[0].prezzo}</h3>
 								<a href=""><button>Acquista</button></a>
 							</div>
 						</div>

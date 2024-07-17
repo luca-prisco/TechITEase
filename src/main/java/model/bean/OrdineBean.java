@@ -12,7 +12,7 @@ public class OrdineBean implements Serializable {
 	private Date dataOrdine;
 	private Date dataConsegna;
 	private BigDecimal prezzoTotale;
-	private String via, cap, citta;
+	private String via, cap, citta, civico;
 	private String emailUtente;
 	
 	public OrdineBean() {
@@ -83,12 +83,20 @@ public class OrdineBean implements Serializable {
 		this.emailUtente = emailUtente;
 	}
 
+	public String getCivico() {
+		return civico;
+	}
+
+	public void setCivico(String civico) {
+		this.civico = civico;
+	}
+
 	@Override
 	public String toString() {
 		return "OrdineBean [IDOrdine=" + IDOrdine + ", dataOrdine=" + dataOrdine + ", dataConsegna=" + dataConsegna
-				+ ", prezzoTotale=" + prezzoTotale + ", via=" + via + ", cap=" + cap + ", citta=" + citta
-				+ ", emailUtente=" + emailUtente + "]";
+				+ ", prezzoTotale=" + prezzoTotale + ", via=" + via + ", cap=" + cap + ", citta=" + citta + ", civico="
+				+ civico + ", emailUtente=" + emailUtente + "]";
 	}
-	
-	
+
+
 }

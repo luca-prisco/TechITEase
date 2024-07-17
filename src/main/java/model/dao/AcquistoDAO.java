@@ -26,49 +26,21 @@ public class AcquistoDAO {
 		Connection connection = null;
 		PreparedStatement ps = null;
 
-		String sql = "INSERT INTO " + AcquistoDAO.TABLE_NAME + " (nome, colore, hdd, ram, quantita, prezzoUnitario, IDOrdine, IDProdotto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO " + AcquistoDAO.TABLE_NAME + " (nomeProdotto, brand, colore, hdd, ram, quantita, prezzoUnitario, IDOrdine, IDProdotto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try {
 			connection = dmcp.getConnection(); 
 			ps = connection.prepareStatement(sql);
+			
 			ps.setString(1, acquisto.getNome());
-			ps.setString(2, acquisto.getColore());
-			ps.setInt(3, acquisto.getHdd());
-			ps.setInt(4, acquisto.getRam());
-			ps.setInt(5, acquisto.getQuantita());
-			ps.setBigDecimal(6, acquisto.getPrezzoUnitario());
-			ps.setInt(7, acquisto.getIDOrdine());
-			ps.setInt(8, acquisto.getIDProdotto());
-	
-			ps.executeUpdate();
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-			} finally {
-				dmcp.releaseConnection(connection);
-			}
-		}
-	}
-
-	public synchronized void updateAcquisto(AcquistoBean acquisto) throws SQLException {
-		Connection connection = null;
-		PreparedStatement ps = null;
-
-		String sql = "UPDATE " + AcquistoDAO.TABLE_NAME + " SET nome = ?, colore = ?, hdd = ?, ram = ?, quantita = ?, prezzoUnitario = ?, IDOrdine = ?, IDProdotto = ? WHERE IDAcquisto = ?";
-
-		try {
-			connection = dmcp.getConnection();
-			ps = connection.prepareStatement(sql);
-			ps.setString(1, acquisto.getNome());
-			ps.setString(2, acquisto.getColore());
-			ps.setInt(3, acquisto.getHdd());
-			ps.setInt(4, acquisto.getRam());
-			ps.setInt(5, acquisto.getQuantita());
-			ps.setBigDecimal(6, acquisto.getPrezzoUnitario());
-			ps.setInt(7, acquisto.getIDOrdine());
-			ps.setInt(8, acquisto.getIDProdotto());
-			ps.setInt(9, acquisto.getIDAcquisto());
+			ps.setString(2, acquisto.getBrand());
+			ps.setString(3, acquisto.getColore());
+			ps.setString(4, acquisto.getHdd());
+			ps.setInt(5, acquisto.getRam());
+			ps.setInt(6, acquisto.getQuantita());
+			ps.setBigDecimal(7, acquisto.getPrezzoUnitario());
+			ps.setInt(8, acquisto.getIDOrdine());
+			ps.setInt(9, acquisto.getIDProdotto());
 	
 			ps.executeUpdate();
 		} finally {
@@ -99,8 +71,9 @@ public class AcquistoDAO {
 				AcquistoBean acquisto = new AcquistoBean();
 				acquisto.setIDAcquisto(rs.getInt("IDAcquisto"));
 				acquisto.setNome(rs.getString("nome"));
+				acquisto.setBrand(rs.getString("brand"));
 				acquisto.setColore(rs.getString("colore"));
-				acquisto.setHdd(rs.getInt("hdd"));
+				acquisto.setHdd(rs.getString("hdd"));
 				acquisto.setRam(rs.getInt("ram"));
 				acquisto.setQuantita(rs.getInt("quantita"));
 				acquisto.setPrezzoUnitario(rs.getBigDecimal("prezzoUnitario"));
@@ -139,8 +112,9 @@ public class AcquistoDAO {
 				AcquistoBean acquisto = new AcquistoBean();
 				acquisto.setIDAcquisto(rs.getInt("IDAcquisto"));
 				acquisto.setNome(rs.getString("nome"));
+				acquisto.setBrand(rs.getString("brand"));
 				acquisto.setColore(rs.getString("colore"));
-				acquisto.setHdd(rs.getInt("hdd"));
+				acquisto.setHdd(rs.getString("hdd"));
 				acquisto.setRam(rs.getInt("ram"));
 				acquisto.setQuantita(rs.getInt("quantita"));
 				acquisto.setPrezzoUnitario(rs.getBigDecimal("prezzoUnitario"));

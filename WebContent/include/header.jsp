@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="model.bean.*"%>
+	pageEncoding="UTF-8" import="model.bean.*, model.*"%>
 
 <!DOCTYPE html>
 <html>
@@ -23,10 +23,20 @@
 				<li><a href="HomeSelection?action=aboutus">Chi siamo</a></li>
 			</ul>
 		</div>
-
-		<a href="${pageContext.request.contextPath}/common/cart.jsp"><img id="cart" src="${pageContext.request.contextPath}/img/icons/cart.png" alt="cart"
-			style="width: 25px;"></a>
-
+		<% 
+		Cart cart = (Cart) session.getAttribute("cart");
+		if (cart != null && cart.getItems().isEmpty()) {
+		%>
+		<a href="${pageContext.request.contextPath}/common/cart.jsp"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart.png" alt="cart"
+			style="width: 25px;">
+		</a>
+		<%} else {%>
+	
+		<a href="${pageContext.request.contextPath}/common/cart.jsp"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart-pieno.png" alt="cart"
+			style="width: 25px;">
+		</a>
+		<%} %>
+		
 		<div class="account">
 
 			<%
@@ -69,10 +79,19 @@
 		</a> <a href="${pageContext.request.contextPath}/Catalogo"> <img
 			src="${pageContext.request.contextPath}/img/icons/prodottiChiaro.png" alt="catalogo" style="width: 25px;">
 		</a> 
-		<a href="#"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cartChiaro.png" alt="cart"
+		<% 
+		if (cart!=null && cart.getItems().isEmpty()) {
+		%>
+		<a href="${pageContext.request.contextPath}/common/cart.jsp"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cartChiaro.png" alt="cart"
+			style="width: 25px; margin: 0;">
+		</a>
+		<%} else {%>
+	
+		<a href="${pageContext.request.contextPath}/common/cart.jsp"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart-pieno-white.png" alt="cart"
 			style="width: 25px;">
 		</a>
-
+		<%} %>
+		
 		<%
 		if (utente != null) {
 		%>

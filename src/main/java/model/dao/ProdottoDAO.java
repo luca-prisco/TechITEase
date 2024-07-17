@@ -100,7 +100,7 @@ public class ProdottoDAO {
 	    PreparedStatement ps = null;
 	    ResultSet rs = null;
 
-	    String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto ORDER BY RAND()";
+	    String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto";
 
 	    try {
 	        connection = dmcp.getConnection();
@@ -130,16 +130,17 @@ public class ProdottoDAO {
 	            }
 
 	            // Aggiunge le specifiche al prodotto
-	            SpecificheRidotte specRidotte = new SpecificheRidotte();
-	            specRidotte.setIDSpecifiche(rs.getInt("IDSpecifiche"));
-	            specRidotte.setColore(rs.getString("colore"));
-	            specRidotte.setHdd(rs.getString("hdd"));
-	            specRidotte.setRam(rs.getInt("ram"));
-	            specRidotte.setQuantita(rs.getInt("quantita"));
-	            specRidotte.setPrezzo(rs.getBigDecimal("prezzo"));
-	            specRidotte.setNumVendite(rs.getInt("numVendite"));
+	            Specifiche specifiche = new Specifiche();
+	            specifiche.setIDSpecifiche(rs.getInt("IDSpecifiche"));
+	            specifiche.setColore(rs.getString("colore"));
+	            specifiche.setHdd(rs.getString("hdd"));
+	            specifiche.setRam(rs.getInt("ram"));
+	            specifiche.setQuantita(rs.getInt("quantita"));
+	            specifiche.setPrezzo(rs.getBigDecimal("prezzo"));
+	            specifiche.setNumVendite(rs.getInt("numVendite"));
+	            specifiche.setImage(rs.getBytes("photo"));
 	            
-	            mapProdotti.get(IDProdotto).getSpecificheRidotte().add(specRidotte);
+	            mapProdotti.get(IDProdotto).getSpecifiche().add(specifiche);
 	        }
 
 	        // Aggiunge i prodotti dalla mappa alla collezione finale

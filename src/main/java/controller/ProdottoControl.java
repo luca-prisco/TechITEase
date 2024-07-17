@@ -143,6 +143,16 @@ public class ProdottoControl extends HttpServlet {
 		Boolean isAdmin = (Boolean) request.getSession().getAttribute("isAdmin");
 		
 		if(isAdmin) {
+			try {
+				List<ProdottoBean> prodotti = (List<ProdottoBean>) prodottoDAO.doRetrieveAll();
+				request.setAttribute("prodotti", prodotti);
+				System.out.println("Prodotti trovati: " + prodotti.size());
+				for (ProdottoBean prodotto : prodotti) {
+				    System.out.println(prodotto.getNomeProdotto());
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/gestioneProdotti.jsp");
 			dispatcher.forward(request, response);
 		} else {

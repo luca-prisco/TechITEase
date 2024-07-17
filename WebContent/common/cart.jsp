@@ -111,10 +111,8 @@
 						<c:out value="${total}" />€
 					</p>
 				</div>
-				<form id="confermaOrdine" method="get" action="ProdottoControl">
-					<input type="hidden" name="action" value="delete"> 
-					<input type="hidden" name="del1" value="${prodotto.IDProdotto}">
-					<input type="hidden" name="del2" value="${specifiche.IDSpecifiche}">
+				<form id="confermaOrdine" method="get" action="./Pagamento">
+					<input type="hidden" name="action" value="conferma"> 
 					<button type="submit">Conferma il tuo ordine</button>
 				</form>
 				
@@ -167,10 +165,6 @@ function updateTotalCart(quantity, price, index) {
     document.getElementById("prod-"+index).innerHTML = quantity + " x " + price + " €";
 }
 </script>
-
-
-
-
-    
+  
 </body>
 </html>

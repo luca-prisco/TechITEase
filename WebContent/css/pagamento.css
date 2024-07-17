@@ -1,0 +1,84 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont;
+	color: #1B2149;
+}
+
+body {
+	 background: #fafafc;
+	 margin: 0;
+}
+
+h1 {margin-top: 100px; letter-spacing: 1px;font-size: 2em;}
+h4 {margin-top:0;}
+
+form {
+	display: table;
+	margin: auto;
+}
+
+div.tableRow {
+	display: table-row;
+}
+
+
+div.tableRow>div, div.tableRow>label{
+	display: table-cell;
+	padding: 4px;
+	padding-top: 10px;
+	vertical-align: top;
+	font-weight: 300;
+}
+
+
+div.tableRow>div input {
+	padding: 2px;
+}
+
+div.tableRow>label:first-child {
+	text-align: right;
+}
+
+.tableRow-sumbit {
+	display: table-row;
+	width: 100%;
+	text-align: center; 
+}
+
+#invia {
+	margin-top: 40px;
+	width: 70%;
+	padding: 9px;
+	border-radius: .375rem;
+	font-weight: 500;
+	font-size: 15px;
+	background-color: #1B2149;
+	border: .1px solid #1B2149;
+	color: #ffffff;
+	letter-spacing: 1px;
+	cursor: pointer;
+}
+
+#invia:hover {
+	background-color: #363975;
+	border: .1px solid #1B2149;
+	color: #ffffff;
+}
+
+.form-container {
+	display: flex;
+	flex-direction: column;
+	margin-top: 40px;
+	padding: 30px;
+	border-radius: 20px;
+	box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.1);
+	background-color: white;
+	border: 0.1px solid lightgrey;
+}
+
+.ordine-forms {
+	display: flex;
+	justify-content: space-between;
+}

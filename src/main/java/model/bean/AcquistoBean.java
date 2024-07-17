@@ -9,8 +9,9 @@ public class AcquistoBean implements Serializable {
 	
 	private int IDAcquisto;
 	private String nome;
+	private String brand;
 	private String colore;
-	private int hdd;
+	private String hdd;
 	private int ram;
 	private int quantita;
 	private BigDecimal prezzoUnitario;
@@ -45,11 +46,11 @@ public class AcquistoBean implements Serializable {
 		this.colore = colore;
 	}
 
-	public int getHdd() {
+	public String getHdd() {
 		return hdd;
 	}
 
-	public void setHdd(int hdd) {
+	public void setHdd(String hdd) {
 		this.hdd = hdd;
 	}
 
@@ -93,11 +94,20 @@ public class AcquistoBean implements Serializable {
 		IDProdotto = iDProdotto;
 	}
 
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+
 	@Override
 	public String toString() {
-		return "AcquistoBean [IDAcquisto=" + IDAcquisto + ", nome=" + nome + ", colore=" + colore + ", hdd=" + hdd
-				+ ", ram=" + ram + ", quantita=" + quantita + ", prezzoUnitario=" + prezzoUnitario + ", IDOrdine="
-				+ IDOrdine + ", IDProdotto=" + IDProdotto + "]";
+		return "AcquistoBean [IDAcquisto=" + IDAcquisto + ", nome=" + nome + ", brand=" + brand + ", colore=" + colore
+				+ ", hdd=" + hdd + ", ram=" + ram + ", quantita=" + quantita + ", prezzoUnitario=" + prezzoUnitario
+				+ ", IDOrdine=" + IDOrdine + ", IDProdotto=" + IDProdotto + "]";
 	}
 
 }
