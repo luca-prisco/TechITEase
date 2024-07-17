@@ -18,7 +18,7 @@ if (prodotti == null || prodotti.isEmpty()) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tech IT Ease - Prodotti</title>
+<title>Tech IT Ease</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin/gestioneProdotti.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
@@ -33,10 +33,6 @@ if (prodotti == null || prodotti.isEmpty()) {
 		<div class="row-container">
 			<a href="${pageContext.request.contextPath}/admin/aggiungiProdotto.jsp"><button>Aggiungi prodotto</button></a> 
 			<input id="myInput" type="text" placeholder="Search..">
-			<div class="filters">
-				<a href=""><button>Brand</button></a> 
-				<a href=""><button>Categoria</button></a>
-			</div>
 		</div>
 		<div class="prodotti__storage">
 			<c:choose>
@@ -84,9 +80,20 @@ if (prodotti == null || prodotti.isEmpty()) {
 											</c:choose>
 										</td>
 										<td id="azioni">
-											<form method="get" action="GestioneCatalogo?action=updateProduct">
-												<input type="hidden" name="id" value="${prodotto.IDProdotto}">
-												<button type="submit">Edit</button>
+											<form method="get" action="${pageContext.request.contextPath}/admin/modificaProdotto.jsp">
+											    <input type="hidden" name="id" value="${prodotto.IDProdotto}">
+											    <input type="hidden" name="nome" value="${prodotto.nomeProdotto}">
+											    <input type="hidden" name="brand" value="${prodotto.brand}">
+											    <input type="hidden" name="categoria" value="${prodotto.categoria}">
+											    <input type="hidden" name="descrizione" value="${prodotto.descrizione}">
+											    <input type="hidden" name="dettagli" value="${prodotto.dettagli}">
+											    <input type="hidden" name="hdd" value="${specifiche.hdd}">
+											    <input type="hidden" name="ram" value="${specifiche.ram}">
+											    <input type="hidden" name="colore" value="${specifiche.colore}">
+											    <input type="hidden" name="prezzo" value="${specifiche.prezzo}">
+											    <input type="hidden" name="quantita" value="${specifiche.quantita}">
+											    <input type="hidden" name="idSpecifiche" value="${specifiche.IDSpecifiche}">
+											    <button type="submit">Edit</button>
 											</form>
 											<form id="deleteForm" method="get" action="ProdottoControl">
 												<input type="hidden" name="action" value="delete">

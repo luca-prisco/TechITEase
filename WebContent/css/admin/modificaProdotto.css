@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont;
+	color: #1B2149;
+}
+
+body {
+	 background: #fafafc;
+	 margin: 0;
+}
+
+form {
+	display: table;
+	margin: auto;
+}
+
+div.tableRow {
+	display: table-row;
+}
+
+div.tableRow>div, div.tableRow>label{
+	display: table-cell;
+	padding: 3px;
+	vertical-align: top;
+}
+
+form textarea {
+	width: 500px;
+	height: 150px;
+}
+
+div.tableRow>label:first-child {
+	text-align: right;
+}
+
+.prodotto-form {
+	padding: 30px;
+	border-radius: 20px;
+	box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.1);
+	background-color: white;
+	border: 0.1px solid lightgrey;
+}
+
+

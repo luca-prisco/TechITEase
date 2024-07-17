@@ -48,8 +48,7 @@ public class ProdottoControl extends HttpServlet {
 			if(action != null) {
 				if(action.equalsIgnoreCase("insert")) { 
 					int numSpecifiche = 0;
-					System.out.println(request.getParameter("numeroSpecifiche"));
-					
+
 					if(request.getParameter("numeroSpecifiche")!=null)
 						numSpecifiche = Integer.parseInt(request.getParameter("numeroSpecifiche"));
 
@@ -99,6 +98,48 @@ public class ProdottoControl extends HttpServlet {
 					prodottoDAO.deleteProduct(Integer.parseInt(id1), Integer.parseInt(id2));
 					response.sendRedirect(request.getContextPath() + "/admin/gestioneProdotti.jsp");
 			        return;
+				}
+				if(action.equalsIgnoreCase("update")) {
+					String IDProdotto = request.getParameter("idProdotto");
+					String IDSpecifiche = request.getParameter("idSpecifiche");
+					String nomeProdotto = request.getParameter("nomeProdotto");
+					String brand = request.getParameter("brand");
+					String categoria = request.getParameter("categoria");
+					String descrizione = request.getParameter("descrizione");
+					String dettagli = request.getParameter("dettagli");
+					String colore = request.getParameter("colore");
+					String hdd = request.getParameter("hdd");
+					String ram = request.getParameter("ram");
+					String quantita = request.getParameter("quantita");
+					String prezzo = request.getParameter("prezzo");
+					
+					System.out.println(IDProdotto + IDSpecifiche + ram);
+					
+					ProdottoBean prodotto = new ProdottoBean();
+					List<SpecificheRidotte> specifiche = new ArrayList<>();
+					SpecificheRidotte specifica = new SpecificheRidotte();
+					prodotto.setIDProdotto(Integer.parseInt(IDProdotto));
+					prodotto.setNomeProdotto(nomeProdotto);
+					prodotto.setBrand(brand);
+					prodotto.setCategoria(categoria);
+					prodotto.setDescrizione(descrizione);
+					prodotto.setDettagli(dettagli);
+					specifica.setIDSpecifiche(Integer.parseInt(IDSpecifiche));
+					specifica.setColore(colore);
+					specifica.setHdd(hdd);
+					specifica.setRam(Integer.parseInt(ram));
+					specifica.setQuantita(Integer.parseInt(quantita));
+					specifica.setPrezzo(new BigDecimal(prezzo));
+					specifiche.add(specifica);
+					prodotto.setSpecificheRidotte(specifiche);
+					
+					try {
+					prodottoDAO.updateProdotto(prodotto);
+					response.sendRedirect(request.getContextPath() + "/admin/gestioneProdotti.jsp");
+					} catch (SQLException e)  {
+						e.printStackTrace();
+					}
+					return;
 				}
 				if(action.equalsIgnoreCase("toPage")) {
 					String id1 = request.getParameter("id1");

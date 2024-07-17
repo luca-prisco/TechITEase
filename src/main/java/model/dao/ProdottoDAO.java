@@ -81,10 +81,55 @@ public class ProdottoDAO {
 			
 			psProdSpec.executeBatch(); //Esegue il batch
 			
+			
+			
 		} finally {
 			try {
 				if (ps != null)
 					ps.close();
+			} finally {
+				dmcp.releaseConnection(connection);
+			}
+		}
+	
+	}
+	
+	public synchronized void updateProdotto(ProdottoBean prodotto) throws SQLException {
+	    Connection connection = null;
+	    PreparedStatement psProdotto = null;
+	    PreparedStatement psSpecifiche = null;
+
+	    String updateProdottoSql = "UPDATE " + ProdottoDAO.TABLE_NAME + " SET nomeProdotto = ?, brand = ?, categoria = ?, descrizione = ?, dettagli = ? WHERE IDProdotto = ?";
+	    String updateSpecificheSql = "UPDATE " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " SET colore = ?, hdd = ?, ram = ?, quantita = ?, prezzo = ? WHERE IDSpecifiche = ? AND IDProdotto = ?";
+	    
+		
+		try {
+			connection = dmcp.getConnection(); //Ottengo la connection dal connection pool
+			psProdotto = connection.prepareStatement(updateProdottoSql);
+			
+	        psProdotto = connection.prepareStatement(updateProdottoSql);
+	        psProdotto.setString(1, prodotto.getNomeProdotto());
+	        psProdotto.setString(2, prodotto.getBrand());
+	        psProdotto.setString(3, prodotto.getCategoria());
+	        psProdotto.setString(4, prodotto.getDescrizione());
+	        psProdotto.setString(5, prodotto.getDettagli());
+	        psProdotto.setInt(6, prodotto.getIDProdotto());
+	        psProdotto.executeUpdate();
+	        
+			psSpecifiche = connection.prepareStatement(updateSpecificheSql);
+            psSpecifiche.setString(1, prodotto.getSpecificheRidotte().get(0).getColore());
+            psSpecifiche.setString(2, prodotto.getSpecificheRidotte().get(0).getHdd());
+            psSpecifiche.setInt(3, prodotto.getSpecificheRidotte().get(0).getRam());
+            psSpecifiche.setInt(4, prodotto.getSpecificheRidotte().get(0).getQuantita());
+            psSpecifiche.setBigDecimal(5, prodotto.getSpecificheRidotte().get(0).getPrezzo());
+            psSpecifiche.setInt(6, prodotto.getSpecificheRidotte().get(0).getIDSpecifiche());
+            psSpecifiche.setInt(7, prodotto.getIDProdotto());
+            psSpecifiche.executeUpdate();
+            
+		} finally {
+			try {
+				if (psProdotto != null) psProdotto.close();
+				if (psSpecifiche != null) psSpecifiche.close();
 			} finally {
 				dmcp.releaseConnection(connection);
 			}
