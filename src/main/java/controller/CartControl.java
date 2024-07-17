@@ -87,7 +87,7 @@ public class CartControl extends HttpServlet {
 
 		            cart.addProduct(prodSelezionato);
 
-			        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/cart.jsp");
+			        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/catalogo.jsp");
 			        dispatcher.forward(request, response);
 		        }
 			} catch (NumberFormatException | SQLException e) {
@@ -121,6 +121,12 @@ public class CartControl extends HttpServlet {
 				e.printStackTrace();
 			}
 		}	
+		
+		if(action.equals("deleteAll")) {
+			cart.clearCart();
+		    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/cart.jsp");
+		    dispatcher.forward(request, response);
+		}
 		
 		if(action.equals("updateQuantity")) {
 			int productId = Integer.parseInt(request.getParameter("productId"));

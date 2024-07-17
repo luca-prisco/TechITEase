@@ -6,7 +6,13 @@
 <%@ page import="model.dao.*" %>
 <%@ page import="model.bean.*" %>
 <%@ page import="model.*" %>
-
+<%
+	Collection<?> prodotti = (Collection<?>) request.getAttribute("prodotti");
+	if(prodotti == null) {
+		response.sendRedirect(request.getContextPath() + "/Catalogo");	
+	return;
+	}
+%>
 
 <!DOCTYPE html>
 <html>

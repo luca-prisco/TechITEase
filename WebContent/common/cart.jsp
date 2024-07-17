@@ -28,7 +28,12 @@
 	
     <div class="page">
         <div class="left">
-        	<h1>Il tuo carrello</h1>
+        	<div class="top-content">
+        		<h1>Il tuo carrello</h1>
+        		<form id="deleteForm" method="post" action="${pageContext.request.contextPath}/common/CartControl?action=deleteAll">
+					<button type="submit" style="margin-top:12px;">Svuota</button>
+				</form>
+        	</div>
         	<div class="prodotti__container">
 	  			<c:forEach var="item" items="${cart.items}" varStatus="loop">
 	  				<div class="prodotto__cart">
