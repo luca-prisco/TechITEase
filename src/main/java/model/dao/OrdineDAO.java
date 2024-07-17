@@ -159,9 +159,11 @@ public class OrdineDAO {
 	            ordine.setDataConsegna(rs.getDate("dataConsegna"));
 	            ordine.setPrezzoTotale(rs.getBigDecimal("prezzoTotale"));
 	            ordine.setVia(rs.getString("via"));
+	            ordine.setCivico(rs.getString("civico"));
 	            ordine.setCap(rs.getString("cap"));
 	            ordine.setCitta(rs.getString("citta"));
 	            ordine.setEmailUtente(rs.getString("emailUtente"));
+	            ordine.setIsResolved(rs.getBoolean("resolved"));
 	            ordini.add(ordine);
 	        }
         } finally {
@@ -176,6 +178,7 @@ public class OrdineDAO {
         return ordini;
     }
     
+ 
     public synchronized Collection<OrdineBean> doRetrieveByEmail(String emailUtente) throws SQLException {
         Collection<OrdineBean> ordini = new ArrayList<>();
         
@@ -198,9 +201,11 @@ public class OrdineDAO {
 	            ordine.setDataConsegna(rs.getDate("dataConsegna"));
 	            ordine.setPrezzoTotale(rs.getBigDecimal("prezzoTotale"));
 	            ordine.setVia(rs.getString("via"));
+	            ordine.setCivico(rs.getString("civico"));
 	            ordine.setCap(rs.getString("cap"));
 	            ordine.setCitta(rs.getString("citta"));
 	            ordine.setEmailUtente(rs.getString("emailUtente"));
+	            ordine.setIsResolved(rs.getBoolean("resolved"));
 	            ordini.add(ordine);
 	        }
         } finally {
@@ -235,9 +240,11 @@ public class OrdineDAO {
 	            ordine.setDataConsegna(rs.getDate("dataConsegna"));
 	            ordine.setPrezzoTotale(rs.getBigDecimal("prezzoTotale"));
 	            ordine.setVia(rs.getString("via"));
+	            ordine.setCivico(rs.getString("civico"));
 	            ordine.setCap(rs.getString("cap"));
 	            ordine.setCitta(rs.getString("citta"));
 	            ordine.setEmailUtente(rs.getString("emailUtente"));
+	            ordine.setIsResolved(rs.getBoolean("resolved"));
 	            ordini.add(ordine);
 	        }
         } finally {

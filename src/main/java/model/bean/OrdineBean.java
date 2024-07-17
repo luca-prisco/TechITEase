@@ -14,6 +14,7 @@ public class OrdineBean implements Serializable {
 	private BigDecimal prezzoTotale;
 	private String via, cap, citta, civico;
 	private String emailUtente;
+	private Boolean isResolved;
 	
 	public OrdineBean() {
 		
@@ -90,13 +91,22 @@ public class OrdineBean implements Serializable {
 	public void setCivico(String civico) {
 		this.civico = civico;
 	}
+	
+	
+
+	public Boolean getIsResolved() {
+		return isResolved;
+	}
+
+	public void setIsResolved(Boolean isResolved) {
+		this.isResolved = isResolved;
+	}
 
 	@Override
 	public String toString() {
 		return "OrdineBean [IDOrdine=" + IDOrdine + ", dataOrdine=" + dataOrdine + ", dataConsegna=" + dataConsegna
 				+ ", prezzoTotale=" + prezzoTotale + ", via=" + via + ", cap=" + cap + ", citta=" + citta + ", civico="
-				+ civico + ", emailUtente=" + emailUtente + "]";
+				+ civico + ", emailUtente=" + emailUtente + ", isResolved=" + isResolved + "]";
 	}
-
-
+	
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -31,10 +32,10 @@ import utils.CryptoUtils;
  */
 @WebServlet("/OrdineControl")
 public class OrdineControl extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
 
-    public OrdineControl() {
+    private static final long serialVersionUID = -5333396671467561523L;
+
+	public OrdineControl() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -43,108 +44,124 @@ public class OrdineControl extends HttpServlet {
 		DriverManagerConnectionPool dm = (DriverManagerConnectionPool) getServletContext().getAttribute("DriverManager");
 		OrdineDAO ordineDAO = new OrdineDAO(dm);
 		AcquistoDAO acquistoDAO = new AcquistoDAO(dm);
-		
+	
 		HttpSession session = request.getSession();
         UtenteBean utente = (UtenteBean) session.getAttribute("utente");
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         Cart carrello = (Cart) session.getAttribute("cart");
-        
-        if(utente == null) {
-	        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/login.jsp");
-	        dispatcher.forward(request, response);
+        String action = request.getParameter("action");
+
+        if(action != null) {
+	        if(action.equals("add")) {
+		        if(utente == null) {
+			        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/login.jsp");
+			        dispatcher.forward(request, response);
+		        }
+		
+		        if (carrello == null || carrello.getItems().isEmpty()) {
+		            response.sendRedirect(request.getContextPath() + "/common/cart.jsp");
+		            return;
+		        }
+		
+		        // Recupera i dettagli di pagamento e indirizzo dal form
+		        String nomeCarta = request.getParameter("nomeCarta");
+		        String cognomeCarta = request.getParameter("cognomeCarta");
+		        String numeroCarta = request.getParameter("numeroCarta");
+		        String scadenzaCarta = request.getParameter("scadenzaCarta");
+		        String cvv = request.getParameter("cvv");
+		        String via = request.getParameter("via");
+		        String civico = request.getParameter("civico");
+		        String cap = request.getParameter("cap");
+		        String citta = request.getParameter("citta");
+		        String emailUtente = utente.getEmailUtente();
+		        List<CartItem> cartItems = carrello.getItems();
+		        
+		        //Data ordine e data consegnaßß
+		        Date dataOrdine = new Date(System.currentTimeMillis());
+		        Calendar cal = Calendar.getInstance();
+		        cal.setTime(dataOrdine);
+		        cal.add(Calendar.DAY_OF_MONTH, 5); // 5 giorni in più per la consegna
+		        Date dataConsegna = new Date(cal.getTimeInMillis());
+		        
+		        // Calcolo il prezzo totale
+		        BigDecimal prezzoTotale = BigDecimal.ZERO;
+		        for (CartItem item : cartItems) {
+		            prezzoTotale = prezzoTotale.add(item.getSpecifiche().getPrezzo().multiply(new BigDecimal(item.getQuantity())));
+		        }
+		
+		        // Creo l'ordine
+		        OrdineBean ordine = new OrdineBean();
+		        int ordineID = -1;
+		        ordine.setDataOrdine(dataOrdine);
+		        ordine.setDataConsegna(dataConsegna); 
+		        ordine.setPrezzoTotale(prezzoTotale);
+		        ordine.setVia(via);
+		        ordine.setCivico(civico);
+		        ordine.setCap(cap);
+		        ordine.setCitta(citta);
+		        ordine.setEmailUtente(emailUtente);
+		
+		        try {
+		        	ordineID = ordineDAO.insertOrdine(ordine);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		        
+		        //creo il pagamento 
+		        PagamentoBean pagamento = new PagamentoBean();
+		        pagamento.setIDOrdine(ordineID);
+		        pagamento.setNomeCarta(nomeCarta);
+		        pagamento.setCognomeCarta(cognomeCarta);
+		        pagamento.setNumeroCarta(CryptoUtils.toHash(numeroCarta));
+		        pagamento.setScadenzaCarta(scadenzaCarta);
+		        pagamento.setCvv(CryptoUtils.toHash(cvv));
+		       
+		        
+		        try {
+		        	ordineDAO.insertPagamento(pagamento);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		        
+		        // Creazione degli acquisti per ogni elemento nel carrello
+		        for (CartItem item : cartItems) {
+		            AcquistoBean acquisto = new AcquistoBean();
+		            acquisto.setNome(item.getProdotto().getNomeProdotto());
+		            acquisto.setBrand(item.getProdotto().getBrand());
+		            acquisto.setColore(item.getSpecifiche().getColore());
+		            acquisto.setHdd(item.getSpecifiche().getHdd());
+		            acquisto.setIDProdotto(item.getSpecifiche().getRam());
+		            acquisto.setQuantita(item.getQuantity());
+		            acquisto.setPrezzoUnitario(item.getSpecifiche().getPrezzo());
+		            acquisto.setIDOrdine(ordineID);
+		            acquisto.setIDProdotto(item.getProdotto().getIDProdotto());
+		
+		
+		            try {
+		                acquistoDAO.insertAcquisto(acquisto);
+		                carrello.clearCart();
+		                
+		                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/ordineEffettuato.jsp");
+		                dispatcher.forward(request, response);
+		            } catch (SQLException e) {
+		                e.printStackTrace();
+		                throw new ServletException("Errore durante l'inserimento dell'acquisto nel database");
+		            }
+		        }
+	        }
+	        if(action.equals("all")) {
+	        	List<OrdineBean> ordini = new ArrayList<>();
+	        	try {
+					ordini = (List<OrdineBean>) ordineDAO.doRetrieveAll();
+					request.setAttribute("ordini", ordini);
+	                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/gestioneOrdini.jsp");
+	                dispatcher.forward(request, response);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+	        }
+
         }
-
-        if (carrello == null || carrello.getItems().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/common/cart.jsp");
-            return;
-        }
-
-        // Recupera i dettagli di pagamento e indirizzo dal form
-        String nomeCarta = request.getParameter("nomeCarta");
-        String cognomeCarta = request.getParameter("cognomeCarta");
-        String numeroCarta = request.getParameter("numeroCarta");
-        String scadenzaCarta = request.getParameter("scadenzaCarta");
-        String cvv = request.getParameter("cvv");
-        String via = request.getParameter("via");
-        String civico = request.getParameter("civico");
-        String cap = request.getParameter("cap");
-        String citta = request.getParameter("citta");
-        String emailUtente = utente.getEmailUtente();
-        List<CartItem> cartItems = carrello.getItems();
-        
-        //Data ordine e data consegnaßß
-        Date dataOrdine = new Date(System.currentTimeMillis());
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(dataOrdine);
-        cal.add(Calendar.DAY_OF_MONTH, 5); // 5 giorni in più per la consegna
-        Date dataConsegna = new Date(cal.getTimeInMillis());
-        
-        // Calcolo il prezzo totale
-        BigDecimal prezzoTotale = BigDecimal.ZERO;
-        for (CartItem item : cartItems) {
-            prezzoTotale = prezzoTotale.add(item.getSpecifiche().getPrezzo().multiply(new BigDecimal(item.getQuantity())));
-        }
-
-        // Creo l'ordine
-        OrdineBean ordine = new OrdineBean();
-        int ordineID = -1;
-        ordine.setDataOrdine(dataOrdine);
-        ordine.setDataConsegna(dataConsegna); 
-        ordine.setPrezzoTotale(prezzoTotale);
-        ordine.setVia(via);
-        ordine.setCivico(civico);
-        ordine.setCap(cap);
-        ordine.setCitta(citta);
-        ordine.setEmailUtente(emailUtente);
-
-        try {
-        	ordineID = ordineDAO.insertOrdine(ordine);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-        
-        //creo il pagamento 
-        PagamentoBean pagamento = new PagamentoBean();
-        pagamento.setIDOrdine(ordineID);
-        pagamento.setNomeCarta(nomeCarta);
-        pagamento.setCognomeCarta(cognomeCarta);
-        pagamento.setNumeroCarta(CryptoUtils.toHash(numeroCarta));
-        pagamento.setScadenzaCarta(scadenzaCarta);
-        pagamento.setCvv(CryptoUtils.toHash(cvv));
-       
-        
-        try {
-        	ordineDAO.insertPagamento(pagamento);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-        
-        // Creazione degli acquisti per ogni elemento nel carrello
-        for (CartItem item : cartItems) {
-            AcquistoBean acquisto = new AcquistoBean();
-            acquisto.setNome(item.getProdotto().getNomeProdotto());
-            acquisto.setBrand(item.getProdotto().getBrand());
-            acquisto.setColore(item.getSpecifiche().getColore());
-            acquisto.setHdd(item.getSpecifiche().getHdd());
-            acquisto.setIDProdotto(item.getSpecifiche().getRam());
-            acquisto.setQuantita(item.getQuantity());
-            acquisto.setPrezzoUnitario(item.getSpecifiche().getPrezzo());
-            acquisto.setIDOrdine(ordineID);
-            acquisto.setIDProdotto(item.getProdotto().getIDProdotto());
-
-
-            try {
-                acquistoDAO.insertAcquisto(acquisto);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw new ServletException("Errore durante l'inserimento dell'acquisto nel database");
-            }
-        }
-
-        carrello.clearCart();
-        
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/ordineEffettuato.jsp");
-        dispatcher.forward(request, response);
 	}
 	
 	

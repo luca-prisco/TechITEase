@@ -8,6 +8,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import model.bean.UtenteBean;
 
 /**
  * Servlet implementation class AcquistoControl
@@ -30,7 +33,14 @@ public class Pagamento extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    
+		HttpSession session = request.getSession();	    
+        UtenteBean utente = (UtenteBean) session.getAttribute("utente");
+
+		if(utente == null) {
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/login.jsp");
+		    dispatcher.forward(request, response);
+		}
+		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/common/pagamento.jsp");
 	    dispatcher.forward(request, response);
 	}

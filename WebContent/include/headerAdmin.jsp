@@ -17,7 +17,7 @@
 			<ul>
 				<li><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
 				<li><a href="${pageContext.request.contextPath}/admin/gestioneProdotti.jsp">Prodotti</a></li>
-				<li><a href="">Ordini</a></li>
+				<li><a href="${pageContext.request.contextPath}/OrdineControl?action=all">Ordini</a></li>
 				<li><a href="">Admins</a></li>
 				<c:choose>
 					<c:when test="${not empty sessionScope.utente}">

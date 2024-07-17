@@ -11,7 +11,7 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/responsive/pagamento-responsive.css" />
 
 <body>
-<form id="pagamento-details" method="post" action="${pageContext.request.contextPath}/OrdineControl?action=create">
+<form id="pagamento-details" method="post" action="${pageContext.request.contextPath}/OrdineControl?action=add">
     <h1>Pagamento</h1>
     <div class="form-container">
 	    <div class="ordine-forms">
