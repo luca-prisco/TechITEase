@@ -50,6 +50,7 @@ public class OrdineControl extends HttpServlet {
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         Cart carrello = (Cart) session.getAttribute("cart");
         String action = request.getParameter("action");
+        String risolvi = request.getParameter("risolvi");
 
         if(action != null) {
 	        if(action.equals("add")) {
@@ -130,7 +131,7 @@ public class OrdineControl extends HttpServlet {
 		            acquisto.setBrand(item.getProdotto().getBrand());
 		            acquisto.setColore(item.getSpecifiche().getColore());
 		            acquisto.setHdd(item.getSpecifiche().getHdd());
-		            acquisto.setIDProdotto(item.getSpecifiche().getRam());
+		            acquisto.setRam(item.getSpecifiche().getRam());
 		            acquisto.setQuantita(item.getQuantity());
 		            acquisto.setPrezzoUnitario(item.getSpecifiche().getPrezzo());
 		            acquisto.setIDOrdine(ordineID);
@@ -160,8 +161,34 @@ public class OrdineControl extends HttpServlet {
 					e.printStackTrace();
 				}
 	        }
+	        if(action.equals("dettagli")) {
+	        	String idOrdine = request.getParameter("idOrdine");
+	        	try {
+					PagamentoBean pagamento = ordineDAO.pagamentoByOrdine(Integer.parseInt(idOrdine));
+					List<AcquistoBean> acquisti = (List<AcquistoBean>) acquistoDAO.doRetrieveByIDOrdine(Integer.parseInt(idOrdine));
+			        System.out.println("Acquisti trovati: " + acquisti); // Debug: stampa gli acquisti
+					request.setAttribute("pagamento", pagamento);
+					request.setAttribute("acquisti", acquisti);
+	                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/dettagliOrdine.jsp");
+	                dispatcher.forward(request, response);
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (action.equals("risolvi")) {
+				String idOrdine = request.getParameter("idOrdine");
+				try {
+					ordineDAO.resolveOrdine(Integer.parseInt(idOrdine));
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/dashboard.jsp");
+					dispatcher.forward(request, response);
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+			}
 
-        }
+		}
+
+        
 	}
 	
 	

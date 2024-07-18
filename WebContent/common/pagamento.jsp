@@ -80,7 +80,7 @@
 		</div>
 		<div class="tableRow-sumbit">
 			<div>
-				<input id="invia" type="submit" value="Conferma l'acquisto">
+				<input id="invia" type="submit" value="Conferma acquisto">
 			</div>
 		</div>
 	</div>

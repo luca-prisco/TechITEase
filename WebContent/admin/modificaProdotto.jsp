@@ -99,7 +99,7 @@ String idSpecifiche = request.getParameter("idSpecifiche");
 	         
 				<div class="tableRow">
 					<label></label>
-					<div>
+					<div class="tableRow-sumbit">
 						<input type="hidden" name="idProdotto" value="<%= idProdotto %>">
 						<input type="hidden" name="idSpecifiche" value="<%= idSpecifiche %>">
 						<input type="submit" value="Modifica">

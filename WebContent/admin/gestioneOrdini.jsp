@@ -42,6 +42,7 @@ if (ordini == null || ordini.isEmpty()) {
 								<th>ID Ordine</th>
 								<th>Email Cliente</th>
 								<th>Data ordine</th>
+								<th>Prezzo totale</th>
 								<th>Risolto</th>
 							</tr>
 						</thead>
@@ -51,13 +52,18 @@ if (ordini == null || ordini.isEmpty()) {
 									<td>${ordine.IDOrdine}</td>
 									<td>${ordine.emailUtente}</td>
 									<td>${ordine.dataOrdine}</td>
+									<td>${ordine.prezzoTotale}€</td>
 									<td>${ordine.isResolved}</td>
 									<td id="azioni">
-										<form method="get"
-											action="${pageContext.request.contextPath}/admin/dettagliOrdine.jsp">
+										<form method="post" action="${pageContext.request.contextPath}/OrdineControl?action=dettagli">
 											<input type="hidden" name="idOrdine" value="${ordine.IDOrdine}">
-										
-											<button type="submit">Mostra dettagli</button>
+											<input type="hidden" name="email" value="${ordine.emailUtente}">
+											<input type="hidden" name="total" value="${ordine.prezzoTotale}">
+											<input type="hidden" name="via" value="${ordine.via}">
+											<input type="hidden" name="civico" value="${ordine.civico}">
+											<input type="hidden" name="cap" value="${ordine.cap}">
+											<input type="hidden" name="citta" value="${ordine.citta}">
+											<button type="submit"><u>Mostra dettagli</u></button>
 										</form>
 									</td>
 

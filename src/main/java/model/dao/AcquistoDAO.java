@@ -70,7 +70,7 @@ public class AcquistoDAO {
 			while (rs.next()) {
 				AcquistoBean acquisto = new AcquistoBean();
 				acquisto.setIDAcquisto(rs.getInt("IDAcquisto"));
-				acquisto.setNome(rs.getString("nome"));
+				acquisto.setNome(rs.getString("nomeProdotto"));
 				acquisto.setBrand(rs.getString("brand"));
 				acquisto.setColore(rs.getString("colore"));
 				acquisto.setHdd(rs.getString("hdd"));

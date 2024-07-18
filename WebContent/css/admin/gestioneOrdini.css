@@ -33,10 +33,9 @@ body {
 }
 
 button{
+	background-color: #ffffff; 
 	border: none;
-	border-radius: 10px;
-	padding: 12px 18px 12px 18px;
-	margin-right: 10px;
+	padding: 0;
 	cursor: pointer;
 }
 

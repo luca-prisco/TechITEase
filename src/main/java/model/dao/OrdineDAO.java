@@ -11,8 +11,10 @@ import java.util.Collection;
 import java.util.Date;
 
 import controller.DriverManagerConnectionPool;
+import controller.Pagamento;
 import model.bean.OrdineBean;
 import model.bean.PagamentoBean;
+import utils.CryptoUtils;
 
 public class OrdineDAO {
     
@@ -65,36 +67,6 @@ public class OrdineDAO {
 			}
 		}
         return ordineID;
-    }
-    
-    public synchronized void insertPagamento(PagamentoBean pagamento) throws SQLException {
-    	Connection connection = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        
-        String sql = "INSERT INTO Pagamento (IDOrdine, nomeCarta, cognomeCarta, numeroCarta, scadenzaCarta, cvv) VALUES (?, ?, ?, ?, ?, ?)";
-        
-        try {
-        	connection = dmcp.getConnection();
-	        ps = connection.prepareStatement(sql);
-	     
-            ps.setInt(1, pagamento.getIDOrdine());
-            ps.setString(2, pagamento.getNomeCarta());
-            ps.setString(3, pagamento.getCognomeCarta());
-            ps.setString(4, pagamento.getNumeroCarta());
-            ps.setString(5, pagamento.getScadenzaCarta());
-            ps.setString(6, pagamento.getCvv());
-            
-	        ps.executeUpdate();
-	        
-        } finally {
-			try {
-				if(rs != null) rs.close();
-				if (ps != null) ps.close();
-			} finally {
-				dmcp.releaseConnection(connection);
-			}
-		}
     }
     
     
@@ -257,5 +229,89 @@ public class OrdineDAO {
 		}   
         return ordini;
     }
+    
+    public synchronized void resolveOrdine(int idOrdine) throws SQLException {
+    	Connection connection = null;
+        PreparedStatement ps = null;
+        
+        String sql = "UPDATE " + OrdineDAO.TABLE_NAME + " SET resolved = ? WHERE IDOrdine = ?";
+
+        try {
+        	connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+	        ps.setBoolean(1, true);
+	        ps.setInt(2, idOrdine);
+	        
+	        ps.executeUpdate();
+        }finally {
+			try {
+				if (ps != null) ps.close();
+			} finally {
+				dmcp.releaseConnection(connection);
+			}
+		}
+    }
+
+    
+    public synchronized void insertPagamento(PagamentoBean pagamento) throws SQLException {
+    	Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        String sql = "INSERT INTO Pagamento (IDOrdine, nomeCarta, cognomeCarta, numeroCarta, scadenzaCarta, cvv) VALUES (?, ?, ?, ?, ?, ?)";
+        
+        try {
+        	connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+	     
+            ps.setInt(1, pagamento.getIDOrdine());
+            ps.setString(2, pagamento.getNomeCarta());
+            ps.setString(3, pagamento.getCognomeCarta());
+            ps.setString(4, pagamento.getNumeroCarta());
+            ps.setString(5, pagamento.getScadenzaCarta());
+            ps.setString(6, pagamento.getCvv());
+            
+	        ps.executeUpdate();
+	        
+        } finally {
+			try {
+				if(rs != null) rs.close();
+				if (ps != null) ps.close();
+			} finally {
+				dmcp.releaseConnection(connection);
+			}
+		}
+    }
+    
+    public synchronized PagamentoBean pagamentoByOrdine(int idOrdine) throws SQLException {
+    	Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        PagamentoBean pagamento = new PagamentoBean();
+        
+        String sql = "SELECT nomeCarta, cognomeCarta, numeroCarta FROM Pagamento WHERE IDOrdine = ?";
+
+        try {
+        	connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+        	ps.setInt(1, idOrdine);
+            rs = ps.executeQuery();
+            
+	        while(rs.next()) {
+	            pagamento.setNomeCarta(rs.getString("nomeCarta"));
+	            pagamento.setCognomeCarta(rs.getString("cognomeCarta"));
+	            pagamento.setNumeroCarta(rs.getString("numeroCarta"));
+	        }
+        } finally {
+			try {
+				if(rs != null) rs.close();
+				if (ps != null) ps.close();
+			} finally {
+				dmcp.releaseConnection(connection);
+			}
+		}
+        return pagamento;
+    }
+    
 }
 

@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="model.bean.*, model.*"%>
+	pageEncoding="UTF-8" import="model.bean.*, model.*, model.dao.*, controller.*, utils.*"%>
+
+<%
+	DriverManagerConnectionPool dm = (DriverManagerConnectionPool) getServletContext().getAttribute("DriverManager");
+	UtenteDAO utenteDAO = new UtenteDAO(dm);
+%>
 
 <!DOCTYPE html>
 <html>
@@ -43,10 +48,19 @@
 			UtenteBean utente = (UtenteBean) session.getAttribute("utente");
 			if (utente != null) {
 			%>
-			<button class="dropbtn" data-dropdown-button>${utente.nome}<img
+			<form id="datiPersonaliUtente" method="post" action="${pageContext.request.contextPath}/common/datiUtente.jsp">
+				<input type="hidden" name="nome" value="${utente.nome}">
+				<input type="hidden" name="cognome" value="${utente.cognome}">
+				<input type="hidden" name="emailUtente" value="${utente.emailUtente}">
+				<input type="hidden" name="telefono" value="${utente.telefono}">
+				<input type="hidden" name="password" value="${utente.password}">
+				
+				<button class="dropbtn">${utente.nome}<img
 					src="${pageContext.request.contextPath}/img/icons/user.svg" style="padding-left: 10px;"
 					alt="Non disponibile">
 			</button>
+			</form>
+
 			<a
 				href="${pageContext.request.contextPath}/common/AutenticationControl?action=logout"><button>LogOut</button></a>
 			<%
