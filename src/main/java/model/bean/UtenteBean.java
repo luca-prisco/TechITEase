@@ -11,11 +11,6 @@ public class UtenteBean implements Serializable {
 	private String cognome;
 	private String telefono;
 	private String password;
-	private String nomeCarta;
-	private String cognomeCarta;
-	private String numeroCarta;
-	private String dataScadenza;
-	private String cvv;
 	private boolean isAdmin;
 	
 	
@@ -73,57 +68,6 @@ public class UtenteBean implements Serializable {
 		this.password = password;
 	}
 
-
-	public String getNomeCarta() {
-		return nomeCarta;
-	}
-
-
-	public void setNomeCarta(String nomeCarta) {
-		this.nomeCarta = nomeCarta;
-	}
-
-
-	public String getCognomeCarta() {
-		return cognomeCarta;
-	}
-
-
-	public void setCognomeCarta(String cognomeCarta) {
-		this.cognomeCarta = cognomeCarta;
-	}
-
-
-	public String getNumeroCarta() {
-		return numeroCarta;
-	}
-
-
-	public void setNumeroCarta(String numeroCarta) {
-		this.numeroCarta = numeroCarta;
-	}
-
-
-	public String getDataScadenza() {
-		return dataScadenza;
-	}
-
-
-	public void setDataScadenza(String dataScadenza) {
-		this.dataScadenza = dataScadenza;
-	}
-
-
-	public String getCvv() {
-		return cvv;
-	}
-
-
-	public void setCvv(String cvv) {
-		this.cvv = cvv;
-	}
-
-
 	public boolean isAdmin() {
 		return isAdmin;
 	}
@@ -137,9 +81,8 @@ public class UtenteBean implements Serializable {
 	@Override
 	public String toString() {
 		return "UtenteBean [emailUtente=" + emailUtente + ", nome=" + nome + ", cognome=" + cognome + ", telefono="
-				+ telefono + ", password=" + password + ", nomeCarta=" + nomeCarta + ", cognomeCarta=" + cognomeCarta
-				+ ", numeroCarta=" + numeroCarta + ", dataScadenza=" + dataScadenza + ", cvv=" + cvv + ", isAdmin="
-				+ isAdmin + "]";
+				+ telefono + ", password=" + password + ", isAdmin=" + isAdmin + "]";
 	}
+
 
 }

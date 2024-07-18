@@ -26,6 +26,10 @@ public class Home extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DriverManagerConnectionPool dm = (DriverManagerConnectionPool) getServletContext().getAttribute("DriverManager");
 		ProdottoDAO prodottoDao = new ProdottoDAO(dm);
 		
@@ -44,11 +48,6 @@ public class Home extends HttpServlet {
 
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/");
 		dispatcher.forward(request, response);
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 
 }
