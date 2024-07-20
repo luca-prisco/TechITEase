@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -182,6 +184,40 @@ public class OrdineControl extends HttpServlet {
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/dashboard.jsp");
 					dispatcher.forward(request, response);
 				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(action.equals("filtraData")) {
+				String dataX = request.getParameter("dataX");
+				String dataY = request.getParameter("dataY");
+				
+		        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		           java.sql.Date sqlDateX = null;
+		           java.sql.Date sqlDateY = null;
+		        
+		        try {
+					sqlDateX = new java.sql.Date(sdf.parse(dataX).getTime());
+					sqlDateY = new java.sql.Date(sdf.parse(dataY).getTime());
+		        	List<OrdineBean> ordini = (List<OrdineBean>) ordineDAO.filterByData(sqlDateX, sqlDateY);
+		        	request.setAttribute("ordini", ordini);
+	                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/gestioneOrdini.jsp");
+	                dispatcher.forward(request, response);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
+			}
+			if(action.equals("filtraUtente")) {
+				String emailUtente = request.getParameter("emailUtente");
+				
+				try {
+					List<OrdineBean> ordini = (List<OrdineBean>) ordineDAO.filterByEmail(emailUtente);
+		        	request.setAttribute("ordini", ordini);
+	                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/gestioneOrdini.jsp");
+	                dispatcher.forward(request, response);
+				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}

@@ -81,4 +81,11 @@ td, th {
 	border-top: 0.5px solid #dddddd;
 }
 
+.filtri {
+	width: 95%;
+	margin-left: 27px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
 

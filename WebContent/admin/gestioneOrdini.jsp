@@ -30,6 +30,18 @@ if (ordini == null || ordini.isEmpty()) {
 			<p id="datetime" style="margin: 30px;">
 				<%= new java.util.Date() %></p>
 		</div>
+		
+		<div class="filtri">	
+			<form class="data-filter" method="post" action="${pageContext.request.contextPath}/OrdineControl?action=filtraData">						
+				<input type="date" name="dataX">
+				<input type="date" name="dataY">
+				<button type="submit">Filtra</button>
+			</form>
+			<form class="utente-filter" method="post" action="${pageContext.request.contextPath}/OrdineControl?action=filtraUtente">						
+				<input type="text" name="emailUtente" placeholder="mariorossi@gmail.com">
+				<button type="submit">Filtra</button>
+			</form>
+		</div>
 		<div class="ordini__storage">
 			<c:choose>
 				<c:when test="${ordini.size() eq 0}">

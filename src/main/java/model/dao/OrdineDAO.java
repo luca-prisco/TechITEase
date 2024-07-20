@@ -191,19 +191,21 @@ public class OrdineDAO {
         return ordini;
     }
     
-    public synchronized Collection<OrdineBean> doRetrieveByData(Date data) throws SQLException {
+    public synchronized Collection<OrdineBean> filterByData(Date dataX, Date dataY) throws SQLException {
         Collection<OrdineBean> ordini = new ArrayList<>();
         Connection connection = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         
-        String sql = "SELECT * FROM " + OrdineDAO.TABLE_NAME + " WHERE dataOrdine = ?";
+        String sql = "SELECT * FROM " + OrdineDAO.TABLE_NAME + " WHERE dataOrdine BETWEEN ? AND ?";
         
         try {
         	connection = dmcp.getConnection();
 	        ps = connection.prepareStatement(sql);
-	        ps.setDate(1, new java.sql.Date(data.getTime()));
+	        ps.setDate(1, new java.sql.Date(dataX.getTime()));
+	        ps.setDate(2, new java.sql.Date(dataY.getTime()));
 	        
-	        ResultSet rs = ps.executeQuery();
+	        rs = ps.executeQuery();
 	        
 	        while(rs.next()) {
 	            OrdineBean ordine = new OrdineBean();
@@ -221,8 +223,48 @@ public class OrdineDAO {
 	        }
         } finally {
 			try {
-				if (ps != null)
-					ps.close();
+				if (ps != null) ps.close();
+				if (rs != null) rs.close();
+			} finally {
+				dmcp.releaseConnection(connection);
+			}
+		}   
+        return ordini;
+    }
+    
+    public synchronized Collection<OrdineBean> filterByEmail(String email) throws SQLException {
+        Collection<OrdineBean> ordini = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        String sql = "SELECT * FROM " + OrdineDAO.TABLE_NAME + " WHERE emailUtente = ?";
+        
+        try {
+        	connection = dmcp.getConnection();
+	        ps = connection.prepareStatement(sql);
+	        ps.setString(1, email);
+	        
+	        rs = ps.executeQuery();
+	        
+	        while(rs.next()) {
+	            OrdineBean ordine = new OrdineBean();
+	            ordine.setIDOrdine(rs.getInt("IDOrdine"));
+	            ordine.setDataOrdine(rs.getDate("dataOrdine"));
+	            ordine.setDataConsegna(rs.getDate("dataConsegna"));
+	            ordine.setPrezzoTotale(rs.getBigDecimal("prezzoTotale"));
+	            ordine.setVia(rs.getString("via"));
+	            ordine.setCivico(rs.getString("civico"));
+	            ordine.setCap(rs.getString("cap"));
+	            ordine.setCitta(rs.getString("citta"));
+	            ordine.setEmailUtente(rs.getString("emailUtente"));
+	            ordine.setIsResolved(rs.getBoolean("resolved"));
+	            ordini.add(ordine);
+	        }
+        } finally {
+			try {
+				if (ps != null) ps.close();
+				if (rs != null) rs.close();
 			} finally {
 				dmcp.releaseConnection(connection);
 			}
