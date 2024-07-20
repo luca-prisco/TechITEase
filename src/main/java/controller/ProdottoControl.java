@@ -175,10 +175,11 @@ public class ProdottoControl extends HttpServlet {
 				    }
 				    return;
 				}
+				
+				}
 
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
 		}
 
 		Boolean isAdmin = (Boolean) request.getSession().getAttribute("isAdmin");

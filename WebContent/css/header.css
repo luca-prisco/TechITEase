@@ -61,16 +61,28 @@ body {
 }
 
 .search {
-	width: 20%;
-	margin: 0 5% 0 0;
+	width: 40%;
+	margin: 0;
 }
 
 .search input {
+	width: 100%;
 	padding: 12px 25% 12px 10px;
 	border: 0.1px solid lightgrey;
 	border-radius: 10px;
 }
- 
+
+.prodotti-list {
+	height: 75vh;
+	overflow: scroll;
+}
+
+.product-item a {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
 .account {
 	display:flex; 
 	flex-direction: row; 
@@ -83,8 +95,22 @@ body {
 	margin-top: 5px;
 }
 
+.product-item {
+	list-style:none;
+	margin-top: 5px;
+	padding-top: 5px;
+}
 
 
+.product-list {
+	width: 98%;
+	background-color: #ffffff;
+	z-index: 1;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+	border-radius: .75rem;
+	border-top: 0;
+	margin: 0 0 5px 5px;
+} 
 
 /* Nascondi l'header mobile per default */
 .header-mobile {

@@ -593,4 +593,57 @@ public class ProdottoDAO {
 	    }
 	    return ridotteList;
 	}
+	
+	public Collection<ProdottoSpecificheBean> searchProdotti(String query) throws SQLException {
+        Collection<ProdottoSpecificheBean> prodotti = new ArrayList<>();
+	    Connection connection = null;
+	    PreparedStatement ps = null;
+	    
+        String sql = "SELECT p.*, s.* FROM " + ProdottoDAO.TABLE_NAME + " p JOIN " + ProdottoDAO.TABLE_NAME_SPECIFICHE + " s ON p.IDProdotto = s.IDProdotto WHERE nomeProdotto LIKE ?";
+        System.out.println("Query SQL: " + sql); // Debug
+        System.out.println("Parametro query: %" + query + "%"); // Debug
+        
+        try {
+        	connection = dmcp.getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, "%" + query + "%");
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+	            ProdottoSpecificheBean prodottoSpec = new ProdottoSpecificheBean();
+	            
+	            ProdottoBean prodotto = new ProdottoBean();
+	            prodotto.setIDProdotto(rs.getInt("IDProdotto"));
+	            prodotto.setNomeProdotto(rs.getString("nomeProdotto"));
+	            prodotto.setBrand(rs.getString("brand"));
+	            prodotto.setCategoria(rs.getString("categoria"));
+	            prodotto.setDescrizione(rs.getString("descrizione"));
+	            prodotto.setDettagli(rs.getString("dettagli"));
+	            
+	            SpecificheRidotte specRidotte = new SpecificheRidotte();
+	            specRidotte.setIDProdotto(rs.getInt("IDProdotto"));
+	            specRidotte.setIDSpecifiche(rs.getInt("IDSpecifiche"));
+	            specRidotte.setColore(rs.getString("colore"));
+	            specRidotte.setHdd(rs.getString("hdd"));
+	            specRidotte.setRam(rs.getInt("ram"));
+	            specRidotte.setQuantita(rs.getInt("quantita"));
+	            specRidotte.setPrezzo(rs.getBigDecimal("prezzo"));
+	            specRidotte.setNumVendite(rs.getInt("numVendite"));
+
+	            prodottoSpec.setProdotto(prodotto);
+	            prodottoSpec.setSpecRidotte(specRidotte);
+
+	            prodotti.add(prodottoSpec);
+	        }
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+			} finally {
+				if (connection != null)
+					dmcp.releaseConnection(connection);
+			}
+		}
+        return prodotti;
+	}	
 }
