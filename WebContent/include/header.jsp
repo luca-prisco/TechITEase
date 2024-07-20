@@ -28,19 +28,10 @@
 				<li><a href="HomeSelection?action=aboutus">Chi siamo</a></li>
 			</ul>
 		</div>
-		<% 
-		Cart cart = (Cart) session.getAttribute("cart");
-		if (cart != null && cart.getItems().isEmpty()) {
-		%>
-		<a href="${pageContext.request.contextPath}/common/cart.jsp"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart.png" alt="cart"
-			style="width: 25px;">
-		</a>
-		<%} else {%>
-	
-		<a href="${pageContext.request.contextPath}/common/cart.jsp"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart-pieno.png" alt="cart"
-			style="width: 25px;">
-		</a>
-		<%} %>
+
+		<div class="search">
+			<input type="text" placeholder="Search">
+		</div>
 		
 		<div class="account">
 
@@ -67,20 +58,31 @@
 			} else {
 			%>
 
-			<a href="${pageContext.request.contextPath}/common/login.jsp"
-				style="text-decoration: none;">
-				<button id="login-button">LogIn</button>
-			</a> <a href="${pageContext.request.contextPath}/common/signup.jsp">
-				<button id="signup-button">SignUp</button>
+			<a href="${pageContext.request.contextPath}/common/login.jsp" style="text-decoration: none;"> <img
+				src="${pageContext.request.contextPath}/img/icons/login.png" alt="login" style="width: 25px; margin-top: 5px;">
+			</a> 
+			<a href="${pageContext.request.contextPath}/common/signup.jsp">
+				<img src="${pageContext.request.contextPath}/img/icons/signup.png" alt="signup" style="width: 25px;margin-top: 5px;">
 			</a>
 
 			<%}%>
+			<% 
+			Cart cart = (Cart) session.getAttribute("cart");
+			if (cart != null && cart.getItems().isEmpty()) {
+			%>
+			<a href="${pageContext.request.contextPath}/common/cart.jsp"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart.png" alt="cart"
+				style="width: 25px;">
+			</a>
+			<%} else {%>
+		
+			<a href="${pageContext.request.contextPath}/common/cart.jsp"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart-pieno.png" alt="cart"
+				style="width: 25px;">
+			</a>
+			<%} %>
+		
 
 		</div>
-
-		<div class="search">
-			<input type="text" placeholder="Search">
-		</div>
+		
 	</div>
 
 	<!-- Header mobile -->

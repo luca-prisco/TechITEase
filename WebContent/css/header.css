@@ -16,6 +16,9 @@ body {
 
 /* HEADER */
 .header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 	width: 100%;
 	height: 85px;
 	padding: 20px 30px 20px 30px;
@@ -27,7 +30,6 @@ body {
 }
 
 .logo {
-	float: left;
 }
 
 .logo img {
@@ -35,7 +37,6 @@ body {
 }
 
 .menu {
-	float: left;
 	width: 30%;
 }
 
@@ -60,7 +61,6 @@ body {
 }
 
 .search {
-	float: right;
 	width: 20%;
 	margin: 0 5% 0 0;
 }
@@ -72,50 +72,15 @@ body {
 }
  
 .account {
-	float: right;
+	display:flex; 
+	flex-direction: row; 
+	justify-content: space-evenly;
 	width: 15%;
-}
-
-
-button{
-	border: none;
-	border-radius: 10px;
-	padding: 12px 18px 12px 18px;
-	margin-right: 10px;
-	cursor: pointer;
-}
-
-#login-button {
-	border: solid 1px #1B2149;
-	background-color: #1B2149;
-	color: #ffffff;
-	letter-spacing: 1px;
-}
-#login-button:hover {
-	background-color: #ffffff;
-	color: #1B2149;
-}
-
-#signup-button {
-	border: solid 1px #9497ff;
-	background-color: #9497ff;
-	color: #ffffff;
-	letter-spacing: 1px;
-}
-#signup-button:hover {
-	background-color: #ffffff;
-	color: #9497ff;
-}
-
-.signin button {
-	background-color: #7d57de;
-	color: #ffffff;
 }
 
 #cart {
 	width: 25px;
-	float: right;
-	margin: 7px 0 0 7px;
+	margin-top: 5px;
 }
 
 

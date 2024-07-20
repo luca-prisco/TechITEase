@@ -162,7 +162,7 @@ public class UtenteDAO {
 		Connection connection = null;
 		PreparedStatement ps = null;
 		
-	    String updateUtenteSql = "UPDATE " + UtenteDAO.TABLE_NAME + " SET emailUtente = ?, nome = ?, cognome = ?, telefono = ?, password = ? WHERE emailUtente = ?";
+	    String updateUtenteSql = "UPDATE " + UtenteDAO.TABLE_NAME + " SET emailUtente = ?, nome = ?, cognome = ?, telefono = ? WHERE emailUtente = ?";
 
 	    try {
 			connection = dmcp.getConnection();
@@ -172,8 +172,30 @@ public class UtenteDAO {
 			ps.setString(2, utente.getNome());
 			ps.setString(3, utente.getCognome());
 			ps.setString(4, utente.getTelefono());
-			ps.setString(5, utente.getPassword());
 			ps.setString(6, email);
+			
+			ps.executeUpdate();
+	    }finally {
+			try {
+				if (ps != null) ps.close();
+			} finally {
+				dmcp.releaseConnection(connection);
+			}
+		}
+	}
+	
+	public synchronized void UpdatePassword(String password, String email) throws SQLException {
+		Connection connection = null;
+		PreparedStatement ps = null;
+		
+	    String updateUtenteSql = "UPDATE " + UtenteDAO.TABLE_NAME + " SET password = ? WHERE emailUtente = ?";
+
+	    try {
+			connection = dmcp.getConnection();
+			ps = connection.prepareStatement(updateUtenteSql);
+			
+			ps.setString(1, password);
+			ps.setString(2, email);
 			
 			ps.executeUpdate();
 	    }finally {

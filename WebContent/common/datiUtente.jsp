@@ -50,18 +50,28 @@
 					</div>
 				</div>
 				<div class="tableRow">
-					<label for="password"> Password </label>
-					<div>
-						<input type="password" id="password" name="password" placeholder="Inserisci/modifica"></input>
-					</div>
-				</div>
-				<div class="tableRow">
 					<label></label>
 					<div class="tableRow-sumbit">
 						<input type="hidden" name="emailOld" value="<%= email %>">
 						<input id="invia" type="submit" value="Modifica dati">
 					</div>
 				</div>
+		</div>
+	</form>
+	<form id="updatePassword" method="post" action="${pageContext.request.contextPath}/UtenteControl?action=updateP">
+		<div class="tableRow">
+			<label for="password"> Password </label>
+			<div>
+				<input type="password" id="password" name="password"
+					placeholder="Nuova password"></input>
+			</div>
+		</div>
+		<div class="tableRow">
+			<label></label>
+			<div class="tableRow-sumbit">
+				<input type="hidden" name="email" value="<%=email%>"> 
+				<input id="invia" type="submit" value="Modifica password">
+			</div>
 		</div>
 	</form>
 </body>
