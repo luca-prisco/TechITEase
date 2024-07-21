@@ -12,67 +12,73 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1, width=device-width">
+
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/datiUtente.css" />
 
 <title>Take IT Ease</title>
 </head>
 <body>
 	<jsp:include page="/include/header.jsp"/>
-	<form id="updateUtente" method="post" action="${pageContext.request.contextPath}/UtenteControl?action=update">
-			<h1>Dati personali</h1>
-			<div class="utente-form">
-				<h3 style="margin-top: 0;"><%=nome %> <%=cognome %></h3>
-				<div class="tableRow">
-					<label for="nome"> Nome </label>
-					<div>
-						<input id="nome" type="text" name="nome"
-							value="<%=nome%>">
+	<div class="page">
+		<form id="updateUtente" method="post" action="${pageContext.request.contextPath}/UtenteControl?action=update">
+				<h1>Dati personali</h1>
+				<div class="utente-form">
+					<h3 style="margin-top: 0;"><%=nome %> <%=cognome %></h3>
+					<div class="tableRow">
+						<label for="nome"> Nome </label>
+						<div>
+							<input id="nome" type="text" name="nome"
+								value="<%=nome%>">
+						</div>
 					</div>
-				</div>
-				<div class="tableRow">
-					<label for="cognome"> Cognome </label>
-					<div>
-						<input type="text" id="cognome" name="cognome" value="<%=cognome%>">
+					<div class="tableRow">
+						<label for="cognome"> Cognome </label>
+						<div>
+							<input type="text" id="cognome" name="cognome" value="<%=cognome%>">
+						</div>
 					</div>
-				</div>
-				<div class="tableRow">
-					<label for="email"> Email </label>
-					<div>
-						<input type="text" id="email" name="email"
-							value="<%=email%>">
+					<div class="tableRow">
+						<label for="email"> Email </label>
+						<div>
+							<input type="text" id="email" name="email"
+								value="<%=email%>">
+						</div>
 					</div>
-				</div>
+					<div class="tableRow">
+						<label for="telefono"> Telefono </label>
+						<div>
+							<input type="text" id="telefono" name="telefono"
+								value="<%=telefono%>">
+						</div>
+					</div>
+					<div class="tableRow">
+						<label></label>
+						<div class="tableRow-sumbit">
+							<input type="hidden" name="emailOld" value="<%= email %>">
+							<input class="invia" type="submit" value="Modifica dati">
+						</div>
+					</div>
+			</div>
+		</form>
+		<form id="updatePassword" method="post" action="${pageContext.request.contextPath}/UtenteControl?action=updateP">
+			<div class="password-form">
 				<div class="tableRow">
-					<label for="telefono"> Telefono </label>
+					<label for="password"> Password </label>
 					<div>
-						<input type="text" id="telefono" name="telefono"
-							value="<%=telefono%>">
+						<input type="password" id="password" name="password"
+							placeholder="Nuova password"></input>
 					</div>
 				</div>
 				<div class="tableRow">
 					<label></label>
 					<div class="tableRow-sumbit">
-						<input type="hidden" name="emailOld" value="<%= email %>">
-						<input id="invia" type="submit" value="Modifica dati">
+						<input type="hidden" name="email" value="<%=email%>"> 
+						<input class="invia" type="submit" value="Modifica password">
 					</div>
 				</div>
-		</div>
-	</form>
-	<form id="updatePassword" method="post" action="${pageContext.request.contextPath}/UtenteControl?action=updateP">
-		<div class="tableRow">
-			<label for="password"> Password </label>
-			<div>
-				<input type="password" id="password" name="password"
-					placeholder="Nuova password"></input>
 			</div>
-		</div>
-		<div class="tableRow">
-			<label></label>
-			<div class="tableRow-sumbit">
-				<input type="hidden" name="email" value="<%=email%>"> 
-				<input id="invia" type="submit" value="Modifica password">
-			</div>
-		</div>
-	</form>
+		</form>
+	</div>
 </body>
 </html>

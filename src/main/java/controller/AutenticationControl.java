@@ -46,7 +46,7 @@ public class AutenticationControl extends HttpServlet {
 		}
 		if(action.equalsIgnoreCase("signup")) {
 			try {
-				handleSignup(request, response, utenteDAO);
+				handleSignup(request, response, Boolean.FALSE, utenteDAO);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -55,6 +55,14 @@ public class AutenticationControl extends HttpServlet {
 			request.getSession().invalidate();
 			response.sendRedirect(request.getContextPath() + "/common/login.jsp");
 		}
+		if(action.equalsIgnoreCase("regAdmin")) {
+			try {
+				handleSignup(request, response, Boolean.TRUE, utenteDAO);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
 
 	}	
 
@@ -74,7 +82,7 @@ public class AutenticationControl extends HttpServlet {
 				errors.clear();
 				if (u.isAdmin()) {	//Se l'utente è un admin setto l'informazione e indirizzo l'utente alla dashboard
 					request.getSession().setAttribute("isAdmin", Boolean.TRUE);
-					response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
+					response.sendRedirect(request.getContextPath() + "/admin/gestioneProdotti.jsp");
 					return;
 				} else if (!u.isAdmin() && u.getPassword() != null) { //USER
 					request.getSession().setAttribute("isAdmin", Boolean.FALSE);
@@ -114,7 +122,7 @@ public class AutenticationControl extends HttpServlet {
 	}
 	
 	//GESTIONE DELLA REGISTRAZIONE
-	private void handleSignup(HttpServletRequest request, HttpServletResponse response, UtenteDAO utenteDAO) throws SQLException, IOException, ServletException {
+	private void handleSignup(HttpServletRequest request, HttpServletResponse response, Boolean isAdmin, UtenteDAO utenteDAO) throws SQLException, IOException, ServletException {
 		String emailUtente = request.getParameter("emailUtente");
 		String nome = request.getParameter("nome");
 		String cognome = request.getParameter("cognome");
@@ -124,7 +132,7 @@ public class AutenticationControl extends HttpServlet {
 		if(isValidSignupForm(emailUtente, nome, cognome, telefono, password)) {
 			String hashPassword = toHash(password);
 			if(!utenteDAO.checkByEmail(emailUtente)) {
-				if(utenteDAO.registerUser(emailUtente, nome, cognome, telefono, hashPassword, Boolean.FALSE)) {
+				if(utenteDAO.registerUser(emailUtente, nome, cognome, telefono, hashPassword, isAdmin)) {
 					request.getSession().setAttribute("newUser", nome);
 		 			response.sendRedirect(request.getContextPath() + "/common/index.jsp");
 		 			errors.clear();
@@ -183,6 +191,8 @@ public class AutenticationControl extends HttpServlet {
 		
 		return errors.isEmpty();
 	}
+	
+	
 
 	
 	

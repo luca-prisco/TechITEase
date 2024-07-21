@@ -37,7 +37,7 @@
         	<div class="prodotti__container">
 	  			<c:forEach var="item" items="${cart.items}" varStatus="loop">
 	  				<div class="prodotto__cart">
-	  					<div style="display:flex;">
+	  					<div class="image-details" style="display:flex;">
 		  					<div class="prodotto__image">
 					  			<img id="productImage"
 									src="${pageContext.request.contextPath}/getPicture?id1=${item.prodotto.IDProdotto}&id2=${item.specifiche.IDSpecifiche}"

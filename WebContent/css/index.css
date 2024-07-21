@@ -55,6 +55,7 @@ body {
     transition: 0.4s ease;
 	border-radius: .75rem;
     user-select: none;
+    border: 0.1px;
 }
 
 .slider-display-left {
@@ -167,4 +168,25 @@ body {
 	background-color: #1B2149;
 	color: #ffffff;
 }
- 
+
+.descrizione__prod button {
+	margin-top: 20px;
+	width: 150px;
+	padding: 11px;
+	border-radius: .375rem;
+	font-weight: 500;
+	font-size: 15px;
+	background-color: #1B2149;
+	border: .1px solid #1B2149;
+	color: #ffffff;
+	letter-spacing: 1px;
+	cursor: pointer;
+	z-index: 1;
+	cursor: pointer;
+}
+
+.descrizione__prod button:hover {
+	background-color: #363975;
+	border: .1px solid #1B2149;
+	color: #ffffff;
+}

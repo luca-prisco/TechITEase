@@ -45,7 +45,7 @@ body {
 }
 
 .details {
-	width: 400px;;
+	width: 400px;
 }
 
 .details p {
@@ -62,17 +62,26 @@ body {
 }
 
 #addToCartForm > .addToCart-button {
-	border: solid 1px #1B2149;
+	margin-top: 20px;
+	width: 100%;
+	padding: 11px;
+	border-radius: .375rem;
+	font-weight: 500;
+	font-size: 15px;
 	background-color: #1B2149;
+	border: .1px solid #1B2149;
 	color: #ffffff;
 	letter-spacing: 1px;
-	margin-top: 30px;
+	cursor: pointer;
+	z-index: 1;
+	cursor: pointer;
 }
 #addToCartForm > .addToCart-button:hover {
-	border: solid 1px #363975;
 	background-color: #363975;
+	border: .1px solid #1B2149;
 	color: #ffffff;
 }
+
 
 
 .spec-options {
@@ -111,3 +120,100 @@ input[type="radio"]:checked+.radio-button-label {
 	border: 1.5px solid #1B2149;
 	opacity: 1;
 }
+
+@media screen and (max-width: 1067px) {
+	.product {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		
+	}
+	
+	.product__left {
+		display: flex;
+		justify-content: center;
+		margin: auto;
+		width: 500px;
+		height: 400px;
+		box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.1);
+		border-radius: 15px;
+		background-color: #ffffff;
+	}
+	.product__left img {
+		object-fit: cover;
+		width: 350px;
+		height: 250px;
+		margin-top: 70px;
+	}
+	
+	.product__right {
+
+		padding: 0 0 0 30px;
+		width: 100%;
+		margin-top: 50px;
+		margin-bottom: 100px;
+	}
+
+	.details {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		width: 100%;
+	}
+	
+	.description {
+		width: 50%;
+		margin-right: 10px;
+	}
+	
+	.description p {
+		font-size: 14px;
+		font-weight: 300;
+		text-align: justify;
+		line-height: 1.5;
+		width: 95%;
+	}
+}
+
+
+@media screen and (max-width: 738px) {
+
+	.details {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		width: 100%;
+	}
+	.description {
+		width: 100%;
+		margin-right: 10px;
+	}
+	
+	.description p {
+		font-size: 14px;
+		font-weight: 300;
+		text-align: justify;
+		line-height: 1.5;
+		width: 95%;
+	}
+}
+
+@media screen and (max-width: 513px) {
+	.product__left {
+		display: flex;
+		justify-content: center;
+		margin: auto;
+		width: 350px;
+		height: 300px;
+		box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.1);
+		border-radius: 15px;
+		background-color: #ffffff;
+	}
+	.product__left img {
+		object-fit: cover;
+		width: 250px;
+		height: 200px;
+		margin-top: 70px;
+	}
+}
+

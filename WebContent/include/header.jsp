@@ -25,7 +25,6 @@
 				<li><a
 					href="${pageContext.request.contextPath}/common/index.jsp">Home</a></li>
 				<li><a href="${pageContext.request.contextPath}/Catalogo">Prodotti</a></li>
-				<li><a href="HomeSelection?action=aboutus">Chi siamo</a></li>
 			</ul>
 		</div>
 
@@ -45,21 +44,20 @@
 			UtenteBean utente = (UtenteBean) session.getAttribute("utente");
 			if (utente != null) {
 			%>
-			<form id="datiPersonaliUtente" method="post" action="${pageContext.request.contextPath}/common/datiUtente.jsp">
+			<form id="datiPersonaliUtente" method="post" action="${pageContext.request.contextPath}/common/datiUtente.jsp" style="margin-top: 0;">
 				<input type="hidden" name="nome" value="${utente.nome}">
 				<input type="hidden" name="cognome" value="${utente.cognome}">
 				<input type="hidden" name="emailUtente" value="${utente.emailUtente}">
 				<input type="hidden" name="telefono" value="${utente.telefono}">
 				<input type="hidden" name="password" value="${utente.password}">
-				
-				<button class="dropbtn">${utente.nome}<img
-					src="${pageContext.request.contextPath}/img/icons/user.svg" style="padding-left: 10px;"
-					alt="Non disponibile">
-			</button>
+				<div>
+					<input class="dropbtn" type="submit" value="<%=utente.getNome()%>">
+				</div>
 			</form>
 
-			<a
-				href="${pageContext.request.contextPath}/common/AutenticationControl?action=logout"><button>LogOut</button></a>
+			<a href="${pageContext.request.contextPath}/common/AutenticationControl?action=logout">
+				<img src="${pageContext.request.contextPath}/img/icons/logout.png" alt="logout" style="width: 25px;margin-top: 5px;">
+			</a>
 			<%
 			} else {
 			%>
@@ -76,12 +74,12 @@
 			Cart cart = (Cart) session.getAttribute("cart");
 			if (cart != null && cart.getItems().isEmpty()) {
 			%>
-			<a href="${pageContext.request.contextPath}/common/cart.jsp"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart.png" alt="cart"
+			<a href="${pageContext.request.contextPath}/common/cart.jsp" style="margin-left: 5px;"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart.png" alt="cart"
 				style="width: 25px;">
 			</a>
 			<%} else {%>
 		
-			<a href="${pageContext.request.contextPath}/common/cart.jsp"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart-pieno.png" alt="cart"
+			<a href="${pageContext.request.contextPath}/common/cart.jsp" style="margin-left: 5px;"> <img id="cart" src="${pageContext.request.contextPath}/img/icons/cart-pieno.png" alt="cart"
 				style="width: 25px;">
 			</a>
 			<%} %>
@@ -163,6 +161,7 @@
 	    const productList = document.getElementById('product-list');
 	    
 	    if(prodotti!=="") {
+	    	productList.style.display = 'block';
 		    productList.innerHTML = ''; // Pulisci i risultati precedenti
 		    prodotti.forEach(p => {
 		        var li = document.createElement('li');
@@ -174,6 +173,7 @@
 		        productList.appendChild(li);
 		    });
 	    } else {
+	    	productList.style.display = 'none';
 	    	productList.innerHTML = ''; // Pulisci i risultati precedenti
 	    }
 	}

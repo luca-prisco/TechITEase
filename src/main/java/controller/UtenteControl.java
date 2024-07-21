@@ -2,6 +2,8 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -66,6 +68,28 @@ public class UtenteControl extends HttpServlet {
 				try {
 					utenteDAO.updatePassword(CryptoUtils.toHash(password), emailUtente);
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Home");
+					dispatcher.forward(request, response);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(action.equals("getAdmins")) {
+				
+				try {
+					List<UtenteBean> admins = (List<UtenteBean>) utenteDAO.doRetrieveAdmins();
+					request.setAttribute("admins", admins);
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/gestioneAdmins.jsp");
+					dispatcher.forward(request, response);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(action.equals("deleteAdmin")) {
+				try {
+					String email = request.getParameter("emailAdmin");
+					utenteDAO.deleteAdmin(email);
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin/gestioneAdmins.jsp");
 					dispatcher.forward(request, response);
 				} catch (SQLException e) {
 					e.printStackTrace();

@@ -40,7 +40,7 @@ if (prodotti == null || prodotti.isEmpty()) {
 					<h1>Nessun prodotto disponibile</h1>
 				</c:when>
 				<c:otherwise>
-					<table>
+					<table class="table-adattabile">
 						<thead>
 							<tr>
 								<th>Nome</th>
@@ -56,12 +56,12 @@ if (prodotti == null || prodotti.isEmpty()) {
 							<c:forEach var="prodotto" items="${prodotti}">
 								<c:forEach var="specifiche" items="${prodotto.specifiche}">
 									<tr>
-										<td>${prodotto.nomeProdotto}</td>
+										<td class="nomeprodotto">${prodotto.nomeProdotto}</td>
 										<td>${prodotto.IDProdotto}</td>
 										<td>${specifiche.hdd}</td>
 										<td>${specifiche.ram}</td>
 										<td>${specifiche.colore}</td>
-										<td>
+										<td id="photo">
 											<c:choose>
 												<c:when test="${empty specifiche.image}">
 													<form id="uploadPhoto" action="./UploadPhoto" enctype="multipart/form-data" method="post">
@@ -80,7 +80,7 @@ if (prodotti == null || prodotti.isEmpty()) {
 											</c:choose>
 										</td>
 										<td id="azioni">
-											<form method="get" action="${pageContext.request.contextPath}/admin/modificaProdotto.jsp">
+											<form id="editForm" method="get" action="${pageContext.request.contextPath}/admin/modificaProdotto.jsp">
 											    <input type="hidden" name="id" value="${prodotto.IDProdotto}">
 											    <input type="hidden" name="nome" value="${prodotto.nomeProdotto}">
 											    <input type="hidden" name="brand" value="${prodotto.brand}">
@@ -93,13 +93,13 @@ if (prodotti == null || prodotti.isEmpty()) {
 											    <input type="hidden" name="prezzo" value="${specifiche.prezzo}">
 											    <input type="hidden" name="quantita" value="${specifiche.quantita}">
 											    <input type="hidden" name="idSpecifiche" value="${specifiche.IDSpecifiche}">
-											    <button type="submit">Edit</button>
+											    <button type="submit"><u>Edit</u></button>
 											</form>
 											<form id="deleteForm" method="get" action="ProdottoControl">
 												<input type="hidden" name="action" value="delete">
 												<input type="hidden" name="del1" value="${prodotto.IDProdotto}">
 												<input type="hidden" name="del2" value="${specifiche.IDSpecifiche}">
-												<button type="submit">Delete</button>
+												<button type="submit"><u>Delete</u></button>
 											</form>
 										</td>
 									

@@ -19,7 +19,7 @@
     <h1>Pagamento</h1>
     <div class="form-container">
 	    <div class="ordine-forms">
-	    	<div class="pagamento-form" style="border-right: .2px solid grey;padding-right: 40px;">
+	    	<div class="pagamento-form" style="padding-right: 40px;">
 		        <h4>Metodo di Pagamento</h4>
 		        <div class="tableRow">
 		            <label for="nomeCarta">Nome</label>

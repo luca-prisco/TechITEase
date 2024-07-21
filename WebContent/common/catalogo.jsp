@@ -25,8 +25,14 @@
 <body>
 	<jsp:include page="/include/header.jsp"/>
 	<div class="page">
+		<div class="menu-toggle" onclick="toggleMenu()">
+			<span></span>
+			<span></span>	
+			<span></span>
+		</div>
 		<h2 style="margin: 140px 0 0 100px;">Store</h2>
 		<div class="catalogo">
+
 			<aside class="filtri">
 				<h3>Ordina per</h3> 
 				<div class="prezzo" style="display: flex;justify-content: left;">
@@ -35,11 +41,6 @@
 						<option value="crescente">Prezzo crescente</option>
 						<option value="decrescente">Prezzo decrescente</option>
 					</select> 
-				</div>
-				<h3>Prezzo</h3> 
-				<div class="prezzo" style="display: flex;justify-content: space-evenly;">     
-			        <input type="text" id="minPrice" name="minPrice" min="0" placeholder="Min(€)">
-			        <input type="text" id="maxPrice" name="maxPrice" min="0" placeholder="Max(€)">
 				</div>
  				<div class="radio-filter">
                     <h3>Categorie</h3>
@@ -91,6 +92,13 @@
 			</div>
 		</div>
 	</div>
+	
+<script>
+	function toggleMenu() {
+		const filtri = document.querySelector('.filtri');
+		filtri.classList.toggle('active');
+	}
+</script>
 	
 <script>
 document.addEventListener("DOMContentLoaded", function() {

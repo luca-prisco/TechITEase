@@ -41,7 +41,7 @@ public class Home extends HttpServlet {
 		
 		try {
 			request.removeAttribute("prodotti");
-			request.setAttribute("prodotti", prodottoDao.doRetrieveAll());
+			request.setAttribute("prodotti", prodottoDao.doRetrieveByVendite());
 		} catch (SQLException e) {
 			System.out.println("Error:" + e.getMessage());
 		}

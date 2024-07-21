@@ -13,12 +13,17 @@
 		<div class="logo">
 			<img src="${pageContext.request.contextPath}/img/logo/TechITEase.svg" alt="LOGO">
 		</div>
+		<div class="menu-toggle" onclick="toggleMenu()">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
 		<div class="menu">
 			<ul>
 				<li><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
 				<li><a href="${pageContext.request.contextPath}/admin/gestioneProdotti.jsp">Prodotti</a></li>
 				<li><a href="${pageContext.request.contextPath}/OrdineControl?action=all">Ordini</a></li>
-				<li><a href="${pageContext.request.contextPath}/AdminControl?action=all">Admins</a></li>
+				<li><a href="${pageContext.request.contextPath}/UtenteControl?action=getAdmins">Admins</a></li>
 				<c:choose>
 					<c:when test="${not empty sessionScope.utente}">
 						<li><a href="${pageContext.request.contextPath}/common/AutenticationControl?action=logout">Logout</a></li>
@@ -30,5 +35,11 @@
 			</ul>
 		</div>
 	</div>	
+		<script>
+		function toggleMenu() {
+			const menu = document.querySelector('.menu');
+			menu.classList.toggle('active');
+		}
+	</script>
 </body>
 </html>

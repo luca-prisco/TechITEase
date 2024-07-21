@@ -7,6 +7,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1, width=device-width">
+
 <title>${prodotto.nomeProdotto}</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/productPage.css" />
 </head>
@@ -22,36 +24,38 @@
         </div>
         <div class="product__right">
             <div class="details">
-                <h1 style="margin-top: 0;">${prodotto.nomeProdotto}</h1>
-                <p>${prodotto.dettagli}</p>
-                
-                <p style="font-weight: 400;">Colore</p>
-                <div class="spec-options">
-                		<c:forEach var="colore" items="${colorsSet}">
-						    <input type="radio" id="colore-${colore}" name="colori" value="${colore}" />
-						    <label class="radio-button-label" for="colore-${colore}">${colore}</label>
-						    <br />
-						</c:forEach>
+            	<div class="description">
+	                <h1 style="margin-top: 0;">${prodotto.nomeProdotto}</h1>
+	                <p>${prodotto.dettagli}</p>
+                </div>
+                <div class="specifiche-container">
+	                <p style="font-weight: 400;">Colore</p>
+	                <div class="spec-options">
+	                		<c:forEach var="colore" items="${colorsSet}">
+							    <input type="radio" id="colore-${colore}" name="colori" value="${colore}" />
+							    <label class="radio-button-label" for="colore-${colore}">${colore}</label>
+							    <br />
+							</c:forEach>
+					</div>
+								
+				    <p style="font-weight: 400;">HDD</p>
+				    <div class="spec-options">
+				        <c:forEach var="hdd" items="${hddsSet}">
+				            <input type="radio" id="hdd-${hdd}" name="hdds" value="${hdd}" />
+				            <label class="radio-button-label" for="hdd-${hdd}">${hdd} gb</label>
+				            <br />
+				        </c:forEach>
+				    </div>
+					
+				    <p style="font-weight: 400;">RAM</p>
+				    <div class="spec-options">
+				        <c:forEach var="ram" items="${ramsSet}">
+				            <input type="radio" id="ram-${ram}" name="rams" value="${ram}" />
+				            <label class="radio-button-label" for="ram-${ram}">${ram} gb</label>
+				            <br />
+				        </c:forEach>
+				    </div>
 				</div>
-							
-			    <p style="font-weight: 400;">HDD</p>
-			    <div class="spec-options">
-			        <c:forEach var="hdd" items="${hddsSet}">
-			            <input type="radio" id="hdd-${hdd}" name="hdds" value="${hdd}" />
-			            <label class="radio-button-label" for="hdd-${hdd}">${hdd} gb</label>
-			            <br />
-			        </c:forEach>
-			    </div>
-				
-			    <p style="font-weight: 400;">RAM</p>
-			    <div class="spec-options">
-			        <c:forEach var="ram" items="${ramsSet}">
-			            <input type="radio" id="ram-${ram}" name="rams" value="${ram}" />
-			            <label class="radio-button-label" for="ram-${ram}">${ram} gb</label>
-			            <br />
-			        </c:forEach>
-			    </div>
-			
             </div>
             <form id="addToCartForm" action="${pageContext.request.contextPath}/common/CartControl?action=add" method="post">
                 <input type="hidden" name="idProdCart" value="${prodotto.IDProdotto}">

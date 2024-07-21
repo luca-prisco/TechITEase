@@ -150,6 +150,8 @@ public class UtenteDAO {
 			try {
 				if (ps != null)
 					ps.close();
+				if (rs != null)
+					rs.close();
 			} finally {
 				dmcp.releaseConnection(connection);
 			}

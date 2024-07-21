@@ -32,53 +32,50 @@ body {
 	color: #ffffff;
 }
 
-button{
+.add-admin {
+	width: 200px;
+	margin-bottom: 30px;
+}
+
+.add-admin button{
+	margin-top: 40px;
+	width: 100%;
+	padding: 9px;
+	border-radius: .375rem;
+	font-weight: 500;
+	font-size: 15px;
+	background-color: #1B2149;
+	border: .1px solid #1B2149;
+	color: #ffffff;
+	letter-spacing: 1px;
+	cursor: pointer;
+}
+
+.add-admin button:hover {
+	background-color: #363975;
+	border: .1px solid #1B2149;
+	color: #ffffff;
+}
+
+#deleteForm button{
 	background-color: #ffffff; 
 	border: none;
 	padding: 0;
 	cursor: pointer;
 }
 
-#editForm button {
-	background-color: #ffffff; 
-	border: none;
-	padding: 0;
-	cursor: pointer;
-}
 
 
-
-/*PRODOTTI__STORAGE*/
-.prodotti__storage {
+.admins__storage{
 	display: flex;
 	flex-direction: column;
 	margin: 20px;
 	height: 100vh;
 }
 
-.prodotto {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	padding: 20px;
-	box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.1);
-	border: 0.1px solid lightgrey;
-	padding: 10px;
-	background-color: #ffffff;
-	margin-bottom: 0px;
+.add-admin {
+	margin-left: 20px;
 }
-
-.info_prodotto{
-	display:flex;
-	flex-direction: row;
-	justify-content: space-evenly;
-}
-
-.tools {
-	display:flex;
-	flex-direction: row;
-}
-
 
 /* TABLE */
 table {
@@ -96,7 +93,7 @@ th {
 }
 
 th {
-	border: 1px solid #dddddd;
+		border: 1px solid #dddddd;
 }
 
 td, th {
@@ -107,11 +104,19 @@ td, th {
 }
 
 #azioni {
-	display:flex;
-	justify-content: space-evenly;
+	display:flex; 
 	border: none;
 	border-top: 0.5px solid #dddddd;
 }
+
+.filtri {
+	width: 95%;
+	margin-left: 27px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
 
 @media screen and (max-width: 600px) {
 	.content {
@@ -151,20 +156,16 @@ td, th {
 		flex-direction: column;
 		border: none;
 		border-top: 0.5px solid #dddddd;
-		height: 50px;
+		height: 40px;
 	}
-    
-    #photo {
-    	height: 60px;
-    }
-    
-   	.table-adattabile .nomeprodotto {
+
+   	.table-adattabile .emailAdmin {
    		background-color: #efedfa;
    		font-weight: 600;
     }
+  
     
     #datetime {
     	display: none;
     }
-
 }

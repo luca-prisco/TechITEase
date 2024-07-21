@@ -9,6 +9,7 @@
 body {
 	 background: #fafafc;
 	 margin: 0;
+	 height:100vh;
 	 display: flex;
 	 flex-direction: row;
 }
@@ -45,7 +46,6 @@ button{
 	display: flex;
 	flex-direction: column;
 	margin: 20px;
-	height: 100vh;
 }
 
 
@@ -89,3 +89,61 @@ td, th {
 	justify-content: space-between;
 }
 
+
+@media screen and (max-width: 600px) {
+	.content {
+		margin: 0;
+	}
+	.ordini__storage {
+		height: 90vh;
+	}
+	
+	.table-adattabile {
+		object-fit: cover;
+	}
+	
+    .table-adattabile thead {
+        display: none;
+    }
+
+    .table-adattabile tbody, .table-adattabile tr, .table-adattabile td {
+        display: block;
+        width: 100%;
+    }
+
+    .table-adattabile tr {
+        margin-bottom: 15px;
+    }
+
+    .table-adattabile td {
+        text-align: center;
+        position: relative;
+    }
+
+    .table-adattabile td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+    }
+    
+    #azioni {
+		display:flex;
+		flex-direction: column;
+		border: none;
+		border-top: 0.5px solid #dddddd;
+		height: 40px;
+	}
+
+   	.table-adattabile .idOrdine-td {
+   		background-color: #efedfa;
+   		font-weight: 600;
+    }
+
+    #datetime {
+    	display: none;
+    }
+}

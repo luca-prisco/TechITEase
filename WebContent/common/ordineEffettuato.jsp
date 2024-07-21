@@ -4,9 +4,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/ordineEffettuato.css" />
+
 <title>Take IT Ease</title>
 </head>
 <body>
-<h1>ORDINE EFFETTUATO</h1>
+<div class="page">
+	<div class="ordine-effettuato">
+		<h1>Ordine effettuato</h1>
+	</div>
+	<a href="${pageContext.request.contextPath}/common/catalogo.jsp" id="button-catalogo">Torna al catalogo</a>
+</div>
 </body>
 </html>

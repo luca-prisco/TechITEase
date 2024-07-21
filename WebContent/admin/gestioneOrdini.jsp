@@ -48,7 +48,7 @@ if (ordini == null || ordini.isEmpty()) {
 					<h1>Nessun ordine</h1>
 				</c:when>
 				<c:otherwise>
-					<table>
+					<table class="table-adattabile">
 						<thead>
 							<tr>
 								<th>ID Ordine</th>
@@ -61,13 +61,13 @@ if (ordini == null || ordini.isEmpty()) {
 						<tbody id="myTable">
 							<c:forEach var="ordine" items="${ordini}">
 								<tr>
-									<td>${ordine.IDOrdine}</td>
+									<td class="idOrdine-td">${ordine.IDOrdine}</td>
 									<td>${ordine.emailUtente}</td>
 									<td>${ordine.dataOrdine}</td>
 									<td>${ordine.prezzoTotale}€</td>
 									<td>${ordine.isResolved}</td>
 									<td id="azioni">
-										<form method="post" action="${pageContext.request.contextPath}/OrdineControl?action=dettagli">
+										<form id="dettagliForm" method="post" action="${pageContext.request.contextPath}/OrdineControl?action=dettagli">
 											<input type="hidden" name="idOrdine" value="${ordine.IDOrdine}">
 											<input type="hidden" name="email" value="${ordine.emailUtente}">
 											<input type="hidden" name="total" value="${ordine.prezzoTotale}">
@@ -108,6 +108,7 @@ if (ordini == null || ordini.isEmpty()) {
 				</c:otherwise>
 			</c:choose>
 		</div>
+
 	</div>
 </body>
 <script>
