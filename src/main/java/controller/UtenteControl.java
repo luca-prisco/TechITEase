@@ -51,7 +51,7 @@ public class UtenteControl extends HttpServlet {
 				utente.setTelefono(telefono);
 				
 				try {
-					utenteDAO.UpdateUser(utente, emailOld);
+					utenteDAO.updateUser(utente, emailOld);
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Home");
 					dispatcher.forward(request, response);
 				} catch (SQLException e) {
@@ -64,7 +64,7 @@ public class UtenteControl extends HttpServlet {
 				String emailUtente = request.getParameter("email");
 				
 				try {
-					utenteDAO.UpdatePassword(CryptoUtils.toHash(password), emailUtente);
+					utenteDAO.updatePassword(CryptoUtils.toHash(password), emailUtente);
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Home");
 					dispatcher.forward(request, response);
 				} catch (SQLException e) {

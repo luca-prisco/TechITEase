@@ -169,7 +169,8 @@
 		        li.className = 'product-item';
 		        li.innerHTML = '<a href="./ProdottoControl?action=toPage&id1=' + p.prodotto.IDProdotto + '&id2=' + p.specRidotte.IDSpecifiche + '" style="text-decoration: none;">' +
 	            '<img src="./getPicture?id1=' + p.prodotto.IDProdotto + '&id2=' + p.specRidotte.IDSpecifiche + '" alt="prova" style="width: 45px;object-fit: cover; margin-right:10px;">' + 
-	            '<p>' + p.prodotto.nomeProdotto + ' - ' + p.specRidotte.colore + '</p>' ;;
+	            '<p>' + p.prodotto.nomeProdotto + ' - ' + p.specRidotte.hdd + 'gb' + ' - ' + p.specRidotte.ram + 'gb' +'</p>' ;;
+	            productList.style.zIndex = '1';
 		        productList.appendChild(li);
 		    });
 	    } else {

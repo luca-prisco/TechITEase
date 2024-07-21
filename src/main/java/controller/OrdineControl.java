@@ -41,6 +41,8 @@ public class OrdineControl extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+	
+	List<String> errors = new ArrayList<>();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DriverManagerConnectionPool dm = (DriverManagerConnectionPool) getServletContext().getAttribute("DriverManager");
@@ -78,6 +80,7 @@ public class OrdineControl extends HttpServlet {
 		        String citta = request.getParameter("citta");
 		        String emailUtente = utente.getEmailUtente();
 		        List<CartItem> cartItems = carrello.getItems();
+		        int ordineID = -1;
 		        
 		        //Data ordine e data consegnaßß
 		        Date dataOrdine = new Date(System.currentTimeMillis());
@@ -91,37 +94,41 @@ public class OrdineControl extends HttpServlet {
 		        for (CartItem item : cartItems) {
 		            prezzoTotale = prezzoTotale.add(item.getSpecifiche().getPrezzo().multiply(new BigDecimal(item.getQuantity())));
 		        }
-		
-		        // Creo l'ordine
-		        OrdineBean ordine = new OrdineBean();
-		        int ordineID = -1;
-		        ordine.setDataOrdine(dataOrdine);
-		        ordine.setDataConsegna(dataConsegna); 
-		        ordine.setPrezzoTotale(prezzoTotale);
-		        ordine.setVia(via);
-		        ordine.setCivico(civico);
-		        ordine.setCap(cap);
-		        ordine.setCitta(citta);
-		        ordine.setEmailUtente(emailUtente);
-		
-		        try {
-		        	ordineID = ordineDAO.insertOrdine(ordine);
+		        
+		        errors.clear();
+		        if (!isValidPagamentoForm(nomeCarta, cognomeCarta, numeroCarta, scadenzaCarta, cvv, via, civico, cap, citta)) {
+		            request.setAttribute("errors", errors);
+		            request.getRequestDispatcher("/common/pagamento.jsp").forward(request, response);
+		            return;
+		        }
+				// Creo l'ordine
+				OrdineBean ordine = new OrdineBean();
+				ordine.setDataOrdine(dataOrdine);
+				ordine.setDataConsegna(dataConsegna);
+				ordine.setPrezzoTotale(prezzoTotale);
+				ordine.setVia(via);
+				ordine.setCivico(civico);
+				ordine.setCap(cap);
+				ordine.setCitta(citta);
+				ordine.setEmailUtente(emailUtente);
+
+				try {
+					ordineID = ordineDAO.insertOrdine(ordine);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-		        
-		        //creo il pagamento 
-		        PagamentoBean pagamento = new PagamentoBean();
-		        pagamento.setIDOrdine(ordineID);
-		        pagamento.setNomeCarta(nomeCarta);
-		        pagamento.setCognomeCarta(cognomeCarta);
-		        pagamento.setNumeroCarta(CryptoUtils.toHash(numeroCarta));
-		        pagamento.setScadenzaCarta(scadenzaCarta);
-		        pagamento.setCvv(CryptoUtils.toHash(cvv));
 		       
-		        
-		        try {
-		        	ordineDAO.insertPagamento(pagamento);
+				// creo il pagamento
+				PagamentoBean pagamento = new PagamentoBean();
+				pagamento.setIDOrdine(ordineID);
+				pagamento.setNomeCarta(nomeCarta);
+				pagamento.setCognomeCarta(cognomeCarta);
+				pagamento.setNumeroCarta(CryptoUtils.toHash(numeroCarta));
+				pagamento.setScadenzaCarta(scadenzaCarta);
+				pagamento.setCvv(CryptoUtils.toHash(cvv));
+
+				try {
+					ordineDAO.insertPagamento(pagamento);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -225,6 +232,67 @@ public class OrdineControl extends HttpServlet {
 		}
 
         
+	}
+	
+	private boolean isValidPagamentoForm(String nomeCarta, String cognomeCarta, String numeroCarta, String scadenzaCarta, String cvv, String via, String civico, String cap, String citta) {
+		String nomeCartaPattern = "^[a-zA-Z\\s]{2,}$";         
+		String cognomeCartaPattern = "^[a-zA-Z\\s]{2,}$";       
+		String numeroCartaPattern = "^\\d{13,19}$";          
+		String scadenzaCartaPattern = "^(0[1-9]|1[0-2])/\\d{2}$"; 
+		String cvvPattern = "^\\d{3,4}$";
+		String viaPattern = "^[a-zA-Z0-9\\s]{2,}$";
+		String civicoPattern = "^[0-9a-zA-Z]{1,}$";
+		String capPattern = "^\\d{5}$";
+		String cittaPattern = "^[a-zA-Z\\s]{2,}$";
+		
+		
+		
+		if(nomeCarta == null || nomeCarta.trim().isEmpty()) 
+			errors.add("Il nome è obbligatoria");
+		else if(!nomeCarta.matches(nomeCartaPattern)) 
+		        errors.add("Formato del nome carta non valido");
+
+		if (cognomeCarta == null || cognomeCarta.trim().isEmpty()) 
+			errors.add("Il nome del cognome è obbligatoria");
+		else if (!cognomeCarta.matches(cognomeCartaPattern)) 
+				errors.add("Il formato del cognome carta non è valido");
+		
+		if (numeroCarta == null || numeroCarta.trim().isEmpty()) 
+			errors.add("Il numero carta è obbligatorio");
+		else if (!numeroCarta.matches(numeroCartaPattern)) 
+				errors.add("Il formato del numero carta non è valido");
+		
+		if (scadenzaCarta == null || scadenzaCarta.trim().isEmpty()) 
+			errors.add("La scadenza è obbligatoria");
+		else if (!scadenzaCarta.matches(scadenzaCartaPattern)) 
+				errors.add("Il formato della scadenza non è valido");
+		
+		if (cvv == null || cvv.trim().isEmpty()) 
+			errors.add("Il cvv è obbligatorio");
+		else if (!cvv.matches(cvvPattern)) 
+				errors.add("Il formato del cvv non è valido");
+		
+		if (via == null || via.trim().isEmpty()) 
+			errors.add("La via è obbligatoria");
+		else if (!via.matches(viaPattern)) 
+				errors.add("Il formato della via non è valido");
+		
+		if (civico == null || civico.trim().isEmpty()) 
+			errors.add("Il civico è obbligatorio");
+		else if (!civico.matches(civicoPattern)) 
+				errors.add("Il formato del civico non è valido");
+		
+		if (cap == null || cap.trim().isEmpty()) 
+			errors.add("Il cap è obbligatoria");
+		else if (!cap.matches(capPattern)) 
+				errors.add("Il formato del cap non è valido");
+		
+		if (citta == null || citta.trim().isEmpty()) 
+			errors.add("La citta' è obbligatorio");
+		else if (!citta.matches(cittaPattern)) 
+				errors.add("Il formato della citta' non è valido");
+
+		return errors.isEmpty();
 	}
 	
 	

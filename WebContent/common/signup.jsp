@@ -9,6 +9,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SignUp</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/signup.css" />
+
+<script src="${pageContext.request.contextPath}/scripts/validate.js"></script>
 </head>
 <body>
 	<%@ include file="/include/header.jsp"%>
@@ -21,20 +23,27 @@
 				<label for="nome">Nome</label>
 				<input id="nome "type="text" name="nome" placeholder="Mario" onchange="validateFormElem(this, nameOrLastnamePattern, document.getElementById('errorName'), nameErrorMessage)">
 				<span id="errorName"></span><br>
+				<span></span>
 					
 				<label for="cognome">Cognome</label>
 				<input id="cognome" type="text" name="cognome" onchange="validateFormElem(this, nameOrLastnamePattern, document.getElementById('errorLastname'), lastnameErrorMessage)">
 				<span id="errorLastname"></span><br>
+				<span></span>
 					
 				<label for="emailUtente">Email</label>
-				<input id="emailUtente" type="text" name="emailUtente"><br>
+				<input id="emailUtente" type="text" name="emailUtente" onchange="validateFormElem(this, emailPattern, document.getElementById('errorEmail'), emailErrorMessage)">
+				<span id="errorEmail"></span><br>
+				<span></span>
 				
 				<label for="telefono">Numero di telefono</label>
 				<input id="telefono" type="text" name="telefono" onchange="validateFormElem(this, phonePattern, document.getElementById('errorPhone'), phoneErrorMessage)">
 				<span id="errorPhone"></span><br>
+				<span></span>
 					
 				<label for="password">Password</label>
-				<input id="password" type="password" name="password" placeholder="enter password" onchange="validateFormElem(this, )"><br>
+				<input id="password" type="password" name="password" placeholder="enter password" onchange="validateFormElem(this, passwordPattern, document.getElementById('errorPassword'), passwordErrorMessage)">
+				<span id="errorPassword"></span><br>
+				<span></span>
 				
 				<input id="registrati" type="submit" value="Registrati">
 				

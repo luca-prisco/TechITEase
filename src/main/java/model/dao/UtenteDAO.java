@@ -158,7 +158,7 @@ public class UtenteDAO {
 		return admins;
 	}
 	
-	public synchronized void UpdateUser(UtenteBean utente, String email) throws SQLException {
+	public synchronized void updateUser(UtenteBean utente, String email) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
 		
@@ -184,7 +184,7 @@ public class UtenteDAO {
 		}
 	}
 	
-	public synchronized void UpdatePassword(String password, String email) throws SQLException {
+	public synchronized void updatePassword(String password, String email) throws SQLException {
 		Connection connection = null;
 		PreparedStatement ps = null;
 		
@@ -205,6 +205,49 @@ public class UtenteDAO {
 				dmcp.releaseConnection(connection);
 			}
 		}
+	}
+	
+	public synchronized void insertAdmin(UtenteBean admin) throws SQLException {
+	    Connection connection = null;
+	    PreparedStatement ps = null;
+	    
+	    String sql = "INSERT INTO " + UtenteDAO.TABLE_NAME + " (emailUtente, nome, cognome, telefono, password, isAdmin) VALUES (?, ?, ?, ?, ?, ?)";
+	    
+	    try {
+	        connection = dmcp.getConnection(); 
+	        ps = connection.prepareStatement(sql);
+	        
+	        ps.setString(1, admin.getEmailUtente());
+	        ps.setString(2, admin.getNome());
+	        ps.setString(3, admin.getCognome());
+	        ps.setString(4, admin.getTelefono());
+	        ps.setString(5, admin.getPassword());
+	        ps.setBoolean(6, admin.isAdmin());
+	        
+	        ps.executeUpdate(); // Execute the insert statement
+	    } finally {
+	        if (ps != null) ps.close();
+	        if (connection != null) dmcp.releaseConnection(connection);
+	    }
+	}
+
+	public synchronized void deleteAdmin(String email) throws SQLException {
+	    Connection connection = null;
+	    PreparedStatement ps = null;
+	    
+	    String sql = "DELETE FROM " + UtenteDAO.TABLE_NAME + " WHERE emailUtente = ?";
+	    
+	    try {
+	        connection = dmcp.getConnection(); 
+	        ps = connection.prepareStatement(sql);
+	        
+	        ps.setString(1, email);
+	        
+	        ps.executeUpdate(); 
+	    } finally {
+	        if (ps != null) ps.close();
+	        if (connection != null) dmcp.releaseConnection(connection);
+	    }
 	}
 
 }

@@ -73,7 +73,6 @@ body {
 }
 
 .prodotti-list {
-	height: 75vh;
 	overflow: scroll;
 }
 

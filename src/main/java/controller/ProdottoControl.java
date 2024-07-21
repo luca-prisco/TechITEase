@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,6 +39,8 @@ public class ProdottoControl extends HttpServlet {
 		super();
 	}
 	
+	List<String> errors = new ArrayList<>();
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DriverManagerConnectionPool dm = (DriverManagerConnectionPool) getServletContext().getAttribute("DriverManager");
 		ProdottoDAO prodottoDAO = new ProdottoDAO(dm);
@@ -48,22 +51,17 @@ public class ProdottoControl extends HttpServlet {
 			if(action != null) {
 				if(action.equalsIgnoreCase("insert")) { 
 					int numSpecifiche = 0;
-
+					ProdottoBean p = new ProdottoBean();
+					
 					if(request.getParameter("numeroSpecifiche")!=null)
 						numSpecifiche = Integer.parseInt(request.getParameter("numeroSpecifiche"));
-
+					
+					
 					String nomeProdotto = request.getParameter("nomeProdotto");
 					String brand = request.getParameter("brand");
 					String categoria = request.getParameter("categoria");
 					String descrizione = request.getParameter("descrizione");
 					String dettagli = request.getParameter("dettagli");
-
-			        ProdottoBean p = new ProdottoBean();
-			        p.setNomeProdotto(nomeProdotto);
-			        p.setBrand(brand);
-			        p.setCategoria(categoria);
-			        p.setDescrizione(descrizione);
-			        p.setDettagli(dettagli);
 			        
 			        String[] colori = request.getParameterValues("colore");
 			        String[] hdds = request.getParameterValues("hdd");
@@ -71,19 +69,35 @@ public class ProdottoControl extends HttpServlet {
 			        String[] quantita = request.getParameterValues("quantita");
 			        String[] prezzi = request.getParameterValues("prezzo");
  
+					
+				    errors.clear();  
+
+			      
+					if (!isValidProdottoForm(nomeProdotto, brand, categoria, descrizione, dettagli, colori[0], hdds[0],
+							rams[0], quantita[0], prezzi[0])) {
+						request.setAttribute("errors", errors);
+			            request.getRequestDispatcher("/admin/aggiungiProdotto.jsp").forward(request, response);
+			            return;
+					}
+			     
+							
+				    p.setNomeProdotto(nomeProdotto);
+				    p.setBrand(brand);
+				    p.setCategoria(categoria);
+				    p.setDescrizione(descrizione);
+				    p.setDettagli(dettagli);
+					
+
 			        List<Specifiche> specificheList = new ArrayList<>();
-			        System.out.println(colori.length);
-			        System.out.println(hdds.length);
-			        System.out.println(prezzi.length);
 			        
 			        for(int i=0; i < colori.length; i++) {
-						Specifiche specifica = new Specifiche();
-						specifica.setColore(colori[i]);
-						specifica.setHdd(hdds[i]);
-						specifica.setRam(Integer.parseInt(rams[i]));
-						specifica.setQuantita(Integer.parseInt(quantita[i]));
-						specifica.setPrezzo(new BigDecimal(prezzi[i]));
-						specificheList.add(specifica);
+							Specifiche specifica = new Specifiche();
+							specifica.setColore(colori[i]);
+							specifica.setHdd(hdds[i]);
+							specifica.setRam(Integer.parseInt(rams[i]));
+							specifica.setQuantita(Integer.parseInt(quantita[i]));
+							specifica.setPrezzo(new BigDecimal(prezzi[i]));
+							specificheList.add(specifica); 
 			        }
 
 					p.setSpecifiche(specificheList);
@@ -112,8 +126,15 @@ public class ProdottoControl extends HttpServlet {
 					String ram = request.getParameter("ram");
 					String quantita = request.getParameter("quantita");
 					String prezzo = request.getParameter("prezzo");
-					
-					System.out.println(IDProdotto + IDSpecifiche + ram);
+
+				    errors.clear();  
+ 
+					if (!isValidProdottoForm(nomeProdotto, brand, categoria, descrizione, dettagli, colore, hdd,
+							ram, quantita, prezzo)) {
+						request.setAttribute("errors", errors);
+			            request.getRequestDispatcher("/admin/modificaProdotto.jsp").forward(request, response);
+			            return;
+					}
 					
 					ProdottoBean prodotto = new ProdottoBean();
 					List<SpecificheRidotte> specifiche = new ArrayList<>();
@@ -203,10 +224,96 @@ public class ProdottoControl extends HttpServlet {
 		}
 		
 	}
+	
+	
+	private boolean isValidProdottoForm(String nomeProdotto, String brand, String categoria, String descrizione, String dettagli, String colore, String hdd, String ram, String quantita, String prezzo) {
+		
+		String nomeProdottoPattern = "^[a-zA-Z\\s]{2,}$";
+		String brandPattern = "^[a-zA-Z\\s]{2,}$";
+		String categoriaPattern = "^[a-zA-Z\\s]+$";
+		String descrizionePattern = "^.{1,70}$";
+		String dettagliPattern = "^.{1,45}$";
+		String colorePattern = "^[a-zA-Z\\s]{3,}$";
+		String hddPattern = "^\\d{1,4}$";
+		String ramPattern = "^\\d{1,4}$";
+		String quantitaPattern = "^\\d+$";
+		String prezzoPattern = "^\\d+(\\.\\d{1,2})?$";
 
+		
+		if(nomeProdotto == null || nomeProdotto.trim().isEmpty()) 
+			errors.add("Il nome del prodotto è obbligatoria");
+		else if(!nomeProdotto.matches(nomeProdottoPattern)) 
+		        errors.add("Formato del nome prodotto non valido");
+
+		if (brand == null || brand.trim().isEmpty()) 
+			errors.add("Il nome del brand è obbligatoria");
+		else if (!brand.matches(brandPattern)) 
+				errors.add("Il formato del brand non è valido");
+		
+		if (categoria == null || categoria.trim().isEmpty()) 
+			errors.add("La categoria è obbligatorio");
+		else if (!categoria.matches(categoriaPattern)) 
+				errors.add("Il formato della categoria non è valido");
+		
+		if (descrizione == null || descrizione.trim().isEmpty()) 
+			errors.add("La descrizione è obbligatoria");
+		else if (!descrizione.matches(descrizionePattern)) 
+				errors.add("Il formato della descrizione non è valido");
+		
+		if (dettagli == null || dettagli.trim().isEmpty()) 
+			errors.add("I dettagli sono obbligatori");
+		else if (!dettagli.matches(dettagliPattern)) 
+				errors.add("Il formato dei dettagli non è valido");
+
+		if (colore == null || colore.trim().isEmpty()) 
+			errors.add("Il colore è obbligatorio");
+		else if (!colore.matches(colorePattern)) 
+				errors.add("Il formato del colore non è valido");
+		
+		if (hdd == null || hdd.trim().isEmpty()) 
+			errors.add("L'hdd è obbligatorio");
+		else if (!hdd.matches(hddPattern)) 
+				errors.add("Il formato dell'hdd non è valido");
+		
+		if (ram == null || ram.trim().isEmpty()) 
+			errors.add("La ram è obbligatoria");
+		else if (!ram.matches(ramPattern)) 
+				errors.add("Il formato della ram non è valido");
+		else {
+		    try {
+		        int ramValue = Integer.parseInt(ram);
+		        if (ramValue < 0 || ramValue > 9999) 
+		            errors.add("Il valore della ram deve essere tra 0 e 9999");
+		    } catch (NumberFormatException e) {
+		        errors.add("Il formato della ram non è valido");
+		    }
+		}
+
+		if (quantita == null || quantita.trim().isEmpty()) 
+		    errors.add("La quantità è obbligatoria");
+		else if (!quantita.matches(quantitaPattern)) 
+		    errors.add("Il formato della quantità non è valido");
+		else {
+		    try {
+		        int quantitaValue = Integer.parseInt(quantita);
+		        if (quantitaValue < 0) 
+		            errors.add("La quantità deve essere un numero positivo");
+		    } catch (NumberFormatException e) {
+		        errors.add("Il formato della quantità non è valido");
+		    }
+		}
+		
+		if (prezzo == null || prezzo.trim().isEmpty()) 
+			errors.add("Il prezzo è obbligatorio");
+		else if (!prezzo.matches(prezzoPattern)) 
+				errors.add("Il formato del prezzo non è valido");
+		
+		return errors.isEmpty();
+	}
+
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }
